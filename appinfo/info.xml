@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<info>
+	<id>twofactor_rcdevsopenotp</id>
+	<name>OpenOTP Two Factor Authentication</name>
+    <description>RCDevs OpenOTP Application enable two-factor authentication for your users using your personnal Cloud. It is versatile, device-independent and based on opened security standards. OpenOTP provides fine-grained user identity and access management (IAM), one-time passwords authentication technologies (OTP) and extensive authentication policies for your AD / LDAP users. It is enterprise-ready with strong support for high-availability, load-balancing, multi-tenancy, cloud-readiness, geolocalization, delegated administration and much more.</description>
+	<licence>AGPL</licence>
+    <author>RCDevs (Julien RICHARD)</author>
+	<version>1.0.0</version>
+	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
+	<category>Security</category>
+	<types>
+		<prelogin/>
+		<authentication/>
+	</types>
+	<two-factor-providers>
+		<provider>OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
+	</two-factor-providers>
+        <screenshot>https://www.rcdevs.com/wp-content/uploads/owncloud_overlay.jpg</screenshot>
+	<dependencies>
+		<!--<owncloud min-version="9.1" max-version="10.0" />-->
+		<nextcloud min-version="9" max-version="11" />
+	</dependencies>
+</info>
