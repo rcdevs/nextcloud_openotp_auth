@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-**********   DESCRIPTION   **********
+### **********   DESCRIPTION   **********
 OpenOTP plugin enables two-factor authentication to login to Nextcloud Admin/User Panel.  Username/Email and Password are validated locally,   and next step the plugin handle the Second Factor, i.e. the Challenge, as a "Two-Factor Vendor".
 OpenOTP plugin manage several Login Mode including: 
 - NextCloud Password (NCP) + OTP (either fill in the input text, or easier by Pressing OK when receiving the Push Notification on mobile).
@@ -30,7 +30,7 @@ User must exists in both Local Database and OpenOTP server (=LDAP integration). 
 (No more contextual auth, account auto-creation while first Login on OpenOTP, Local OR Remote password validation (avoiding user blocking during configuration), remote password management (handle now by core), Global or per user permission) 
  
 
-##OPENOTP SERVER
+## OPENOTP SERVER
 
 OpenOTP is the RCDevs user authentication solution. OpenOTP is a server
 application which provides multiple (highly configurable) authentication
@@ -44,7 +44,7 @@ https://www.rcdevs.com/downloads/documents.php?id=OpenOTP+Authentication+Server%
 or download our appliances:
 https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
-####**********   INSTALLATION   **********
+### **********   INSTALLATION   **********
 Compatible Nextcloud 11.x (Tested on 11.0.3)
 Version 1.1
 
@@ -59,7 +59,7 @@ Version 1.1
 ..	'custom_csp_policy' => 'script-src * \'self\' \'unsafe-eval\' \'unsafe-inline\'; '
 
 
-####**********   USAGE  **********
+### **********   USAGE  **********
 
 -	Navigate to the 'Admin' page, or go to the 'RCDevs OpenOTP' Application Menu to set at 
 	least the server url and the Client Id, Click 'Save'
@@ -87,7 +87,7 @@ Version 1.1
 
 
 
-####**********   CHANGELOG  **********
+### **********   CHANGELOG  **********
 1.0.0
      Initial public release.
  
