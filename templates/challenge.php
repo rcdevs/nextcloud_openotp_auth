@@ -89,7 +89,7 @@ html #body-login .warning{ margin:0; }
 				<input type="submit" id="openotp_submit" class="login primary icon-confirm-white" title="" value="Login" />
 			</div>
 			<?php } ?>		
-
+			<div id="retry"></div>
 		<?php }else{ ?>
 				<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />		
 		<?php } ?>
@@ -143,7 +143,8 @@ html #body-login .warning{ margin:0; }
 		    }
 		    u2f.sign(u2f_request.appId, u2f_request.challenge, u2f_regkeys, function(response) {
 				if(response.errorCode){
-					$('#OpenOTPLoginForm').append('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
+					$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
+					//$('#OpenOTPLoginForm').append('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
 					$('#u2f_display').hide();
 					console.log("OpenOTP Fido U2F signature Log #Code:" + response.errorCode);
 				}else{ document.getElementsByName('openotp_u2f')[0].value = JSON.stringify(response); 
@@ -155,7 +156,7 @@ html #body-login .warning{ margin:0; }
 			$('#u2f_activate').html('[Not Supported]'); 
 			$('#u2f_activate').css('color','red'); 
 		}
-		<?php } ?>
+	<?php } ?>
 	
 
 	<?php if(!$_['error_msg'] && ($_['status'] && $_['status'] != "pushSuccess")):?>
@@ -175,7 +176,8 @@ html #body-login .warning{ margin:0; }
 			clearInterval(timer);
 			$("#timout_cell").html("<b style='color:red;'>Login timedout!</b>");
 			$(".display").html("");
-			$('#OpenOTPLoginForm').append('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
+			$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
+			//$('#OpenOTPLoginForm').append('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
 		}
 		c--;
 	}

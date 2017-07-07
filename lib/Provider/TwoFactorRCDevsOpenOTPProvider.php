@@ -27,12 +27,10 @@ namespace OCA\TwoFactor_RCDevsOpenOTP\Provider;
 use OC_User;
 use OCP\IUser;
 use OCP\Template;
-use OCP\Http\Client\IClientService;
 use OCP\ILogger;
 use OCP\IConfig;
 use OCP\IRequest;
 use Exception;
-// For OC < 9.2 the TwoFactorException does not exist. So we need to handle this in the method verifyChallenge
 use OCP\Authentication\TwoFactorAuth\TwoFactorException;
 use OCP\Authentication\TwoFactorAuth\IProvider;
 use OCP\IL10N;
@@ -43,7 +41,6 @@ use OCA\TwoFactor_RCDevsOpenOTP\Settings\OpenotpConfig;
 class TwoFactorRCDevsOpenOTPProvider implements IProvider
 {
 
-    private $httpClientService;
     private $config;
     private $logger;
     private $trans;
@@ -51,26 +48,17 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 	/**OpenOTP Config */
     private $openotpconfig;
 
-    public function __construct(IClientService $httpClientService,
-                                IConfig $config,
+    public function __construct(IConfig $config,
                                 ILogger $logger, 
 								IRequest $request,
                                 IL10N $trans)
     {
-        $this->httpClientService = $httpClientService;
         $this->config = $config;
         $this->logger = $logger;
         $this->trans = $trans;
         $this->request = $request;
 		$this->session = \OC::$server->getSession();
 		$this->openotpconfig = OpenotpConfig::$_openotp_configs;
-		
-		/*
-        $this->hideOTPField = null;
-        $this->detail = array();
-        $this->transactionId = null;
-        $this->u2fSignRequest = null;
-		*/
     }
 
     /**
@@ -328,20 +316,15 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		$allow_user_administer_openotp = $this->getAppValue('rcdevsopenotp_allow_user_administer_openotp');
 		$authentication_method = $this->getAppValue('rcdevsopenotp_authentication_method'); 
 		// 0 => AUTHENTICATION_METHOD_STD (Standard)
-		// 1 => AUTHENTICATION_METHOD_STD_OTP (OTP or Standard)
-		// 2 => AUTHENTICATION_METHOD_OTP (OTP)
+		// 1 => AUTHENTICATION_METHOD_OTP (OTP)
 
-		$this->logger->info("1-User_enable_openotp: " . $user_enable_openotp, array('app' => 'twofactor_rcdevsopenotp'));		
-		$this->logger->info("2-Allow_user_administer_openotp: " . $allow_user_administer_openotp, array('app' => 'twofactor_rcdevsopenotp'));		
-		$this->logger->info("3-Authentication_method: " . $authentication_method, array('app' => 'twofactor_rcdevsopenotp'));	
-		
 		if( ( $allow_user_administer_openotp === "off" && $authentication_method === "1") ||
 		    ( $allow_user_administer_openotp === "on" && $user_enable_openotp === "yes") ){
-			  $this->logger->info("2FA ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
+			  //$this->logger->info("2FA ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
 			  return true;
 		  }
 		  
-		  $this->logger->info("2FA NOT ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
+		  //$this->logger->info("2FA NOT ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
 		  return false;
     }
 

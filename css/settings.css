@@ -28,7 +28,11 @@
 }
 #openotp_general_settings #message, #openotp_personnal_settings #message{ display:none; }
 #openotp_general_settings #message.success, #openotp_personnal_settings #message.success{ color:green; }
-#openotp_general_settings #message.error, #openotp_personnal_settings #message.error{ color:red; }
+#openotp_general_settings #message.error, #openotp_personnal_settings #message.error, span.error{ color:red; }
+
+span.success{ background: #37ce02; border-radius: 3px; }
+span.error{ background: #ce3702; border-radius: 3px; }
+
 
 #openotp_general_settings #message_check_server_url{ border:1px solid #37ce02; }
 #openotp_general_settings #message_status{ position:relative; top:-1px; }
