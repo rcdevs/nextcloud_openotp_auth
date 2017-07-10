@@ -2,7 +2,7 @@
 host = https://www.transifex.com
 lang_map = ja_JP: ja
 
-[owncloud.twofactor_rcdevsopenotp]
+[nextcloud.twofactor_rcdevsopenotp]
 file_filter = <lang>/twofactor_rcdevsopenotp.po
 source_file = templates/twofactor_rcdevsopenotp.pot
 source_lang = en
