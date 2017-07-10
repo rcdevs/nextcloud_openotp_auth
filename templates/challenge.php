@@ -22,8 +22,6 @@
  * @license http://opensource.org/licenses/AGPL-3.0 GNU AFFERO GENERAL PUBLIC LICENSE
  *
  */
-script('twofactor_rcdevsopenotp', 'script');
-script('twofactor_rcdevsopenotp', 'context');
 $rcdevsopenotp_message = "";
 if(is_array($_['challenge_params'])) extract($_['challenge_params']);
 ?>
@@ -66,7 +64,6 @@ html #body-login .warning{ margin:0; }
 			<?php foreach( $_['challenge_params'] as $param => $val){ ?>
 				<input type="hidden" name="<?php p($param); ?>" value="<?php p($val); ?>">
 			<?php } ?>
-			<input type="hidden" id="context" name="context" value=""/>
 			
 			<?php if( $rcdevsopenotp_u2fChallenge ){ ?>
 				<input type="hidden" name="openotp_u2f" value="">
@@ -126,12 +123,6 @@ html #body-login .warning{ margin:0; }
 		    window.location = "";    
 		});
 	});
-	
-	/*Add hidden context input*/
-	new devicecontext().get(function(_context){
-		value = _context;
-	});
-	$("#context").val(value);
 	
 	/*U2F*/
 	<?php if($rcdevsopenotp_u2fChallenge) { ?>

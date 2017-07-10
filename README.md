@@ -19,13 +19,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 ### **********   DESCRIPTION   **********
-OpenOTP plugin enables two-factor authentication to login to Nextcloud Admin/User Panel.  Username/Email and Password are validated locally,   and next step the plugin handle the Second Factor, i.e. the Challenge, as a "Two-Factor Vendor".
+OpenOTP plugin enables two-factor authentication to login to Nextcloud Admin/User Panel.  
+Username/Email and Password are validated locally, and next step the plugin handle the Second Factor, i.e. the Challenge, as a "Two-Factor Vendor".
 OpenOTP plugin manage several Login Mode including: 
 - NextCloud Password (NCP) + OTP (either fill in the input text, or easier by Pressing OK when receiving the Push Notification on mobile).
 - NCP + FidoU2F (U2F Fido authentication method, see https://fidoalliance.org/ for more details.)
 - NCP + OTP Or FidoU2F
 
-User must exists in both Local Database and OpenOTP server (=LDAP integration). Nextcloud User Name must be the same as OTP Server (LDAP) Login Name (or email in NC and UPN/Alias in OpenOTP) but password could be different (simple passwords are not sent to OTP server).  The reason is the way how Nextcloud designs TwoFactor vendor integration, most of the time all the login steps could  be validated to a single User backend (e.g. Authentication Server) avoiding duplicate accounts. 
+User must exists in both Local Database and OpenOTP server (=LDAP integration). Nextcloud User Name must be the same as OTP Server (LDAP) Login Name (or email in NC and UPN/Alias in OpenOTP) 
+but password could be different (simple passwords are not sent to OTP server). The reason is the way how Nextcloud designs TwoFactor vendor integration, most of the time all the login steps 
+could  be validated to a single User backend (e.g. Authentication Server) avoiding duplicate accounts.
+The new plugin is compatible with user_ldap core application. So, with just a little attribute to configure in the LDAP app, it's possible to have all
+the user account in one place, your LDAP Directory (Nextcloud need local accounts to work properly but they are auto generated with LDAP integration app)
 
 (No more contextual auth, account auto-creation while first Login on OpenOTP, Local OR Remote password validation (avoiding user blocking during configuration), remote password management (handle now by core), Global or per user permission) 
  
@@ -46,43 +51,32 @@ https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
 Compatible Nextcloud 11.x (Tested on 11.0.3)
-Version 1.1
+Version 1.0
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
-2.  Upload user_rcdevsopenotp directory under the 'apps' directory of your ownCloud.
+2.  Upload twofactor_rcdevsopenotp directory under the 'apps' directory of your ownCloud.
 3.	RCDevsOpenOTP Application folder should have read write permission for the web server 
-..	user (under debian/ubutnu : chown -R www-data:www-data user_rcdevsopenotp)
+..	user (under debian/ubuntu : chown -R www-data:www-data twofactor_rcdevsopenotp)
 4.	Navigate to the 'Apps' page in Admin.
-..	Click on 'user_rcdevsopenotp' in the application list. Then click the 'Enable' button.
-5.	Add Custom Content Security Policy in your config/config.php file 
-..	'custom_csp_policy' => 'script-src * \'self\' \'unsafe-eval\' \'unsafe-inline\'; '
+..	Click on 'OpenOTP Two Factor Authentication' in the application list. Then click the 'Enable' button.
 
 
 ### **********   USAGE  **********
 
--	Navigate to the 'Admin' page, or go to the 'RCDevs OpenOTP' Application Menu to set at 
-	least the server url and the Client Id, Click 'Save'
--	Configure if you want the authentication requests to be sent to OpenOTP on remote access,
-	the loginMode will be forced to LDAP because the Desktop/Mobile application sends authentication
-	for every requests so Two-factor is not possible right now.
-	!! IMPORTANT !! We recommand to check "Force Remote Password on Desktop/Mobile Apps authentication"
-	and use the Remote Password (=local Owncloud Password) 
--	Allow users to administer Two-factor on their profile settings page or not
--	At first Login, owncloud displays a popup with a Random Generated Password to use for remote connection.
-	If users don't keep safely the code on first login, they will be able to do it in "Personal" area on nexts logins.
--	During configuration of your plugin:
-		-> Select "Two-Factor OR Standard authentication (Enable OpenOTP or Owncloud 
-		Password)", even if you are not able to connect, Owncloud password remains active.
-		-> Disable "Allow users to administer Two-factor on their profile settings page"
--	After successfully authenticate with OTP, enable OpenOTP for all user
-	If "Allow users to administer Two-factor on their profile settings page" is checked, users are able
-	to deactivate Two-Factor
+-	Navigate to the 'Admin' page / Additional settings, or go directly to the configuration via Admin button in the header
+-	Set at least the server url and the Client Id, Click 'Save'
+-	Allow users to administer Two-factor on their profile settings page or not. When activated, User goes to Personnal section
+	to enable or not Two-Factor on his account.
+-	It's possible to use LDAP/AD Integration (user_ldap) application with RCDEvs OpenOTP (twofactor_rcdevsopenotp) app. Be sure to configure
+	LDAP plugin to create your local user with the uid/samaccountname, otherwise a random generated string is used for username when accounts 
+	are auto-created during import process. To do this, click on Expert tab, and fill in "Override UUID detection" with the correct login name
+	based on your LDAP directory (uid/samaccountname...)
 -	!! IMPORTANT !! keep an admin user working without otp in case of a problem. If not you can:
 		->  Switch authentication method to Standard (Owncloud password):
-			"UPDATE *PREFIX*appconfig SET configvalue = 0 WHERE appid = 'user_rcdevsopenotp' AND configkey = 'rcdevsopenotp_authentication_method'
+			"UPDATE *PREFIX*appconfig SET configvalue = 0 WHERE appid = 'twofactor_rcdevsopenotp' AND configkey = 'rcdevsopenotp_authentication_method'
 		->  Disable openOTP authentication for one (admin?) user:
-			"DELETE FROM *PREFIX*appconfig WHERE userid = 'username' AND appid = 'user_rcdevsopenotp' AND configkey = 'enable_openotp'
+			"DELETE FROM *PREFIX*appconfig WHERE userid = '%yourusername%' AND appid = 'twofactor_rcdevsopenotp' AND configkey = 'enable_openotp'
 			Replace *PREFIX* by owncloud table prefix 'oc_' by default
 
 

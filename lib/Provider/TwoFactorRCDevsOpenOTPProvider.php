@@ -160,18 +160,16 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		
 		$domain = NULL;
 		$password = NULL;
-		$context = "";
+		$context = NULL;
 		/* Don't check LDAP password, validate ONLY localy*/
 		$option = "-LDAP";
 		
 		$POST = array();
 		$POST[] = $this->request->getParam("password");
-		$POST[] = $this->request->getParam("context");
 		$this->logger->info("POST: ".serialize($POST), array('app' => 'twofactor_rcdevsopenotp'));
 		
 		
 		$u2f = isset($_POST['openotp_u2f']) ? $_POST['openotp_u2f'] : "";
-		$context = isset($_POST['context']) ? $_POST['context'] : "";
 		if( $u2f != "" ) $otp = NULL;
 		$state = isset($_POST['rcdevsopenotp_session']) ? $_POST['rcdevsopenotp_session'] : "";
 		

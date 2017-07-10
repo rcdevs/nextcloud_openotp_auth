@@ -15,6 +15,11 @@
 
 	$(document).ready(function () {
 		
+		$('form[name="login"]').submit(function () {
+			$(this).prepend("<span style='color:white; font-size:0.9em;'>Processing request. Please wait...</span>");
+			return true;
+		});
+		
 		$('#openotp_settings #saveconfig').click(function () {
 			var url = OC.generateUrl('/apps/twofactor_rcdevsopenotp/saveconfig');
 			var post = {

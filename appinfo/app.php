@@ -32,17 +32,20 @@ $app->registerSettings();
 \OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\AuthService\\OpenotpAuth'] = 'twofactor_rcdevsopenotp/lib/Provider/openotp.class.php';
 
 \OCP\Util::addStyle('twofactor_rcdevsopenotp', 'settings');
-\OCP\Util::addScript('twofactor_rcdevsopenotp', 'context');
+\OCP\Util::addScript('twofactor_rcdevsopenotp', 'script');
 \OCP\Util::addScript('twofactor_rcdevsopenotp', 'fidou2f');
 
 $isadmin = \OC_User::isAdminUser(\OC_User::getUser());
 if($isadmin){
-	\OCP\App::addNavigationEntry([
-		'id' => 'twofactor_rcdevsopenotp',
-		'order' => 100,
-		'href' => \OCP\Util::linkToRoute('twofactor_rcdevsopenotp.settings.index'),
-		'icon' => \OCP\Util::imagePath('twofactor_rcdevsopenotp', 'app.svg'),
-		'name' => 'Rcdevs Openotp'
-	]);
+	\OC::$server->getNavigationManager()->add(function () {
+	    $urlGenerator = \OC::$server->getURLGenerator();
+	    return [
+	        'id' => 'twofactor_rcdevsopenotp',
+	        'order' => 100,
+	        'href' => $urlGenerator->linkToRoute('twofactor_rcdevsopenotp.settings.index'),
+	        'icon' => $urlGenerator->imagePath('twofactor_rcdevsopenotp', 'app.svg'),
+			'name' => "RCDevs OpenOTP"
+	    ];
+	});
 }
 

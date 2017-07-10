@@ -33,10 +33,6 @@ script('twofactor_rcdevsopenotp', 'script');
 			<?php p($l->t('Enter your OpenOTP server settings in the fields below.')); ?> 
 			<?php p($l->t('You can also enable or disable Two-Factor Authentication by editing the personnal settings on the Users page.')); ?> 
 		</p>
-			<?php if(OCP\App::isEnabled('user_webdavauth') || OCP\App::isEnabled('user_ldap')) {
-				print_unescaped('<p style="color:red; padding-bottom:10px;">'.$l->t('<b>Warning:</b> Apps user_ldap and/or user_webdavauth are incompatible with RCDevs OpenOTP Two-factor Authentication. Please ask your system administrator to disable one of them. OpenOTP Server already stores users in LDAP backends (AD, OpenLDAP, Novell etc..), you have to configure WebADM / OpenOTP with your current Directory or use the build-in OpenLDAP supplied with the product.').'</p>');
-			} ?>		
-
 		<?php foreach( $_['openotp_allconfig'] as $openotp_config  ):?>
 		<p style="position:relative;" class="p_<?php p($openotp_config['type']); ?>">
 			<?php switch( $openotp_config['type'] ){ 
