@@ -30,6 +30,7 @@ use OCP\Template;
 use OCP\ILogger;
 use OCP\IConfig;
 use OCP\IRequest;
+use OCP\IURLGenerator; 
 use Exception;
 use OCP\Authentication\TwoFactorAuth\TwoFactorException;
 use OCP\Authentication\TwoFactorAuth\IProvider;
@@ -45,13 +46,15 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
     private $logger;
     private $trans;
     private $session;
+    private $urlGenerator;
 	/**OpenOTP Config */
     private $openotpconfig;
 
     public function __construct(IConfig $config,
                                 ILogger $logger, 
 								IRequest $request,
-                                IL10N $trans)
+                                IL10N $trans,
+                                IURLGenerator $urlGenerator)
     {
         $this->config = $config;
         $this->logger = $logger;
@@ -59,6 +62,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
         $this->request = $request;
 		$this->session = \OC::$server->getSession();
 		$this->openotpconfig = OpenotpConfig::$_openotp_configs;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -253,7 +257,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
         $template->assign("userID", $user->getUID());
         $template->assign("status", $response['status']);
         $template->assign("error_msg", $response['message']);
-        $template->assign("logout_attr", $l = OC_User::getLogoutAttribute());
+        $template->assign("logout_attr", $l = OC_User::getLogoutUrl($this->urlGenerator));
         $template->assign("challenge_params", $response['challenge_params']);
 
         return $template;

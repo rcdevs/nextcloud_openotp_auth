@@ -39,6 +39,8 @@ span.error{ background: #ce3702; border-radius: 3px; }
 #openotp_general_settings #check_server_loading{ position:absolute; left:142px; top:12px; display:none; }
 #openotp_general_settings span.error{ border-radius: 3px; }
 
-
+.nav-icon-openotp-two-factor-authentication {
+	background-image: url('../img/app-dark.svg');
+}
 
 
