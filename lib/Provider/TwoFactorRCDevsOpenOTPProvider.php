@@ -127,9 +127,9 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
     /**
      * 
      *
-     * @param string $key application config key
-     * @param string $default application default value
-     * @return string value
+     * @param string $user user
+     * @param string $otp OTP
+     * @return array(message, challenge,status)
      */
     private function openOTPsendRequest($user, $otp = NULL)
     {
@@ -165,7 +165,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		$domain = NULL;
 		$password = NULL;
 		$context = NULL;
-		/* Don't check LDAP password, validate ONLY localy*/
+		/* Don't check LDAP password, validate localy OR via third party User integration (LDAP plugin, etc...) */
 		$option = "-LDAP";
 		
 		$POST = array();
@@ -213,6 +213,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 					$status = "pushSuccess";
 					$PolicyNonce = \OC::$server->getContentSecurityPolicyNonceManager()->getNonce();
 					$rcdevsopenotp_nonce = sha1($PolicyNonce);
+
 					$challenge_params['rcdevsopenotp_nonce'] = $rcdevsopenotp_nonce;
 					$this->session->set('rcdevsopenotp_nonce', $rcdevsopenotp_nonce);
 				}else $status = "success";

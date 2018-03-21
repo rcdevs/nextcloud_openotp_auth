@@ -18,6 +18,6 @@
     <screenshot>https://www.rcdevs.com/wp-content/uploads/owncloud_overlay.jpg</screenshot>
 	<dependencies>
 		<!--<owncloud min-version="9.1" max-version="10.0" />-->
-		<nextcloud min-version="9" max-version="12" />
+		<nextcloud min-version="9" max-version="13" />
 	</dependencies>
 </info>

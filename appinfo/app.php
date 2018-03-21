@@ -31,6 +31,13 @@ $app->registerSettings();
 \OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\Settings\\OpenotpConfig'] = 'twofactor_rcdevsopenotp/settings/openotp.config.php';
 \OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\AuthService\\OpenotpAuth'] = 'twofactor_rcdevsopenotp/lib/Provider/openotp.class.php';
 
+if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) { 
+	$manager = \OC::$server->getContentSecurityPolicyManager();
+	$policy = new \OCP\AppFramework\Http\EmptyContentSecurityPolicy();
+    $policy->addAllowedScriptDomain('\'unsafe-inline\'');
+	$manager->addDefaultPolicy($policy);
+}
+
 \OCP\Util::addStyle('twofactor_rcdevsopenotp', 'settings');
 \OCP\Util::addScript('twofactor_rcdevsopenotp', 'script');
 \OCP\Util::addScript('twofactor_rcdevsopenotp', 'fidou2f');

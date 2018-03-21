@@ -98,7 +98,6 @@ html #body-login .warning{ margin:0; }
 	
 	$(document).ready(function () {
 	/* Compute Timeout */	
-	/*'nonce' => \OC::$server->getContentSecurityPolicyNonceManager()->getNonce() ],*/
 		
 	/*Handle Push Challenge*/
 	<?php if($_['status'] && $_['status'] == "pushSuccess") { ?>
@@ -124,8 +123,8 @@ html #body-login .warning{ margin:0; }
 		});
 	});
 	
-	/*U2F*/
 	<?php if($rcdevsopenotp_u2fChallenge) { ?>
+	/*U2F*/
 		if (/chrome|chromium|firefox|opera/.test(navigator.userAgent.toLowerCase())) { 
 		    var u2f_request = <?php echo $rcdevsopenotp_u2fChallenge; ?>;
 		    var u2f_regkeys = [];
