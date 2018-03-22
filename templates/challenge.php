@@ -43,6 +43,7 @@ html #body-login .warning{ margin:0; }
     </fieldset>
 <?php endif; ?>
 
+<?php //print_r($_); ?>
 
 <form method="POST" id="OpenOTPLoginForm" name="LoginForm">
 	
@@ -95,7 +96,10 @@ html #body-login .warning{ margin:0; }
 </form>
 
 <script type="text/javascript" nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>">
-	
+
+document.addEventListener('DOMContentLoaded', function() {
+	   // your code here
+
 	$(document).ready(function () {
 	/* Compute Timeout */	
 		
@@ -106,9 +110,6 @@ html #body-login .warning{ margin:0; }
 	
 	/*Get Retry Button location*/
 	var logout_attr = '<?php print_unescaped($_['logout_attr']); ?>';	
-	var regex = /href=\"(.*)\"/;
-	var match = regex.exec(logout_attr);
-	var retry_url = match[1];
 	
 	if ( $("#openotp_retry").length ) {
 		$(this).on('click', function(){
@@ -167,7 +168,6 @@ html #body-login .warning{ margin:0; }
 			$("#timout_cell").html("<b style='color:red;'>Login timedout!</b>");
 			$(".display").html("");
 			$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
-			//$('#OpenOTPLoginForm').append('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
 		}
 		c--;
 	}
@@ -207,4 +207,5 @@ html #body-login .warning{ margin:0; }
 	
 	<?php endif; ?>
 });
+}, false);
 </script>

@@ -127,6 +127,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
     /**
      * 
      *
+     * @UseSession
      * @param string $user user
      * @param string $otp OTP
      * @return array(message, challenge,status)
@@ -258,7 +259,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
         $template->assign("userID", $user->getUID());
         $template->assign("status", $response['status']);
         $template->assign("error_msg", $response['message']);
-        $template->assign("logout_attr", $l = OC_User::getLogoutUrl($this->urlGenerator));
+        $template->assign("logout_attr", OC_User::getLogoutUrl($this->urlGenerator));
         $template->assign("challenge_params", $response['challenge_params']);
 
         return $template;
@@ -268,6 +269,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
     /**
      * Verify the given challenge
      *
+     * @UseSession
      * @param IUser $user
      * @param string $challenge => OTP password
      * @return Boolean, True in case of success

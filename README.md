@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.0.1
+RCDevs OpenOTP Plugin for Nextcloud version 1.0.2
 Copyright (c) 2010-2018 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -33,7 +33,9 @@ The new plugin is compatible with user_ldap core application. So, with just a li
 the user account in one place, your LDAP Directory (Nextcloud need local accounts to work properly but they are auto generated with LDAP integration app)
 
 (No more contextual auth, account auto-creation while first Login on OpenOTP, Local OR Remote password validation (avoiding user blocking during configuration), remote password management (handle now by core), Global or per user permission) 
- 
+When using Desktop client, you have to generate an Application password in your Dashboard, OpenOTP server is not contacted to authenticate. 
+On the other hand, for Mobile application, OpenOTP Plugin handle login requests in the same way as for Application in your Web Browser, e.g. if you have configured Push notification on OpenOTP Authentication Server, 
+you don't have to leave your Mobile, click on the notification and Confirm login.
 
 ## OPENOTP SERVER
 
@@ -45,13 +47,13 @@ Authenticator - Mobile-OTP (mOTP) Software Tokens - SMS One-Time Passwords
 - Mail / Secure Mail One-Time Passwords - Yubikey
 Visit https://www.rcdevs.com/products/openotp/
 Follow the quick start guide:
-https://www.rcdevs.com/downloads/documents.php?id=OpenOTP+Authentication+Server%0A
+http://docs.rcdevs/howtos/openotp_quick_start/openotp_quick_start/
 or download our appliances:
 https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
-Compatible Nextcloud 12.x (Tested on 12.0.6)
-Version 1.0.1
+Compatible Nextcloud 12.x/13.X (Tested on 12.0.6/13.0.1)
+Version 1.0.2
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -82,6 +84,11 @@ Version 1.0.1
 
 
 ### **********   CHANGELOG  **********
+1.0.2
+	Add compatibility to NextCloud v13 
+		 - custom_csp in config deprecated - nonce used instead + addDefaultPolicy
+		 - add Annotation @UseSession to store session
+		 - add EventListener on DOMContentLoaded in template challenge		 
 1.0.1
 	Add compatibility to NextCloud v12 
 		 - OC_User::getLogoutAttribute() is now deprecated
