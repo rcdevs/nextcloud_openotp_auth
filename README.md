@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.0.2
+RCDevs OpenOTP Plugin for Nextcloud version 1.0.1
 Copyright (c) 2010-2018 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
 Compatible Nextcloud 12.x/13.X (Tested on 12.0.6/13.0.1)
-Version 1.0.2
+Version 1.0.1
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -70,7 +70,7 @@ Version 1.0.2
 -	Set at least the server url and the Client Id, Click 'Save'
 -	Allow users to administer Two-factor on their profile settings page or not. When activated, User goes to Personnal section
 	to enable or not Two-Factor on his account.
--	It's possible to use LDAP/AD Integration (user_ldap) application with RCDEvs OpenOTP (twofactor_rcdevsopenotp) app. Be sure to configure
+-	It's possible to use LDAP/AD Integration (user_ldap) application with RCDevs OpenOTP (twofactor_rcdevsopenotp) application. Be sure to configure
 	LDAP plugin to create your local user with the uid/samaccountname, otherwise a random generated string is used for username when accounts 
 	are auto-created during import process. To do this, click on Expert tab, and fill in "Override UUID detection" with the correct login name
 	based on your LDAP directory (uid/samaccountname...)
@@ -84,15 +84,13 @@ Version 1.0.2
 
 
 ### **********   CHANGELOG  **********
-1.0.2
-	Add compatibility to NextCloud v13 
+1.0.1
+	Add compatibility to NextCloud v12/13 
+		 - OC_User::getLogoutAttribute() is now deprecated
+		 - Fixed ajax-loader img not showing while pressing Test button
 		 - custom_csp in config deprecated - nonce used instead + addDefaultPolicy
 		 - add Annotation @UseSession to store session
 		 - add EventListener on DOMContentLoaded in template challenge		 
-1.0.1
-	Add compatibility to NextCloud v12 
-		 - OC_User::getLogoutAttribute() is now deprecated
-		 - Fixed ajax-loader img not showing while pressing Test button
 1.0.0
      Initial public release.
  

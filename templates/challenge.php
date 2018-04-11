@@ -4,7 +4,7 @@
  *
  * @package twofactor_rcdevsopenotp
  * @author Julien RICHARD
- * @copyright 2017 RCDEVS info@rcdevs.com
+ * @copyright 2018 RCDEVS info@rcdevs.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -30,16 +30,10 @@ html #body-login .warning{ margin:0; }
 </style>
 
 <?php if ($_['error_msg']): ?>
-    <fieldset style="margin-top:6px;" class="warning">
-        <ul>
-            <?php foreach ($_['error_msg'] as $message): ?>
-                <li><?php p($message); ?></li>
-            <?php endforeach; ?>
-        </ul>
-        <!--
-        Debug:
-        <?php print_r($_); ?>
-        -->
+    <fieldset style="margin:6px 0 15px 0;" class="warning">
+		<legend>System throws this exception(s):</legend>
+		<p><?php p($_['error_msg']); ?></p>
+		<p style="font-size:0.8em;">Please contact administrator (more details on logfile).</p>
     </fieldset>
 <?php endif; ?>
 
@@ -98,8 +92,6 @@ html #body-login .warning{ margin:0; }
 <script type="text/javascript" nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>">
 
 document.addEventListener('DOMContentLoaded', function() {
-	   // your code here
-
 	$(document).ready(function () {
 	/* Compute Timeout */	
 		
@@ -113,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	if ( $("#openotp_retry").length ) {
 		$(this).on('click', function(){
-		    window.location = retry_url;    
+		    window.location = "";    
 		});
 	}	
 	
@@ -124,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 	
-	<?php if($rcdevsopenotp_u2fChallenge) { ?>
+	<?php if(isset($rcdevsopenotp_u2fChallenge) && $rcdevsopenotp_u2fChallenge !== "") { ?>
 	/*U2F*/
 		if (/chrome|chromium|firefox|opera/.test(navigator.userAgent.toLowerCase())) { 
 		    var u2f_request = <?php echo $rcdevsopenotp_u2fChallenge; ?>;
@@ -132,11 +124,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		    for (var i=0, len=u2f_request.keyHandles.length; i<len; i++) {
 		        u2f_regkeys.push({version:u2f_request.version,keyHandle:u2f_request.keyHandles[i]});
 		    }
-		    u2f.sign(u2f_request.appId, u2f_request.challenge, u2f_regkeys, function(response) {
+		    u2f.sign(u2f_request.appId, u2f_request.challenge, u2f_regkeys, function(response) {								
 				if(response.errorCode){
 					$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
 					//$('#OpenOTPLoginForm').append('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
-					$('#u2f_display').hide();
+					if(response.errorCode != 5) $('#u2f_display').html("<b style=\"color:red;\">A problem occurs, please verify your configuration:</b><br/><ul><li>- FIDO client communication with the public AppID URL requires SSL. </li><li>- Onwcloud App URL (U2F facets) MUST be under the same DNS domain suffix as the AppID URL (configured in RCDevs MFA Server - WebADM WebPortal)</li><li>- Fido U2F login Method is only available for Chrome, Firefox and Opera. Internet Explorer and other Web browser are coming soon.</li></ul><br/><a style=\"text-decoration:underline;\" target=\"_blank\" href=\"https://www.rcdevs.com/docs/howtos/openotp_u2f/openotp_u2f/\">Read more on RCDevs Docs site</a><br/><br/>");
 					console.log("OpenOTP Fido U2F signature Log #Code:" + response.errorCode);
 				}else{ document.getElementsByName('openotp_u2f')[0].value = JSON.stringify(response); 
 					document.getElementsByName('challenge')[0].value = "dummy"; 
@@ -154,12 +146,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 	var c = <?php p($rcdevsopenotp_timeout); ?>;
 	var base = <?php p($rcdevsopenotp_timeout); ?>;
+	var static_width = "";
 	function count()
 	{
 		plural = c <= 1 ? "" : "s";
 		$("#timeout").html(c + " second" + plural);
-		var div_width = 300;
-		var new_width =  Math.round(c*div_width/base);
+		var div_width = $('#div_orange').width();
+		if(!static_width) static_width = div_width;
+		var new_width =  Math.round(c*static_width/base);
 		$('#div_orange').css('width',new_width+'px');
 
 		if(c == 0 || c < 0) {

@@ -4,7 +4,7 @@
  *
  * @package twofactor_rcdevsopenotp
  * @author Julien RICHARD
- * @copyright 2017 RCDEVS info@rcdevs.com
+ * @copyright 2018 RCDEVS info@rcdevs.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -32,11 +32,14 @@ use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IConfig;
 use OCP\ILogger;
+use Exception;
 use OCA\TwoFactor_RCDevsOpenOTP\AuthService\OpenotpAuth;
 use OCA\TwoFactor_RCDevsOpenOTP\Settings\OpenotpConfig;
 
 
-
+class OpenotpAuthException extends Exception
+{
+}
 class SettingsController extends Controller {
 	/** @var IL10N */
 	private $l10n;
@@ -152,12 +155,16 @@ class SettingsController extends Controller {
 		$appPath = \OC_App::getAppPath('twofactor_rcdevsopenotp');
 		
 		$openotpAuth = new openotpAuth($this->logger, $params, $appPath);
-		$resp = $openotpAuth->openOTPStatus();
+		try{
+			$resp = $openotpAuth->openOTPStatus();
+		}catch(exception $e){}
 		
-		if( $resp )
+		if( isset($resp) )
 			return new DataResponse(['status' => "success", 'openotpStatus' => $resp['status'], 'message' => nl2br($resp['message']) ]);
-		else
+		else{
+			$this->logger->error("Could not connect to host", array('app' => 'twofactor_rcdevsopenotp'));
 			return new DataResponse(['status' => "error", 'message' => 'Could not connect to host' ]);
+		}		
 	}
 }
 

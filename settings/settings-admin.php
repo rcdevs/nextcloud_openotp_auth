@@ -4,7 +4,7 @@
  *
  * @package twofactor_rcdevsopenotp
  * @author Julien RICHARD
- * @copyright 2017 RCDEVS info@rcdevs.com
+ * @copyright 2018 RCDEVS info@rcdevs.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by

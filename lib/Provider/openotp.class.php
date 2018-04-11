@@ -4,7 +4,7 @@
  *
  * @package twofactor_rcdevsopenotp
  * @author Julien RICHARD
- * @copyright 2017 RCDEVS info@rcdevs.com
+ * @copyright 2018 RCDEVS info@rcdevs.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -28,6 +28,10 @@ namespace OCA\TwoFactor_RCDevsOpenOTP\AuthService;
 use OCP\AppFramework\App;
 use OCP\ILogger;
 use Exception;
+
+class OpenotpAuthException extends Exception
+{
+}
 
 class OpenotpAuth{ 
 
@@ -312,8 +316,9 @@ EOT;
 		try{	
 			$soap_client = new SoapClientTimeout(dirname(__FILE__).'/openotp.wsdl', $options);
 		}catch(exception $e){
-			$this->logger->error(__METHOD__.', exception: '.$e->getMessage(), array('app' => 'rcdevsopenotp'));
-			return false;
+			$message = __METHOD__.', exception: '.$e->getMessage();
+			//$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+			throw new OpenotpAuthException($message);
 		}
 
 		$soap_client->setTimeout(30);	
@@ -325,37 +330,37 @@ EOT;
 	}
 		
 	public function openOTPSimpleLogin($username, $domain, $password, $option, $context){
-		if (!$this->soapRequest()) return false;
 		try{
+			$this->soapRequest();
 			$resp = $this->soap_client->openotpSimpleLogin($username, $domain, $password, $this->client_id, $this->remote_addr, $this->user_settings, $option, $context );
 		}catch(exception $e){
-			$this->logger->error(__METHOD__.', exception: '.$e->getMessage(), array('app' => 'rcdevsopenotp'));
-			return false;
+			$message = __METHOD__.', exception: '.$e->getMessage();
+			$this->logger->error($message, array('app' => 'rcdevsopenotp'));
 		}
-		
-		return $resp;
+		return isset($resp) ? $resp : false;
 	}
 	
 	public function openOTPChallenge($username, $domain, $state, $password, $u2f){
-		if (!$this->soapRequest()) return false;
 		try{
+			$this->soapRequest();
 			$resp = $this->soap_client->openotpChallenge($username, $domain, $state, $password, $u2f);
 		}catch(exception $e){
-			$this->logger->error(__METHOD__.', exception: '.$e->getMessage(), array('app' => 'rcdevsopenotp'));
-			return false;
+			$message = __METHOD__.', exception: '.$e->getMessage();
+			$this->logger->error($message, array('app' => 'rcdevsopenotp'));
 		}
-		return $resp;
+		return isset($resp) ? $resp : false;
 	}
 	
 	public function openOTPStatus(){
-		if (!$this->soapRequest()) return false;
 		try{
+			$this->soapRequest();
 			$resp = $this->soap_client->openotpStatus();
 		}catch(exception $e){
-			$this->logger->error(__METHOD__.', exception: '.$e->getMessage(), array('app' => 'rcdevsopenotp'));			
-			//\OCP\Util::writeLog('user_rcdevsopenotp', __METHOD__.', exception: '.$e->getMessage(), \OCP\Util::ERROR);
-			return false;
+			$message = __METHOD__.', exception: '.$e->getMessage();
+			$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+			throw new OpenotpAuthException($message);
 		}
+
 		return $resp;
 	}
 }
