@@ -135,6 +135,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		
         return $configs;
     }
+
 	
     /**
      * 
@@ -175,16 +176,21 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 			throw new OpenOTPsendRequestException($message);
 		}		
 		
+		// Get context cookie
+		$context_name = $openotpAuth->getContext_name();
+		$context_size = $openotpAuth->getContext_size();
+		$context_time = $openotpAuth->getContext_time();
+		
+		if (isset($_COOKIE[$context_name])) $context = $_COOKIE[$context_name];
+		else $context = bin2hex(openssl_random_pseudo_bytes($context_size/2));	
+		
 		$domain = NULL;
 		$password = NULL;
-		$context = NULL;
 		/* Don't check LDAP password, validate localy OR via third party User integration (LDAP plugin, etc...) */
 		$option = "-LDAP";
 		
 		$POST = array();
-		$POST[] = $this->request->getParam("password");
-		//$this->logger->info("POST: ".serialize($POST), array('app' => 'twofactor_rcdevsopenotp'));
-		
+		$POST[] = $this->request->getParam("password");		
 		
 		$u2f = isset($_POST['openotp_u2f']) ? $_POST['openotp_u2f'] : "";
 		if ($u2f != "") $otp = NULL;
@@ -227,8 +233,17 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 					$PolicyNonce = \OC::$server->getContentSecurityPolicyNonceManager()->getNonce();
 					$rcdevsopenotp_nonce = sha1($PolicyNonce);
 
-					$challenge_params['rcdevsopenotp_nonce'] = $rcdevsopenotp_nonce;
+					$this->challenge_params['rcdevsopenotp_nonce'] = $rcdevsopenotp_nonce;
 					$this->session->set('rcdevsopenotp_nonce', $rcdevsopenotp_nonce);
+					
+					// set context cookie
+					if (extension_loaded('openssl')) {			
+						if (strlen($context) != $context_size) $context = bin2hex(openssl_random_pseudo_bytes($context_size/2));
+						setcookie($context_name, $context, time()+$context_time, '/', NULL, true, true);
+					}else{
+						$this->logger->info("Openssl extension not loaded - context authentication not available", array('app' => 'twofactor_rcdevsopenotp'));
+					}
+					
 				}else $this->openOTPsendRequestStatus = "success";
 				break;
 			 case 2:

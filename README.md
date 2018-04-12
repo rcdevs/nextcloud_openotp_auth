@@ -74,6 +74,12 @@ Version 1.0.1
 	LDAP plugin to create your local user with the uid/samaccountname, otherwise a random generated string is used for username when accounts 
 	are auto-created during import process. To do this, click on Expert tab, and fill in "Override UUID detection" with the correct login name
 	based on your LDAP directory (uid/samaccountname...)
+-	Contextual authentication: Change the LoginMode to LDAP-only for requests comming from trusted devices on trusted IPs.
+	One user device gets trusted for a specifc IP address after a successful two-factor authentication. 
+	Contextual Authentication need a persistant cookie after logout to work properly. Nextcloud implement Clear-Site-Data HTTP response header (https://www.w3.org/TR/clear-site-data/#grammardef-cookies),
+	this mechanism clear all cache, cookie and storage from the browser, included OpenOTP context cookie. To enable this feature, you need to MANUALLY edit this file:
+	core/Controller/LoginController.php and comments this line 123 in public function logout():
+	//$response->addHeader('Clear-Site-Data', '"cache", "cookies", "storage", "executionContexts"'); or delete ["cookies",] from the same line.
 -	!! IMPORTANT !! keep an admin user working without otp in case of a problem. If not you can:
 		->  Switch authentication method to Standard (Owncloud password):
 			"UPDATE *PREFIX*appconfig SET configvalue = 0 WHERE appid = 'twofactor_rcdevsopenotp' AND configkey = 'rcdevsopenotp_authentication_method'
@@ -91,6 +97,7 @@ Version 1.0.1
 		 - custom_csp in config deprecated - nonce used instead + addDefaultPolicy
 		 - add Annotation @UseSession to store session
 		 - add EventListener on DOMContentLoaded in template challenge		 
+		 - implement contextual authentication		 
 1.0.0
      Initial public release.
  

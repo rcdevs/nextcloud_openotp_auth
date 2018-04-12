@@ -5,6 +5,6 @@
 		 - custom_csp in config deprecated - nonce used instead + addDefaultPolicy
 		 - add Annotation @UseSession to store session
 		 - add EventListener on DOMContentLoaded in template challenge	
-		 - Enhance errors/exceptions management
+		 - implement contextual authentication
 1.0.0
      Initial public release.

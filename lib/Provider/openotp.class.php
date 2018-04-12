@@ -57,6 +57,12 @@ class OpenotpAuth{
 	private $soap_client;
 	/** Logger object */
     private $logger;
+	/** @var context_name */
+	private $context_name = '__Host-OpenOTPContext';
+	/** @var context_size */
+	private $context_size = 32;
+	/** @var context_time */
+	private $context_time = 2500000;	
 
     /**
 	 * @param ILogger $logger
@@ -117,6 +123,18 @@ class OpenotpAuth{
 		}
 		return $ret;
 	}
+	public function getContext_name()
+	{
+		return $this->context_name;
+	}
+	public function getContext_size()
+	{
+		return $this->context_size;
+	}	
+	public function getContext_time()
+	{
+		return $this->context_time;
+	}	
 	
 	public static function getOverlay($otpChallenge, $u2fChallenge, $message, $username, $session, $timeout, $ldappw, $path, $appWebPath, $domain=NULL){
 		$appWebPath .= "/images";
