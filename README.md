@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.0.1
+RCDevs OpenOTP Plugin for Nextcloud version 1.0.2
 Copyright (c) 2010-2018 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
 Compatible Nextcloud 12.x/13.X (Tested on 12.0.6/13.0.1)
-Version 1.0.1
+Version 1.0.2
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -81,6 +81,7 @@ Version 1.0.1
 	core/Controller/LoginController.php and comments this line 123 in public function logout():
 	//$response->addHeader('Clear-Site-Data', '"cache", "cookies", "storage", "executionContexts"'); or delete ["cookies",] from the same line.
 -	!! IMPORTANT !! keep an admin user working without otp in case of a problem. If not you can:
+		->  Use occ command line to disable/enable two-factor authentication for a user: (sudo -u www-data) ./occ twofactorauth:enable username 
 		->  Switch authentication method to Standard (Owncloud password):
 			"UPDATE *PREFIX*appconfig SET configvalue = 0 WHERE appid = 'twofactor_rcdevsopenotp' AND configkey = 'rcdevsopenotp_authentication_method'
 		->  Disable openOTP authentication for one (admin?) user:
@@ -90,6 +91,10 @@ Version 1.0.1
 
 
 ### **********   CHANGELOG  **********
+1.0.2
+		 - app:check-code integrity		 
+		 - Create new Administration menu entry in left side 
+		 - Personal settings are now situated in Security Section
 1.0.1
 	Add compatibility to NextCloud v12/13 
 		 - OC_User::getLogoutAttribute() is now deprecated

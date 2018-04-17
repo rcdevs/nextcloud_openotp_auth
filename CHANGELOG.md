@@ -1,3 +1,7 @@
+1.0.2
+		 - app:check-code integrity		 
+		 - Create new Administration menu entry in left side 
+		 - Personal settings are now situated in Security Section
 1.0.1
 	Add compatibility to NextCloud v12/13 
 		 - OC_User::getLogoutAttribute() is now deprecated

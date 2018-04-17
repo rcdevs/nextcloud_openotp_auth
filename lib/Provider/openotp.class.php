@@ -317,10 +317,10 @@ EOT;
 	private function soapRequest(){
 	
 		$options = array('location' => $this->server_url);
-		if ($this->proxy_host != NULL && $this->proxy_port != NULL) {
+		if ($this->proxy_host !== NULL && $this->proxy_port !== NULL) {
 			$options['proxy_host'] = $this->proxy_host;
 			$options['proxy_port'] = $this->proxy_port;
-			if ($this->proxy_username != NULL && $this->proxy_password != NULL) {
+			if ($this->proxy_username !== NULL && $this->proxy_password !== NULL) {
 				$options['proxy_login'] = $this->proxy_username;
 				$options['proxy_password'] = $this->proxy_password;
 			}

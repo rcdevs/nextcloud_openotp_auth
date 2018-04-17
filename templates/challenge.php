@@ -41,7 +41,7 @@ html #body-login .warning{ margin:0; }
 
 <form method="POST" id="OpenOTPLoginForm" name="LoginForm">
 	
-	<?php if($_['status'] && $_['status'] == "pushSuccess") { ?>
+	<?php if($_['status'] && $_['status'] === "pushSuccess") { ?>
 		<p>You have been connected<br/> You will be redirected in 2 seconds</p>
 		<input type="hidden" name="challenge" value="passme" />
 		<input type="hidden" name="rcdevsopenotp_nonce" value="<?php p($_['challenge_params']['rcdevsopenotp_nonce']);?>" />
@@ -96,12 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	/* Compute Timeout */	
 		
 	/*Handle Push Challenge*/
-	<?php if($_['status'] && $_['status'] == "pushSuccess") { ?>
+	<?php if($_['status'] && $_['status'] === "pushSuccess") { ?>
 		$("#OpenOTPLoginForm").submit();
 	<?php } ?>
 	
-	/*Get Retry Button location*/
-	var logout_attr = '<?php print_unescaped($_['logout_attr']); ?>';	
 	
 	if ( $("#openotp_retry").length ) {
 		$(this).on('click', function(){
@@ -142,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	<?php } ?>
 	
 
-	<?php if(!$_['error_msg'] && ($_['status'] && $_['status'] != "pushSuccess")):?>
+	<?php if(!$_['error_msg'] && ($_['status'] && $_['status'] !== "pushSuccess")):?>
 		
 	var c = <?php p($rcdevsopenotp_timeout); ?>;
 	var base = <?php p($rcdevsopenotp_timeout); ?>;

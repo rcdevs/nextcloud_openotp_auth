@@ -38,6 +38,11 @@ class Application extends \OCP\AppFramework\App
     {
         parent::__construct('twofactor_rcdevsopenotp', $urlParams);
         $container = $this->getContainer();
+			
+
+		//Declaration openotp classes
+		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\Settings\\OpenotpConfig'] = 'twofactor_rcdevsopenotp/lib/Settings/openotp.config.php';
+		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\AuthService\\OpenotpAuth'] = 'twofactor_rcdevsopenotp/lib/Provider/openotp.class.php';
 		
         /**
          * Controllers
@@ -45,7 +50,8 @@ class Application extends \OCP\AppFramework\App
         $container->registerService('UserSession', function($c) {
             return $c->query('ServerContainer')->getUserSession();
         });
-			   
+
+				   
 	    $container->registerService('SettingsController', function ($c) {
             $server = $c->getServer();
             return new SettingsController(
@@ -54,22 +60,9 @@ class Application extends \OCP\AppFramework\App
                 $server->getRequest(),
                 $server->getL10N($c->getAppName()),
                 $server->getConfig(),
-				$server->getLogger()
+				$server->getLogger(),
+				$server->getAppManager()
             );
         });
-    }
-
-    /**
-     * register setting scripts
-     */
-    public function registerSettings()
-    {
-        App::registerAdmin('twofactor_rcdevsopenotp',
-            'settings/settings-admin');
-
-        App::registerPersonal('twofactor_rcdevsopenotp',
-            'settings/settings-personnal');
-    }
-
-
+	}	
 }

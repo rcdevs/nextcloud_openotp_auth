@@ -4,7 +4,7 @@
 	<id>twofactor_rcdevsopenotp</id>
 	<name>OpenOTP Two Factor Authentication</name>
     <description>
-		**RCDevs OpenOTP Application enables two-factor authentication for your users using your personnal Cloud.**
+		**RCDevs OpenOTP Application enables two-factor authentication for your users using your personal Cloud.**
 		It is versatile, device-independent and based on opened security standards. 
 		OpenOTP provides fine-grained user identity and access management (IAM), one-time passwords authentication technologies (OTP) and extensive authentication policies for your AD / LDAP users. 
 		It is enterprise-ready with strong support for:
@@ -20,7 +20,7 @@
     <summary>RCDevs OpenOTP Application enables Multi-Factor authentication for your users.</summary>
 	<licence>AGPL</licence>
     <author>RCDevs (Julien RICHARD)</author>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
 	<category>Security</category>
 	<types>
@@ -35,8 +35,23 @@
     <bugs>https://github.com/rcdevs/openotp_authentication_nextcloud/issues</bugs>	
     <repository type="git">https://github.com/rcdevs/openotp_authentication_nextcloud/tree/nextcloud-v13</repository>	
 	<two-factor-providers>
-		<provider>OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
+		<provider>\OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
 	</two-factor-providers>
+    <settings>
+		<personal>\OCA\TwoFactor_RCDevsOpenOTP\Settings\Personal</personal>
+		<admin>\OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSettings</admin>
+		<admin-section>\OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSection</admin-section>
+    </settings>	
+    <navigations>
+         <navigation role="admin">			 
+             <id>twofactor_rcdevsopenotp</id>
+             <name>OpenOTP Authentication</name>
+             <route>twofactor_rcdevsopenotp.settings.index</route>
+             <order>100</order>
+             <icon>app.svg</icon>
+             <type>link</type>
+         </navigation>
+     </navigations>	
     <screenshot>https://raw.githubusercontent.com/rcdevs/openotp_authentication_nextcloud/nextcloud-v13/screenshots/loginscreen-by-otp-u2f.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/rcdevs/openotp_authentication_nextcloud/nextcloud-v13/screenshots/loginscreen-by-otp.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/rcdevs/openotp_authentication_nextcloud/nextcloud-v13/screenshots/loginscreen-by-u2f.png</screenshot>

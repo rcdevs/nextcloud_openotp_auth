@@ -8,7 +8,7 @@
  *
  * @package twofactor_rcdevsopenotp
  * @author Julien RICHARD
- * @copyright 2017 RCDEVS info@rcdevs.com
+ * @copyright 2018 RCDEVS info@rcdevs.com
  */
 
 (function ($, OC) {
