@@ -22,7 +22,7 @@
     <author>RCDevs (Julien RICHARD)</author>
 	<version>1.0.2</version>
 	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
-	<category>Security</category>
+	<category>security</category>
 	<types>
 		<prelogin/>
 		<authentication/>
