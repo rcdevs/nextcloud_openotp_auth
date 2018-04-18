@@ -64,5 +64,15 @@ class Application extends \OCP\AppFramework\App
 				$server->getAppManager()
             );
         });
-	}	
+	}
+	
+    /**
+     * register setting scripts
+     */
+    public function registerSettings()
+    {
+        App::registerPersonal('twofactor_rcdevsopenotp',
+            'lib/Settings/settings-personal');
+    }	
+		
 }

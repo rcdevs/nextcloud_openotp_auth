@@ -60,6 +60,6 @@
 		<php min-version="5.5"/>
         <lib>soap</lib>
         <lib>ldap</lib>
-		<nextcloud min-version="9" max-version="13" />
+		<nextcloud min-version="12" max-version="13" />
     </dependencies>	
 </info>
