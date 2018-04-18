@@ -35,11 +35,11 @@
     <bugs>https://github.com/rcdevs/openotp_authentication_nextcloud/issues</bugs>	
     <repository type="git">https://github.com/rcdevs/openotp_authentication_nextcloud/tree/nextcloud-v13</repository>	
 	<two-factor-providers>
-		<provider>\OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
+		<provider>OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
 	</two-factor-providers>
     <settings>
-		<personal>\OCA\TwoFactor_RCDevsOpenOTP\Settings\Personal</personal>
-		<admin>\OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSettings</admin>
+		<personal>OCA\TwoFactor_RCDevsOpenOTP\Settings\Personal</personal>
+		<admin>OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSettings</admin>
 		<admin-section>\OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSection</admin-section>
     </settings>	
     <navigations>
