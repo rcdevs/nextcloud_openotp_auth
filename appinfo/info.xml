@@ -6,21 +6,23 @@
     <description>
 		**RCDevs OpenOTP Application enables two-factor authentication for your users using your personal Cloud.**
 		It is versatile, device-independent and based on opened security standards. 
-		OpenOTP provides fine-grained user identity and access management (IAM), one-time passwords authentication technologies (OTP) and extensive authentication policies for your AD / LDAP users. 
+		OpenOTP provides fine-grained user identity and access management (IAM), one-time passwords authentication technologies (OTP) and Universal Second Factor Authentification (U2F) including among others extensive authentication policies for your AD / LDAP users. 
 		It is enterprise-ready with strong support for:
 		
 		- high-availability
 		- load-balancing
 		- multi-tenancy
-		- cloud-readiness
 		- geolocalization
 		- delegated administration 
-		- ...and much more.
+		- contextual authentication with IP address and device fingerprint
+		- push Login technologie with Mobile Phone
+		- easy installation, update and configuration in RCDevs WebADM
+		- ... and much more.
 	</description>
     <summary>RCDevs OpenOTP Application enables Multi-Factor authentication for your users.</summary>
 	<licence>AGPL</licence>
     <author>RCDevs (Julien RICHARD)</author>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
 	<category>security</category>
 	<types>
