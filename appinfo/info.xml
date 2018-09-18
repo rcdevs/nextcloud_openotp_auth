@@ -22,7 +22,7 @@
     <summary>RCDevs OpenOTP Application enables Multi-Factor authentication for your users.</summary>
 	<licence>AGPL</licence>
     <author>RCDevs (Julien RICHARD)</author>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
 	<category>security</category>
 	<types>
@@ -62,6 +62,6 @@
 		<php min-version="5.5"/>
         <lib>soap</lib>
         <lib>ldap</lib>
-		<nextcloud min-version="12" max-version="13" />
+		<nextcloud min-version="13" max-version="15" />
     </dependencies>	
 </info>

@@ -25,6 +25,10 @@
 
 namespace OCA\TwoFactor_RCDevsOpenOTP\AppInfo;
 
+use OCA\TwoFactor_RCDevsOpenOTP\Event\StateChanged;
+use OCA\TwoFactor_RCDevsOpenOTP\Listener\IListener;
+use OCA\TwoFactor_RCDevsOpenOTP\Listener\StateChangeActivity;
+use OCA\TwoFactor_RCDevsOpenOTP\Listener\StateChangeRegistryUpdater;
 use OCA\TwoFactor_RCDevsOpenOTP\Controller\SettingsController;
 use OCP\App;
 
@@ -61,9 +65,25 @@ class Application extends \OCP\AppFramework\App
                 $server->getL10N($c->getAppName()),
                 $server->getConfig(),
 				$server->getLogger(),
-				$server->getAppManager()
+				$server->getAppManager(),
+				$server->getUserManager(),
+				$server->getEventDispatcher()
             );
         });
+		
+		$dispatcher = $container->getServer()->getEventDispatcher();
+		$dispatcher->addListener(StateChanged::class, function (StateChanged $event) use ($container) {
+			/** @var IListener[] $listeners */
+			$listeners = [
+				$container->query(StateChangeActivity::class),
+				$container->query(StateChangeRegistryUpdater::class),
+			];
+
+			foreach ($listeners as $listener) {
+				$listener->handle($event);
+			}
+		});		
+		
 	}
 	
     /**

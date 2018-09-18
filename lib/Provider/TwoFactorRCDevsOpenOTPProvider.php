@@ -87,7 +87,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return 'rcdevsopenotp';
     }
@@ -97,7 +97,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
      *
      * @return string
      */
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return 'RCDevs OpenOTP';
     }
@@ -107,7 +107,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'Two-Factor RCDevs OpenOTP';
     }
@@ -285,7 +285,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
      * @param IUser $user
      * @return Template
      */
-    public function getTemplate(IUser $user)
+    public function getTemplate(IUser $user): Template
     {
         try {
 			$this->openOTPsendRequest($user);
@@ -311,7 +311,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
      * @param string $challenge => OTP password
      * @return Boolean, True in case of success
      */
-    public function verifyChallenge(IUser $user, $challenge)
+    public function verifyChallenge(IUser $user, string $challenge): bool
     {
 		/*$this->logger->info("----- verifyChallenge -------:" . $challenge, array('app' => 'twofactor_rcdevsopenotp'));
     	$this->logger->info("POST NONCE:" . $_POST['rcdevsopenotp_nonce'], array('app' => 'twofactor_rcdevsopenotp'));
@@ -356,7 +356,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
      * @param IUser $user
      * @return boolean
      */
-    public function isTwoFactorAuthEnabledForUser(IUser $user)
+    public function isTwoFactorAuthEnabledForUser(IUser $user): bool
     {
 		// Get User Config
 		$user_enable_openotp = $this->config->getUserValue( $user->getUID(), 'twofactor_rcdevsopenotp', 'enable_openotp');
@@ -367,11 +367,11 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 
 		if (( $allow_user_administer_openotp === "off" && $authentication_method === "1") ||
 		    ( $allow_user_administer_openotp === "on" && $user_enable_openotp === "yes") ){
-			  //$this->logger->info("2FA ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
+			  $this->logger->info("2FA ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
 			  return true;
 		  }
 		  
-		  //$this->logger->info("2FA NOT ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
+		  $this->logger->info("2FA NOT ACTIVED", array('app' => 'twofactor_rcdevsopenotp'));		
 		  return false;
     }
 

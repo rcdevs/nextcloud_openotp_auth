@@ -32,15 +32,19 @@ use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IConfig;
 use OCP\ILogger;
+use OCP\IUserManager;
+use OCP\IURLGenerator;
 use Exception;
 use OCA\TwoFactor_RCDevsOpenOTP\AuthService\OpenotpAuth;
 use OCA\TwoFactor_RCDevsOpenOTP\Settings\OpenotpConfig;
+use OCA\TwoFactor_RCDevsOpenOTP\Event\StateChanged;
 use OCP\App\IAppManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
-class OpenotpAuthException extends Exception
+/*class OpenotpAuthException extends Exception
 {
-}
+}*/
 class SettingsController extends Controller {
 	/** @var IL10N */
 	private $l10n;
@@ -53,7 +57,12 @@ class SettingsController extends Controller {
 	/** OpenOTP Config */
     private $openotpconfig;
 	/** @var IAppManager */
-	private $appManager;		
+	private $appManager;	
+	/** @var IUserManager */
+	protected $userManager;
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;	
+	
 	
     /**
 	 * @param string $appName
@@ -62,14 +71,19 @@ class SettingsController extends Controller {
 	 * @param IL10N $l10n
 	 * @param IConfig $config
 	 * @param ILogger $logger
+	 * @param IAppManager $appManager
+	 * @param IUserManager $userManager
 	 */
-	public function __construct($AppName, $User, IRequest $request, IL10N $l10n, IConfig $config, ILogger $logger, IAppManager $appManager) {
+
+	public function __construct($AppName, $User, IRequest $request, IL10N $l10n, IConfig $config, ILogger $logger, IAppManager $appManager, IUserManager $userManager, EventDispatcherInterface $eventDispatcher) {
 		parent::__construct($AppName, $request);
 		$this->l10n = $l10n;
 		$this->User = $User;
 		
         $this->config = $config;
 		$this->appManager = $appManager;		
+		$this->userManager = $userManager;		
+		$this->eventDispatcher = $eventDispatcher;		
 		$this->logger = $logger;
 		$this->openotpconfig = OpenotpConfig::$_openotp_configs;
 	}
@@ -102,7 +116,7 @@ class SettingsController extends Controller {
 	 */
 	public function saveconfig( $post ){
 		parse_str($post, $POST);		
-
+		
 	    // Admin Settings && Application Settings page
 		if( $POST && isset($POST["openotp_settings_sent"]) ){
 			if( $POST['rcdevsopenotp_server_url'] === "" &&  $POST['rcdevsopenotp_client_id'] === ""
@@ -112,7 +126,7 @@ class SettingsController extends Controller {
 				return new DataResponse(['status' => "error", 'message' => "You must fill openotp settings before saving" ]);
 			
 			foreach( $this->openotpconfig as $_openotp_confname => $_openotp_config ){
-				if($_openotp_config['type'] === "checkbox" && !isset( $POST[$_openotp_config['name']] ) )
+				if( $_openotp_config['type'] === "checkbox" && !isset( $POST[$_openotp_config['name']] ) )
 					$this->config->setAppValue('twofactor_rcdevsopenotp', $_openotp_config['name'], "off");
 				else{
 					if( isset($POST[$_openotp_config['name']]) && $POST[$_openotp_config['name']] === "" && isset($_openotp_config['default_value']) ){
@@ -124,15 +138,55 @@ class SettingsController extends Controller {
 					}
 				}
 			}
+
+			if( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] == 1 ){
+				  //$this->logger->debug("*********-------------- Enable for everybody ---------------********* ", array('app' => 'twofactor_rcdevsopenotp'));
+				  $stateChanged = true;
+			}elseif( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] == 0 ){
+				  //$this->logger->debug("*********-------------- disable for everyBody ---------------********* ", array('app' => 'twofactor_rcdevsopenotp'));
+				  $stateChanged = false;
+			}else{
+				  //$this->logger->debug("*********-------------- NOPEEEEEEEEEEEEEEEEEEEEEEE ---------------********* ", array('app' => 'twofactor_rcdevsopenotp'));				
+				  $stateChanged = "";
+			}
+
+			// https://github.com/nextcloud/server/pull/9632
+			// Admins can enable or disable 2FA for all users, this change give the possibility to be "statefull" in other word
+			// we have to register enable/disable state for all users in IRegistry during plugin configuration (all user IRegistry will be populated at first config)						
+			foreach($this->userManager->getBackends() as $backend) {
+				$limit = 500;
+				$offset = 0;
+				do {
+					$users = $backend->getUsers('', $limit, $offset);
+					foreach ($users as $user) {
+						if( $stateChanged !== "" ){
+						  $this->eventDispatcher->dispatch(StateChanged::class, new StateChanged($this->userManager->get($user), $stateChanged));
+						} 
+					}
+					$offset += $limit;
+				} while(count($users) >= $limit);
+			}			
+
 			return new DataResponse(['status' => "success", 'message' => "Your settings have been saved succesfully" ]);
 	    }
+
+
 		// Personal Settings
 	    if( !$POST ) return new DataResponse(['status' => "error", 'message' => "An error occured, please contact administrator" ]);
 		
 		if( $POST && isset($POST["openotp_psettings_sent"]) ){	
-			if( isset($POST["enable_openotp"]) ) $this->config->setUserValue( $this->User->getUID(), 'twofactor_rcdevsopenotp', 'enable_openotp', $POST["enable_openotp"] );
-			
-			return new DataResponse(['status' => "success", 'message' => "Your settings have been saved succesfully" ]);
+			if( isset($POST["enable_openotp"]) ){
+				$this->config->setUserValue( $this->User->getUID(), 'twofactor_rcdevsopenotp', 'enable_openotp', $POST["enable_openotp"] );
+				
+				if( $POST["enable_openotp"] == "yes" ){
+					$this->eventDispatcher->dispatch(StateChanged::class, new StateChanged($this->User, true));
+					//$this->logger->info("*********-------------- Enable for user ---------------********* ".$this->User->getUID(), array('app' => 'twofactor_rcdevsopenotp'));
+				}else{
+					$this->eventDispatcher->dispatch(StateChanged::class, new StateChanged($this->User, false));
+					//$this->logger->info("*********-------------- Disable for user ---------------********* ".$this->User->getUID(), array('app' => 'twofactor_rcdevsopenotp'));
+				}
+				return new DataResponse(['status' => "success", 'message' => "Your settings have been saved succesfully" ]);
+			}
 		}else
 			return new DataResponse(['status' => "error", 'message' => "An error occured, please contact administrator" ]);
 	}
