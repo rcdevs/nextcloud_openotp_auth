@@ -350,7 +350,7 @@ EOT;
 	public function openOTPSimpleLogin($username, $domain, $password, $option, $context){
 		try{
 			$this->soapRequest();
-			$resp = $this->soap_client->openotpSimpleLogin($username, $domain, $password, $this->client_id, $this->remote_addr, $this->user_settings, $option, $context );
+			$resp = $this->soap_client->openotpSimpleLogin($username, $domain, $password, $this->client_id, $this->remote_addr, $this->user_settings, $option, $context, null);
 		}catch(exception $e){
 			$message = __METHOD__.', exception: '.$e->getMessage();
 			$this->logger->error($message, array('app' => 'rcdevsopenotp'));

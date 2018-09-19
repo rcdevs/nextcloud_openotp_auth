@@ -9,6 +9,8 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+<!-- User Authentication Methods -->
+
 <message name="openotpSimpleLoginRequest">
     <part name="username" type="xsd:string"/>
     <part name="domain" type="xsd:string"/>
@@ -18,6 +20,7 @@
     <part name="settings" type="xsd:string"/>
     <part name="options" type="xsd:string"/>
     <part name="context" type="xsd:string"/>
+    <part name="retryId" type="xsd:string"/>
 </message>
 
 <message name="openotpNormalLoginRequest">
@@ -30,6 +33,15 @@
     <part name="settings" type="xsd:string"/>
     <part name="options" type="xsd:string"/>
     <part name="context" type="xsd:string"/>
+    <part name="retryId" type="xsd:string"/>
+</message>
+
+<message name="openotpChallengeRequest">
+    <part name="username" type="xsd:string"/>
+    <part name="domain" type="xsd:string"/>
+    <part name="session" type="xsd:string"/>
+    <part name="otpPassword" type="xsd:string"/>
+    <part name="u2fResponse" type="xsd:string"/>
 </message>
 
 <message name="openotpLoginResponse">
@@ -42,21 +54,57 @@
     <part name="timeout" type="xsd:integer"/>
     <part name="otpChallenge" type="xsd:string"/>
     <part name="u2fChallenge" type="xsd:string"/>
+    <part name="offlineState" type="xsd:string"/>
 </message>
 
-<message name="openotpChallengeRequest">
+<!-- Mobile Confirmation Methods -->
+
+<message name="openotpNormalConfirmRequest">
     <part name="username" type="xsd:string"/>
     <part name="domain" type="xsd:string"/>
-    <part name="session" type="xsd:string"/>
-    <part name="otpPassword" type="xsd:string"/>
-    <part name="u2fResponse" type="xsd:string"/>
+    <part name="data" type="xsd:string"/>
+    <part name="async" type="xsd:integer"/>
+    <part name="client" type="xsd:string"/>
+    <part name="source" type="xsd:string"/>
+    <part name="settings" type="xsd:string"/>
 </message>
 
-<message name="openotpChallengeResponse">
+<message name="openotpAsyncConfirmRequest">
+    <part name="session" type="xsd:string"/>
+</message>
+
+<message name="openotpOfflineConfirmRequest">
+    <part name="session" type="xsd:string"/>
+    <part name="response" type="xsd:string"/>
+</message>
+
+<message name="openotpConfirmResponse">
     <part name="code" type="xsd:integer"/>
     <part name="error" type="xsd:string"/>
     <part name="message" type="xsd:string"/>
+    <part name="session" type="xsd:string"/>
+    <part name="timeout" type="xsd:integer"/>
+</message>
+
+<message name="openotpOfflineQRCodeRequest">
+    <part name="username" type="xsd:string"/>
+    <part name="domain" type="xsd:string"/>
     <part name="data" type="xsd:string"/>
+    <part name="client" type="xsd:string"/>
+    <part name="source" type="xsd:string"/>
+    <part name="settings" type="xsd:string"/>
+    <part name="qrFormat" type="xsd:string"/>
+    <part name="qrSizing" type="xsd:integer"/>
+    <part name="qrMargin" type="xsd:integer"/>
+</message>
+
+<message name="openotpOfflineQRCodeResponse">
+    <part name="code" type="xsd:integer"/>
+    <part name="error" type="xsd:string"/>
+    <part name="message" type="xsd:string"/>
+    <part name="session" type="xsd:string"/>
+    <part name="timeout" type="xsd:integer"/>
+    <part name="qrImage" type="xsd:base64Binary"/>
 </message>
 
 <message name="openotpStatusRequest"/>
@@ -75,13 +123,29 @@
       <input name="openotpNormalLoginRequest" message="tns:openotpNormalLoginRequest"/>
       <output name="openotpNormalLoginResponse" message="tns:openotpLoginResponse"/>
    </operation>
-   <operation name="openotpLogin">
-      <input name="openotpLoginRequest" message="tns:openotpNormalLoginRequest"/>
-      <output name="openotpLoginResponse" message="tns:openotpLoginResponse"/>
-   </operation>
    <operation name="openotpChallenge">
       <input name="openotpChallengeRequest" message="tns:openotpChallengeRequest"/>
-      <output name="openotpChallengeResponse" message="tns:openotpChallengeResponse"/>
+      <output name="openotpChallengeResponse" message="tns:openotpLoginResponse"/>
+   </operation>
+   <operation name="openotpNormalConfirm">
+      <input name="openotpNormalConfirmRequest" message="tns:openotpNormalConfirmRequest"/>
+      <output name="openotpNormalConfirmResponse" message="tns:openotpConfirmResponse"/>
+   </operation>
+   <operation name="openotpCheckConfirm">
+      <input name="openotpCheckConfirmRequest" message="tns:openotpAsyncConfirmRequest"/>
+      <output name="openotpCheckConfirmResponse" message="tns:openotpConfirmResponse"/>
+   </operation>
+   <operation name="openotpCancelConfirm">
+      <input name="openotpCancelConfirmRequest" message="tns:openotpAsyncConfirmRequest"/>
+      <output name="openotpCancelConfirmResponse" message="tns:openotpConfirmResponse"/>
+   </operation>
+   <operation name="openotpOfflineConfirm">
+      <input name="openotpOfflineConfirmRequest" message="tns:openotpOfflineConfirmRequest"/>
+      <output name="openotpOfflineConfirmResponse" message="tns:openotpConfirmResponse"/>
+   </operation>
+   <operation name="openotpOfflineQRCode">
+      <input name="openotpOfflineQRCodeRequest" message="tns:openotpOfflineQRCodeRequest"/>
+      <output name="openotpOfflineQRCodeResponse" message="tns:openotpOfflineQRCodeResponse"/>
    </operation>
    <operation name="openotpStatus">
       <input name="openotpStatusRequest" message="tns:openotpStatusRequest"/>
@@ -101,14 +165,33 @@
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>
-   <operation name="openotpLogin">
-      <!-- Operation openotpLogin is an alias of openotpNormalLogin. It is kept for backward compatibility with OpenOTP v1.0. -->
-      <soap:operation soapAction="openotpLogin"/>
+   <operation name="openotpChallenge">
+      <soap:operation soapAction="openotpChallenge"/>
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>
-   <operation name="openotpChallenge">
-      <soap:operation soapAction="openotpChallenge"/>
+   <operation name="openotpNormalConfirm">
+      <soap:operation soapAction="openotpNormalConfirm"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
+   <operation name="openotpCheckConfirm">
+      <soap:operation soapAction="openotpCheckConfirm"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
+   <operation name="openotpCancelConfirm">
+      <soap:operation soapAction="openotpCancelConfirm"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
+   <operation name="openotpOfflineConfirm">
+      <soap:operation soapAction="openotpOfflineConfirm"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
+   <operation name="openotpOfflineQRCode">
+      <soap:operation soapAction="openotpOfflineQRCode"/>
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>

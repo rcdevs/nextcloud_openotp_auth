@@ -33,7 +33,6 @@ use OCP\IRequest;
 use OCP\IConfig;
 use OCP\ILogger;
 use OCP\IUserManager;
-use OCP\IURLGenerator;
 use Exception;
 use OCA\TwoFactor_RCDevsOpenOTP\AuthService\OpenotpAuth;
 use OCA\TwoFactor_RCDevsOpenOTP\Settings\OpenotpConfig;
@@ -166,7 +165,6 @@ class SettingsController extends Controller {
 					$offset += $limit;
 				} while(count($users) >= $limit);
 			}			
-
 			return new DataResponse(['status' => "success", 'message' => "Your settings have been saved succesfully" ]);
 	    }
 

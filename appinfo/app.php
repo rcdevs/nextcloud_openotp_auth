@@ -38,6 +38,7 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 \OCP\Util::addStyle('twofactor_rcdevsopenotp', 'settings');
 \OCP\Util::addScript('twofactor_rcdevsopenotp', 'script');
 \OCP\Util::addScript('twofactor_rcdevsopenotp', 'fidou2f');
+\OCP\Util::addScript('twofactor_rcdevsopenotp', 'base64');
 
 //TODO: OC_User - Static method of private class must not be called
 /*$isadmin = \OC_User::isAdminUser(\OC_User::getUser());

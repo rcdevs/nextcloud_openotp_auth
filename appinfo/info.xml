@@ -64,4 +64,12 @@
         <lib>ldap</lib>
 		<nextcloud min-version="13" max-version="15" />
     </dependencies>	
+	<activity>
+		<settings>
+			<setting>OCA\TwoFactor_RCDevsOpenOTP\Activity\Setting</setting>
+		</settings>
+		<providers>
+			<provider>OCA\TwoFactor_RCDevsOpenOTP\Activity\Provider</provider>
+		</providers>
+	</activity>	
 </info>
