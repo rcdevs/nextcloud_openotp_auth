@@ -335,7 +335,6 @@ EOT;
 			$soap_client = new SoapClientTimeout(dirname(__FILE__).'/openotp.wsdl', $options);
 		}catch(exception $e){
 			$message = __METHOD__.', exception: '.$e->getMessage();
-			//$this->logger->error($message, array('app' => 'rcdevsopenotp'));
 			throw new OpenotpAuthException($message);
 		}
 

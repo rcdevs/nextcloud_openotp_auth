@@ -30,7 +30,6 @@ use OCA\TwoFactor_RCDevsOpenOTP\Listener\IListener;
 use OCA\TwoFactor_RCDevsOpenOTP\Listener\StateChangeActivity;
 use OCA\TwoFactor_RCDevsOpenOTP\Listener\StateChangeRegistryUpdater;
 use OCA\TwoFactor_RCDevsOpenOTP\Controller\SettingsController;
-use OCP\App;
 
 
 class Application extends \OCP\AppFramework\App
@@ -54,21 +53,24 @@ class Application extends \OCP\AppFramework\App
         $container->registerService('UserSession', function($c) {
             return $c->query('ServerContainer')->getUserSession();
         });
-
-				   
+						   
 	    $container->registerService('SettingsController', function ($c) {
             $server = $c->getServer();
             return new SettingsController(
                 $c->getAppName(),
 				$c->query('UserSession')->getUser(),
                 $server->getRequest(),
-                $server->getL10N($c->getAppName()),
+				$c->query('L10N'),
                 $server->getConfig(),
 				$server->getLogger(),
 				$server->getAppManager(),
 				$server->getUserManager(),
 				$server->getEventDispatcher()
             );
+        });
+		
+        $container->registerService('L10N', function($c) {
+            return $c->query('ServerContainer')->getL10N($c->query('AppName'));
         });
 		
 		$dispatcher = $container->getServer()->getEventDispatcher();
@@ -89,9 +91,11 @@ class Application extends \OCP\AppFramework\App
     /**
      * register setting scripts
      */
+	
     public function registerSettings()
     {
-        App::registerPersonal('twofactor_rcdevsopenotp',
+		//TODO: line   94: OCP\App::registerPersonal - Method of deprecated class must not be called
+        \OCP\App::registerPersonal('twofactor_rcdevsopenotp',
             'lib/Settings/settings-personal');
     }	
 		

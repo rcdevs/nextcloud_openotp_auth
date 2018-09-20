@@ -16,7 +16,7 @@
 	$(document).ready(function () {
 		
 		$('form[name="login"]').submit(function () {
-			$(this).prepend("<span style='color:white; font-size:0.9em;'>Processing request. Please wait...</span>");
+			$(this).prepend("<span style='color:white; font-size:0.9em;'>"+t('twofactor_totp', 'Processing request. Please wait...')+"</span>");
 			return true;
 		});
 		

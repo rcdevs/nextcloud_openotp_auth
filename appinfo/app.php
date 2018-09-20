@@ -41,17 +41,5 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 \OCP\Util::addScript('twofactor_rcdevsopenotp', 'base64');
 
 //TODO: OC_User - Static method of private class must not be called
-/*$isadmin = \OC_User::isAdminUser(\OC_User::getUser());
-if($isadmin){
-	\OC::$server->getNavigationManager()->add(function () {
-	    $urlGenerator = \OC::$server->getURLGenerator();
-	    return [
-	        'id' => 'twofactor_rcdevsopenotp',
-	        'order' => 100,
-	        'href' => $urlGenerator->linkToRoute('twofactor_rcdevsopenotp.settings.index'),
-	        'icon' => $urlGenerator->imagePath('twofactor_rcdevsopenotp', 'app.svg'),
-			'name' => "RCDevs OpenOTP"
-	    ];
-	});
-}*/
+
 

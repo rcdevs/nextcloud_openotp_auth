@@ -31,9 +31,9 @@ html #body-login .warning{ margin:0; }
 
 <?php if ($_['error_msg']): ?>
     <fieldset style="margin:6px 0 15px 0;" class="warning">
-		<legend>System throws this exception(s):</legend>
+		<legend><?php p($l->t('System throws this exception(s):')); ?></legend>
 		<p><?php p($_['error_msg']); ?></p>
-		<p style="font-size:0.8em;">Please contact administrator (more details on logfile).</p>
+		<p style="font-size:0.8em;"><?php p($l->t('Please contact administrator (more details on logfile).')); ?>.</p>
     </fieldset>
 <?php endif; ?>
 
@@ -42,7 +42,7 @@ html #body-login .warning{ margin:0; }
 <form method="POST" id="OpenOTPLoginForm" name="LoginForm">
 	
 	<?php if($_['status'] && $_['status'] === "pushSuccess") { ?>
-		<p>You have been connected<br/> You will be redirected in 2 seconds</p>
+		<p><?php p($l->t('You have been connected')); ?><br/><?php p($l->t('You will be redirected in 2 seconds')); ?></p>
 		<input type="hidden" name="challenge" value="passme" />
 		<input type="hidden" name="rcdevsopenotp_nonce" value="<?php p($_['challenge_params']['rcdevsopenotp_nonce']);?>" />
 	<?php }else{ ?>	
@@ -55,7 +55,7 @@ html #body-login .warning{ margin:0; }
 		endif; ?>
 		</p>
 		<?php if(!$_['error_msg']){ ?>
-			<p id="timout_cell" style="padding:10px 0; font-style:italic;">Timeout: <span id="timeout"><?php p($rcdevsopenotp_timeout); ?> seconds</p>
+			<p id="timout_cell" style="padding:10px 0; font-style:italic;"><?php p($l->t('Timeout:')); ?> <span id="timeout"><?php p($rcdevsopenotp_timeout) . " " . p($l->t('seconds')); ?></p>
 			<?php foreach( $_['challenge_params'] as $param => $val){ ?>
 				<input type="hidden" name="<?php p($param); ?>" value="<?php p($val); ?>">
 			<?php } ?>
@@ -65,11 +65,11 @@ html #body-login .warning{ margin:0; }
 				<input type="hidden" name="challenge" value="" />
 				<div id="u2f_display" class="display">
 				<?php if( $rcdevsopenotp_otpChallenge ){ ?>
-					<b>U2F response</b> &nbsp; <span class="blink" id="u2f_activate">[Activate Device]</span>
+					<b><?php p($l->t('U2F response')); ?></b> &nbsp; <span class="blink" id="u2f_activate">[<?php p($l->t('Activate Device')); ?>]</span>
 				<?php }else{ ?>
 					<p style="text-align:center;padding-top:10px;">
 						<img src="<?php p($rcdevsopenotp_appWebPath) ?>/img/u2f.png"><br/>
-						<span class="blink" id="u2f_activate">[Activate Device]</span>
+						<span class="blink" id="u2f_activate">[<?php p($l->t('Activate Device')); ?>]</span>
 					</p>
 				<?php } ?>		
 				</div>	
@@ -78,12 +78,12 @@ html #body-login .warning{ margin:0; }
 			<?php if( $rcdevsopenotp_otpChallenge || ( !$rcdevsopenotp_otpChallenge && !$rcdevsopenotp_u2fChallenge ) ){ ?>
 			<div id="actions" class="display">
 				<input type="password" id="openotp_password" name="challenge" placeholder="One Time Password" autocomplete="off" autocorrect="off" required autofocus/>
-				<input type="submit" id="openotp_submit" class="login primary icon-confirm-white" title="" value="Login" />
+				<input type="submit" id="openotp_submit" class="login primary icon-confirm-white" title="" value="<?php p($l->t('Login')); ?>" />
 			</div>
 			<?php } ?>		
 			<div id="retry"></div>
 		<?php }else{ ?>
-				<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />		
+				<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="<?php p($l->t('Retry')); ?>" />		
 		<?php } ?>
 
 	<?php } ?>
@@ -126,14 +126,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	
     function login_u2f (request) {
     	var u2f_handles = [];
+		var u2fProblemMsg = "<b style=\"color:darkorange;\">" + t('twofactor_rcdevsopenotp', 'A problem occurs, please verify your configuration:') + "</b><br/><ul><li>- " + t('twofactor_rcdevsopenotp', 'FIDO client communication with the public AppID URL requires SSL. Verify your AppID and communication in between.') + " </li><li>- " + t('twofactor_rcdevsopenotp', 'Onwcloud App URL (U2F facets) MUST be under the same DNS domain suffix as the AppID URL (configured in RCDevs MFA Server - WebADM WebPortal)') + "</li><li>- " + t('twofactor_rcdevsopenotp', 'Fido U2F login Method is only available for Chrome, Firefox and Opera. Internet Explorer and other Web browser are coming soon.') + "</li></ul><br/><a style=\"text-decoration:underline;\" target=\"_blank\" href=\"https://www.rcdevs.com/docs/howtos/openotp_u2f/openotp_u2f/\">" + t('twofactor_rcdevsopenotp', 'Read more on RCDevs Docs site') + "</a><br/><br/>";
 		var u2fErrorCodes = {
 			2: 'Invalid U2F request',
 			3: 'Unsupported U2F client',
 			4: 'Unsupported U2F device',
 			5: 'U2F request timed out',
 			6: 'Unknown U2F error',
-			10: "<b style=\"color:darkorange;\">A problem occurs, please verify your configuration:</b><br/><ul><li>- FIDO client communication with the public AppID URL requires SSL. Verify your AppID and communication in between. </li><li>- Onwcloud App URL (U2F facets) MUST be under the same DNS domain suffix as the AppID URL (configured in RCDevs MFA Server - WebADM WebPortal)</li><li>- Fido U2F login Method is only available for Chrome, Firefox and Opera. Internet Explorer and other Web browser are coming soon.</li></ul><br/><a style=\"text-decoration:underline;\" target=\"_blank\" href=\"https://www.rcdevs.com/docs/howtos/openotp_u2f/openotp_u2f/\">Read more on RCDevs Docs site</a><br/><br/>"
+			10: u2fProblemMsg
 		};
+		
     	for (i=0, len=request.keyHandles.length; i<len; i++) {
            u2f_handles.push({version:request.version,keyHandle:request.keyHandles[i]});
     	}
@@ -141,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.errorCode) {
 				$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
 				if (response.errorMessage) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + response.errorMessage.ucwords() + "</p><br/>" + u2fErrorCodes[10]);
-				else if (response.errorCode != 5) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + u2fErrorCodes[response.errorCode] + "</p>" + u2fErrorCodes[10]);
+				else if (response.errorCode != 5) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + t('twofactor_rcdevsopenotp', u2fErrorCodes[response.errorCode]) + "</p>" + t('twofactor_rcdevsopenotp', u2fErrorCodes[10]));
 				else if (response.errorCode == 5) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + u2fErrorCodes[response.errorCode] + "</p>");
 				else $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + u2fErrorCodes[6] + "</p>");
 				console.log("OpenOTP Fido U2F signature Log #Code:" + response.errorCode);								
@@ -187,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (request.credentialIds) login_fido2(request);
                 if (request.keyHandles) login_u2f(request);
             } else {
-				$('#u2f_activate').html('<h2>[Browser Not Supported]</h2>'); 
+				$('#u2f_activate').html('<h2>[' + t('twofactor_rcdevsopenotp', 'Browser Not Supported') + ']</h2>'); 
 				$('#u2f_activate').css('color','darkorange'); 
             }
             <?php
@@ -202,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function count()
 	{
 		plural = c <= 1 ? "" : "s";
-		$("#timeout").html(c + " second" + plural);
+		$("#timeout").html(c + " " + t('twofactor_rcdevsopenotp', 'second'+ plural) );
 		var div_width = $('#div_orange').width();
 		if(!static_width) static_width = div_width;
 		var new_width =  Math.round(c*static_width/base);
@@ -211,9 +213,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		if(c == 0 || c < 0) {
 			c = 0;
 			clearInterval(timer);
-			$("#timout_cell").html("<b style='color:darkorange;'>Login timedout!</b>");
+			$("#timout_cell").html("<b style='color:darkorange;'>" + t('twofactor_rcdevsopenotp', 'Login timedout!') + "</b>");
 			$(".display").html("");
-			$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
+			$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="' + t('twofactor_rcdevsopenotp', 'Retry') + '" />');
 		}
 		c--;
 	}

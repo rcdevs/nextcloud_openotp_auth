@@ -224,7 +224,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		
 		if (!$resp || !isset($resp['code'])) {
 			$this->logger->error("Invalid OpenOTP response for user " . $username, array('app' => 'twofactor_rcdevsopenotp'));
-			$message[] = "Invalid OpenOTP response for user " . $username;
+			$message[] = $this->trans->t("Invalid OpenOTP response for user") . " " . $username;
 		}
 		
 		switch ($resp['code']) {
@@ -270,7 +270,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 				$this->openOTPsendRequestStatus = "challenge";
 				break;
 			 default:
-			 	$this->trans->t("OpenOTP Authentication failed for user ".$username);
+			 	$this->trans->t("OpenOTP Authentication failed for user") . " " . $username;
 				$this->logger->info("OpenOTP Authentication failed for user ".$username, array('app' => 'twofactor_rcdevsopenotp'));
 				$this->openOTPsendRequestStatus = "error";
 				break;

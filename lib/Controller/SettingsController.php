@@ -41,9 +41,9 @@ use OCP\App\IAppManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
-/*class OpenotpAuthException extends Exception
+class OpenotpAuthException extends Exception
 {
-}*/
+}
 class SettingsController extends Controller {
 	/** @var IL10N */
 	private $l10n;
@@ -103,7 +103,6 @@ class SettingsController extends Controller {
 		    $params[$_openotp_config['name']] = $this->config->getAppValue( 'twofactor_rcdevsopenotp',$_openotp_config['name'],$_openotp_config['default_value'] );
 		}
 		
-		//$this->logger->debug("++ User ++  from Class " . get_class($this->User), array('app' => 'rcdevsopenotp'));
 		$params['user'] = $this->User->getUID();
 		$params['openotp_allconfig'] = $this->openotpconfig;
 
@@ -122,7 +121,7 @@ class SettingsController extends Controller {
 			&&	$POST['rcdevsopenotp_default_domain']  === "" && $POST['rcdevsopenotp_proxy_host']  === "" 
 			&&	$POST['rcdevsopenotp_proxy_port']  === "" && $POST['rcdevsopenotp_proxy_login']  === ""
 			&&	$POST['rcdevsopenotp_proxy_password']  === "" )
-				return new DataResponse(['status' => "error", 'message' => "You must fill openotp settings before saving" ]);
+				return new DataResponse(['status' => "error", 'message' => $this->l10n->t("You must fill openotp settings before saving") ]);
 			
 			foreach( $this->openotpconfig as $_openotp_confname => $_openotp_config ){
 				if( $_openotp_config['type'] === "checkbox" && !isset( $POST[$_openotp_config['name']] ) )
@@ -138,14 +137,14 @@ class SettingsController extends Controller {
 				}
 			}
 
-			if( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] == 1 ){
-				  //$this->logger->debug("*********-------------- Enable for everybody ---------------********* ", array('app' => 'twofactor_rcdevsopenotp'));
+			if( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] === 1 ){
+				  $this->logger->debug("*********  2FA state is Enabled for everybody  ********* ", array('app' => 'twofactor_rcdevsopenotp'));
 				  $stateChanged = true;
-			}elseif( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] == 0 ){
-				  //$this->logger->debug("*********-------------- disable for everyBody ---------------********* ", array('app' => 'twofactor_rcdevsopenotp'));
+			}elseif( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] === 0 ){
+				  $this->logger->debug("*********  2FA state is disabled for everyBody  ********* ", array('app' => 'twofactor_rcdevsopenotp'));
 				  $stateChanged = false;
 			}else{
-				  //$this->logger->debug("*********-------------- NOPEEEEEEEEEEEEEEEEEEEEEEE ---------------********* ", array('app' => 'twofactor_rcdevsopenotp'));				
+				  $this->logger->debug("*********  Silence is golden - No 2FA State  ********* ", array('app' => 'twofactor_rcdevsopenotp'));				
 				  $stateChanged = "";
 			}
 
@@ -165,28 +164,27 @@ class SettingsController extends Controller {
 					$offset += $limit;
 				} while(count($users) >= $limit);
 			}			
-			return new DataResponse(['status' => "success", 'message' => "Your settings have been saved succesfully" ]);
+			return new DataResponse(['status' => "success", 'message' => $this->l10n->t("Your settings have been saved succesfully") ]);
 	    }
 
-
 		// Personal Settings
-	    if( !$POST ) return new DataResponse(['status' => "error", 'message' => "An error occured, please contact administrator" ]);
+	    if( !$POST ) return new DataResponse(['status' => "error", 'message' => $this->l10n->t("An error occured, please contact administrator") ]);
 		
 		if( $POST && isset($POST["openotp_psettings_sent"]) ){	
 			if( isset($POST["enable_openotp"]) ){
 				$this->config->setUserValue( $this->User->getUID(), 'twofactor_rcdevsopenotp', 'enable_openotp', $POST["enable_openotp"] );
 				
-				if( $POST["enable_openotp"] == "yes" ){
+				if( $POST["enable_openotp"] === "yes" ){
 					$this->eventDispatcher->dispatch(StateChanged::class, new StateChanged($this->User, true));
-					//$this->logger->info("*********-------------- Enable for user ---------------********* ".$this->User->getUID(), array('app' => 'twofactor_rcdevsopenotp'));
+					$this->logger->debug("*********  2FA state is Enable for user  ********* ".$this->User->getUID(), array('app' => 'twofactor_rcdevsopenotp'));
 				}else{
 					$this->eventDispatcher->dispatch(StateChanged::class, new StateChanged($this->User, false));
-					//$this->logger->info("*********-------------- Disable for user ---------------********* ".$this->User->getUID(), array('app' => 'twofactor_rcdevsopenotp'));
+					$this->logger->debug("*********  2FA state is Disable for user  ********* ".$this->User->getUID(), array('app' => 'twofactor_rcdevsopenotp'));
 				}
-				return new DataResponse(['status' => "success", 'message' => "Your settings have been saved succesfully" ]);
+				return new DataResponse(['status' => "success", 'message' => $this->l10n->t("Your settings have been saved succesfully") ]);
 			}
 		}else
-			return new DataResponse(['status' => "error", 'message' => "An error occured, please contact administrator" ]);
+			return new DataResponse(['status' => "error", 'message' => $this->l10n->t("An error occured, please contact administrator") ]);
 	}
 	
 	/**
@@ -221,7 +219,7 @@ class SettingsController extends Controller {
 			return new DataResponse(['status' => "success", 'openotpStatus' => $resp['status'], 'message' => nl2br($resp['message']) ]);
 		else{
 			$this->logger->error("Could not connect to host", array('app' => 'twofactor_rcdevsopenotp'));
-			return new DataResponse(['status' => "error", 'message' => 'Could not connect to host' ]);
+			return new DataResponse(['status' => "error", 'message' => $this->l10n->t('Could not connect to host') ]);
 		}		
 	}
 }

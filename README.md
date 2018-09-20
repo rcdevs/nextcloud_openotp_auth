@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.0.2
+RCDevs OpenOTP Plugin for Nextcloud version 1.0.4
 Copyright (c) 2010-2018 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -52,8 +52,8 @@ or download our appliances:
 https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
-Compatible Nextcloud 12.x/13.X (Tested on 12.0.6/13.0.1)
-Version 1.0.2
+Compatible Nextcloud 14.x/15.X (Tested on 14.0/15.0.0alpha)
+Version 1.0.4
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -91,18 +91,31 @@ Version 1.0.2
 
 
 ### **********   CHANGELOG  **********
+1.0.4
+	- Add Statefull state to IRegistry: https://github.com/nextcloud/server/pull/9632
+	-  Admins can enable or disable 2FA for all users, this change give the possibility to be "statefull" in other word
+	   we have to register enable/disable state for all users in IRegistry during plugin configuration (all user IRegistry will be populated at first config)
+	- FIDO2 now supported, All FIDO protocols fully supported:
+		 U2F: OpenOTP operated with CTAP1 only
+		 FIDO2: OpenOTP operates with CTAP2 only (WebAuthn)
+	- Activate Multilingual 
+	- Add type to IProvider implemented classes
+1.0.3
+	- Update register settings scripts
+	- Update deprecated classes
 1.0.2
-		 - app:check-code integrity		 
-		 - Create new Administration menu entry in left side 
-		 - Personal settings are now situated in Security Section
+	- app:check-code integrity		 
+	- Create new Administration menu entry in left side 
+	- Personal settings are now situated in Security Section
 1.0.1
 	Add compatibility to NextCloud v12/13 
-		 - OC_User::getLogoutAttribute() is now deprecated
-		 - Fixed ajax-loader img not showing while pressing Test button
-		 - custom_csp in config deprecated - nonce used instead + addDefaultPolicy
-		 - add Annotation @UseSession to store session
-		 - add EventListener on DOMContentLoaded in template challenge		 
-		 - implement contextual authentication		 
+	- OC_User::getLogoutAttribute() is now deprecated
+	- Fixed ajax-loader img not showing while pressing Test button
+	- custom_csp in config deprecated - nonce used instead + addDefaultPolicy
+	- add Annotation @UseSession to store session
+	- add EventListener on DOMContentLoaded in template challenge	
+	- implement contextual authentication
 1.0.0
      Initial public release.
+
  
