@@ -137,10 +137,10 @@ class SettingsController extends Controller {
 				}
 			}
 
-			if( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] === 1 ){
+			if( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] === "1" ){
 				  $this->logger->debug("*********  2FA state is Enabled for everybody  ********* ", array('app' => 'twofactor_rcdevsopenotp'));
 				  $stateChanged = true;
-			}elseif( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] === 0 ){
+			}elseif( !isset( $POST["rcdevsopenotp_allow_user_administer_openotp"] ) && $POST["rcdevsopenotp_authentication_method"] === "0" ){
 				  $this->logger->debug("*********  2FA state is disabled for everyBody  ********* ", array('app' => 'twofactor_rcdevsopenotp'));
 				  $stateChanged = false;
 			}else{
