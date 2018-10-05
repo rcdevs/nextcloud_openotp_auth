@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.0.4-1
+RCDevs OpenOTP Plugin for Nextcloud version 1.0.5
 Copyright (c) 2010-2018 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -91,6 +91,7 @@ Version 1.0.4
 
 
 ### **********   CHANGELOG  **********
+1.0.5
 1.0.4-1
 	- Fixed Add all users to IRegistry when saving plugin configuration
 1.0.4

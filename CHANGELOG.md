@@ -1,3 +1,4 @@
+1.0.5
 1.0.4-1
 	- Fixed Add all users to IRegistry when saving plugin configuration
 1.0.4
