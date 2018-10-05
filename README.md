@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.0.4
+RCDevs OpenOTP Plugin for Nextcloud version 1.0.4-1
 Copyright (c) 2010-2018 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -91,6 +91,8 @@ Version 1.0.4
 
 
 ### **********   CHANGELOG  **********
+1.0.4-1
+	- Fixed Add all users to IRegistry when saving plugin configuration
 1.0.4
 	- Add Statefull state to IRegistry: https://github.com/nextcloud/server/pull/9632
 	-  Admins can enable or disable 2FA for all users, this change give the possibility to be "statefull" in other word

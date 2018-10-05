@@ -1,3 +1,5 @@
+1.0.4-1
+	- Fixed Add all users to IRegistry when saving plugin configuration
 1.0.4
 	- Add Statefull state to IRegistry: https://github.com/nextcloud/server/pull/9632
 	-  Admins can enable or disable 2FA for all users, this change give the possibility to be "statefull" in other word
