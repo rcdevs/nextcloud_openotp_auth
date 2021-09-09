@@ -1,4 +1,4 @@
 # Authors
 
-* RCDevs - Julien RICHARD: <julien.richard@rcdevs.com>
+* RCDevs - Charly ROHART: <info@rcdevs.com>
 

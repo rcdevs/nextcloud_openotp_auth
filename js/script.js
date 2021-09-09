@@ -7,7 +7,7 @@
  * (at your option) any later version.
  *
  * @package twofactor_rcdevsopenotp
- * @author Julien RICHARD
+ * @author Charly ROHART
  * @copyright 2018 RCDEVS info@rcdevs.com
  */
 
