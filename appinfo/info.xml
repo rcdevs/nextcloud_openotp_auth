@@ -62,7 +62,7 @@
 		<php min-version="5.5"/>
         <lib>soap</lib>
         <lib>ldap</lib>
-		<nextcloud min-version="14" max-version="15" />
+		<nextcloud min-version="14" max-version="22" />
     </dependencies>	
 	<activity>
 		<settings>
