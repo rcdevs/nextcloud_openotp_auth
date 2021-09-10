@@ -100,7 +100,7 @@ u2f.Error;
 
 /**
  * Data object for a single sign request.
- * @typedef {enum {BLUETOOTH_RADIO, BLUETOOTH_LOW_ENERGY, USB, NFC}}
+ * @typedef {enum {BLUETOOTH_RADIO, BLUETOOTH_LOW_ENERGY, USB, NFC, USB_INTERNAL}}
  */
 u2f.Transport;
 
@@ -230,7 +230,7 @@ u2f.isAndroidChrome_ = function() {
  * @private
  */
 u2f.isIosChrome_ = function() {
-  return $.inArray(navigator.platform, ["iPhone", "iPad", "iPod"]) > -1;
+  return ["iPhone", "iPad", "iPod"].indexOf(navigator.platform) > -1;
 };
 
 /**
@@ -610,6 +610,28 @@ u2f.responseHandler_ = function(message) {
   var cb = u2f.callbackMap_[reqId];
   delete u2f.callbackMap_[reqId];
   cb(response['responseData']);
+};
+
+/**
+ * Calls the callback with true or false as first and only argument
+ * @param {Function} callback
+ */
+u2f.isSupported = function(callback) {
+  var hasCalledBack = false;
+  function reply(value) {
+    if (hasCalledBack)
+      return;
+    hasCalledBack = true;
+    callback(value);
+  }
+  u2f.getApiVersion(
+    function (response) {
+      js_api_version = response['js_api_version'] === undefined ? 0 : response['js_api_version'];
+      reply(true);
+    }
+  );
+  // No response from extension within 500ms -> no support
+  setTimeout(reply.bind(null, false), 500);
 };
 
 /**
