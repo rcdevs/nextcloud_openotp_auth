@@ -216,8 +216,9 @@ document.addEventListener('DOMContentLoaded', function() {
 						audio_stream.getTracks().forEach((track) => { track.stop(); });
 					} else if (counter > 0) {
 						$('#voice_button').attr('value', '<?php p($l->t('Speak Now')); ?>' + '('+counter+')');
-			$('#voice_button').addClass('ui_button_red');
+						$('#voice_button').addClass('openotp_ui_button_red');
 						$('#login_button').prop('disabled', true);
+						$('#voice_button').prop('disabled', true);
 					} else {
 			$('#voice_button').attr('value', '<?php p($l->t('Processing...')); ?>');
 		}

@@ -43,4 +43,6 @@ span.error{ background: #ce3702; border-radius: 3px; }
 	background-image: url('../img/app-dark.svg');
 }
 
-
+.openotp_ui_button_red.primary {
+	background-color: red;
+}
