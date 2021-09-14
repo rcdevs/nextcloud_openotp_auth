@@ -75,11 +75,13 @@ html #body-login .warning{ margin:0; }
 				</div>	
 			<?php } ?>			
 			<?php if ($rcdevsopenotp_voiceLogin) { ?>
-				<strong><?php p($l->t('Voice Biometrics: ')); ?></strong>
-				<img style="width:100px;" src="<?php p($rcdevsopenotp_appWebPath) ?>/img/voice.gif"><br>
-				<input type="button" id="voice_button" value="<?php p($l->t('Click to Speak')); ?>" class="login primary icon-confirm-white">
-				<input type="hidden" name="rcdevsopenotp_sample" value="">
-				<input type="hidden" name="challenge" value="">
+				<div id="voice_display" class="display">
+					<strong><?php p($l->t('Voice Biometrics: ')); ?></strong>
+					<img style="width:100px;" src="<?php p($rcdevsopenotp_appWebPath) ?>/img/voice.gif"><br>
+					<input type="button" id="voice_button" value="<?php p($l->t('Click to Speak')); ?>" class="login primary icon-confirm-white">
+					<input type="hidden" name="rcdevsopenotp_sample" value="">
+					<input type="hidden" name="challenge" value="">
+				</div>
 			<?php } elseif( $rcdevsopenotp_otpChallenge || ( !$rcdevsopenotp_otpChallenge && !$rcdevsopenotp_u2fChallenge ) ){ ?>
 			<div id="actions" class="display">
 				<input type="password" id="openotp_password" name="challenge" placeholder="One Time Password" autocomplete="off" autocorrect="off" required autofocus/>
