@@ -150,7 +150,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
      * @param string $otp OTP
      * @throws OpenOTPsendRequestException
      */
-    private function openOTPsendRequest($user, $otp = NULL)
+    private function openOTPsendRequest($user, $otp = NULL, $sample = NULL)
     {
 		$message = array();
 		$params = array();
@@ -215,7 +215,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		if ($state !== "") {
 			// OpenOTP Challenge
 			$this->logger->info("New OpenOTP Challenge for user " . $username, array('app' => 'twofactor_rcdevsopenotp'));
-			$resp = $openotpAuth->openOTPChallenge( $username, $domain, $state, $otp, $u2f );
+			$resp = $openotpAuth->openOTPChallenge( $username, $domain, $state, $otp, $u2f, $sample );
 		} else {
 			// OpenOTP Login
 			$this->logger->info( "New OpenOTP SimpleLogin for user " . $username, array('app' => 'twofactor_rcdevsopenotp'));
@@ -258,6 +258,8 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 
 				$this->challenge_params = array( 'rcdevsopenotp_otpChallenge' => $resp['otpChallenge'],
 										  'rcdevsopenotp_u2fChallenge' => $resp['u2fChallenge'],
+										  'rcdevsopenotp_voiceLogin' => (strstr($resp['otpChallenge'], "VOICE")),
+										  'rcdevsopenotp_voiceOnly' => (strcmp($resp['otpChallenge'], "VOICE") == 0),
 										  'rcdevsopenotp_message' => $resp['message'],
 										  'rcdevsopenotp_username' => $username,
 										  'rcdevsopenotp_session' => $resp['session'],
@@ -329,7 +331,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		if($challenge === "passme" && $nonce && $rcdevsopenotp_nonce && $nonce === $rcdevsopenotp_nonce) return true;
 		
         try {
-			$this->openOTPsendRequest($user, $challenge);
+			$this->openOTPsendRequest($user, $challenge, isset($_POST['rcdevsopenotp_sample']) ? $_POST['rcdevsopenotp_sample'] : NULL);
         } catch (OpenOTPsendRequestException $e) {
             $error_message = $e->getMessage();
         }

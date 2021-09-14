@@ -21,6 +21,7 @@
     <part name="options" type="xsd:string"/>
     <part name="context" type="xsd:string"/>
     <part name="retryId" type="xsd:string"/>
+    <part name="virtual" type="xsd:string"/>
 </message>
 
 <message name="openotpNormalLoginRequest">
@@ -34,6 +35,7 @@
     <part name="options" type="xsd:string"/>
     <part name="context" type="xsd:string"/>
     <part name="retryId" type="xsd:string"/>
+    <part name="virtual" type="xsd:string"/>
 </message>
 
 <message name="openotpChallengeRequest">
@@ -42,6 +44,7 @@
     <part name="session" type="xsd:string"/>
     <part name="otpPassword" type="xsd:string"/>
     <part name="u2fResponse" type="xsd:string"/>
+    <part name="voiceSample" type="xsd:base64Binary"/>
 </message>
 
 <message name="openotpLoginResponse">
@@ -55,6 +58,7 @@
     <part name="otpChallenge" type="xsd:string"/>
     <part name="u2fChallenge" type="xsd:string"/>
     <part name="offlineState" type="xsd:string"/>
+    <part name="u2fDataState" type="xsd:string"/>
 </message>
 
 <!-- Mobile Confirmation Methods -->
@@ -63,13 +67,18 @@
     <part name="username" type="xsd:string"/>
     <part name="domain" type="xsd:string"/>
     <part name="data" type="xsd:string"/>
-    <part name="async" type="xsd:integer"/>
+    <part name="file" type="xsd:base64Binary"/>
+    <part name="form" type="xsd:base64Binary"/>
+    <part name="async" type="xsd:boolean"/>
+    <part name="timeout" type="xsd:integer"/>
+    <part name="issuer" type="xsd:string"/>
     <part name="client" type="xsd:string"/>
     <part name="source" type="xsd:string"/>
     <part name="settings" type="xsd:string"/>
+    <part name="virtual" type="xsd:string"/>
 </message>
 
-<message name="openotpAsyncConfirmRequest">
+<message name="openotpCheckConfirmRequest">
     <part name="session" type="xsd:string"/>
 </message>
 
@@ -84,27 +93,83 @@
     <part name="message" type="xsd:string"/>
     <part name="session" type="xsd:string"/>
     <part name="timeout" type="xsd:integer"/>
+    <part name="comment" type="xsd:string"/>
+    <part name="file" type="xsd:base64Binary"/>
+    <part name="fileData" type="xsd:string"/>
+    <part name="formData" type="xsd:string"/>
 </message>
 
-<message name="openotpOfflineQRCodeRequest">
+<message name="openotpConfirmQRCodeRequest">
     <part name="username" type="xsd:string"/>
     <part name="domain" type="xsd:string"/>
     <part name="data" type="xsd:string"/>
+    <part name="file" type="xsd:base64Binary"/>
+    <part name="form" type="xsd:base64Binary"/>
+    <part name="async" type="xsd:boolean"/>
+    <part name="timeout" type="xsd:integer"/>
+    <part name="issuer" type="xsd:string"/>
     <part name="client" type="xsd:string"/>
     <part name="source" type="xsd:string"/>
     <part name="settings" type="xsd:string"/>
     <part name="qrFormat" type="xsd:string"/>
     <part name="qrSizing" type="xsd:integer"/>
     <part name="qrMargin" type="xsd:integer"/>
+    <part name="virtual" type="xsd:string"/>
 </message>
 
-<message name="openotpOfflineQRCodeResponse">
+<message name="openotpConfirmQRCodeResponse">
     <part name="code" type="xsd:integer"/>
     <part name="error" type="xsd:string"/>
     <part name="message" type="xsd:string"/>
     <part name="session" type="xsd:string"/>
     <part name="timeout" type="xsd:integer"/>
     <part name="qrImage" type="xsd:base64Binary"/>
+</message>
+
+<message name="openotpTouchConfirmRequest">
+    <part name="session" type="xsd:string"/>
+    <part name="sendPush" type="xsd:boolean"/>
+    <part name="qrFormat" type="xsd:string"/>
+    <part name="qrSizing" type="xsd:integer"/>
+    <part name="qrMargin" type="xsd:integer"/>
+</message>
+
+<message name="openotpTouchConfirmResponse">
+    <part name="code" type="xsd:integer"/>
+    <part name="error" type="xsd:string"/>
+    <part name="message" type="xsd:string"/>
+    <part name="timeout" type="xsd:integer"/>
+    <part name="qrImage" type="xsd:base64Binary"/>
+</message>
+
+<message name="openotpListRequest"/>
+
+<message name="openotpListResponse">
+    <part name="code" type="xsd:string"/>
+    <part name="error" type="xsd:string"/>
+    <part name="message" type="xsd:string"/>
+    <part name="jsonData" type="tns:string"/>
+</message>
+
+<!-- PKI Authentication Methods -->
+
+<message name="openotpPKILoginRequest">
+    <part name="certificate" type="xsd:string"/>
+    <part name="untrusted" type="xsd:boolean"/>
+    <part name="client" type="xsd:string"/>
+    <part name="source" type="xsd:string"/>
+    <part name="settings" type="xsd:string"/>
+    <part name="options" type="xsd:string"/>
+    <part name="virtual" type="xsd:string"/>
+</message>
+
+<message name="openotpPKILoginResponse">
+    <part name="code" type="xsd:integer"/>
+    <part name="error" type="xsd:string"/>
+    <part name="message" type="xsd:string"/>
+    <part name="username" type="xsd:string"/>
+    <part name="domain" type="xsd:string"/>
+    <part name="data" type="xsd:string"/>
 </message>
 
 <message name="openotpStatusRequest"/>
@@ -127,25 +192,41 @@
       <input name="openotpChallengeRequest" message="tns:openotpChallengeRequest"/>
       <output name="openotpChallengeResponse" message="tns:openotpLoginResponse"/>
    </operation>
+   <operation name="openotpListLogin">
+      <input name="openotpListLoginRequest" message="tns:openotpListRequest"/>
+      <output name="openotpListLoginResponse" message="tns:openotpListResponse"/>
+   </operation>
+   <operation name="openotpPKILogin">
+      <input name="openotpPKILoginRequest" message="tns:openotpPKILoginRequest"/>
+      <output name="openotpPKILoginResponse" message="tns:openotpPKILoginResponse"/>
+   </operation>
    <operation name="openotpNormalConfirm">
       <input name="openotpNormalConfirmRequest" message="tns:openotpNormalConfirmRequest"/>
       <output name="openotpNormalConfirmResponse" message="tns:openotpConfirmResponse"/>
-   </operation>
-   <operation name="openotpCheckConfirm">
-      <input name="openotpCheckConfirmRequest" message="tns:openotpAsyncConfirmRequest"/>
-      <output name="openotpCheckConfirmResponse" message="tns:openotpConfirmResponse"/>
-   </operation>
-   <operation name="openotpCancelConfirm">
-      <input name="openotpCancelConfirmRequest" message="tns:openotpAsyncConfirmRequest"/>
-      <output name="openotpCancelConfirmResponse" message="tns:openotpConfirmResponse"/>
    </operation>
    <operation name="openotpOfflineConfirm">
       <input name="openotpOfflineConfirmRequest" message="tns:openotpOfflineConfirmRequest"/>
       <output name="openotpOfflineConfirmResponse" message="tns:openotpConfirmResponse"/>
    </operation>
-   <operation name="openotpOfflineQRCode">
-      <input name="openotpOfflineQRCodeRequest" message="tns:openotpOfflineQRCodeRequest"/>
-      <output name="openotpOfflineQRCodeResponse" message="tns:openotpOfflineQRCodeResponse"/>
+   <operation name="openotpConfirmQRCode">
+      <input name="openotpConfirmQRCodeRequest" message="tns:openotpConfirmQRCodeRequest"/>
+      <output name="openotpConfirmQRCodeResponse" message="tns:openotpConfirmQRCodeResponse"/>
+   </operation>
+   <operation name="openotpCheckConfirm">
+      <input name="openotpCheckConfirmRequest" message="tns:openotpCheckConfirmRequest"/>
+      <output name="openotpCheckConfirmResponse" message="tns:openotpConfirmResponse"/>
+   </operation>
+   <operation name="openotpCancelConfirm">
+      <input name="openotpCancelConfirmRequest" message="tns:openotpCheckConfirmRequest"/>
+      <output name="openotpCancelConfirmResponse" message="tns:openotpConfirmResponse"/>
+   </operation>
+   <operation name="openotpTouchConfirm">
+      <input name="openotpTouchConfirmRequest" message="tns:openotpTouchConfirmRequest"/>
+      <output name="openotpTouchConfirmResponse" message="tns:openotpTouchConfirmResponse"/>
+   </operation>
+   <operation name="openotpListConfirm">
+      <input name="openotpListConfirmRequest" message="tns:openotpListRequest"/>
+      <output name="openotpListConfirmResponse" message="tns:openotpListResponse"/>
    </operation>
    <operation name="openotpStatus">
       <input name="openotpStatusRequest" message="tns:openotpStatusRequest"/>
@@ -170,8 +251,28 @@
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>
+   <operation name="openotpListLogin">
+      <soap:operation soapAction="openotpListLogin"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
+   <operation name="openotpPKILogin">
+      <soap:operation soapAction="openotpPKILogin"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
    <operation name="openotpNormalConfirm">
       <soap:operation soapAction="openotpNormalConfirm"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
+   <operation name="openotpOfflineConfirm">
+      <soap:operation soapAction="openotpOfflineConfirm"/>
+      <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+      <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+   </operation>
+   <operation name="openotpConfirmQRCode">
+      <soap:operation soapAction="openotpConfirmQRCode"/>
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>
@@ -185,13 +286,13 @@
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>
-   <operation name="openotpOfflineConfirm">
-      <soap:operation soapAction="openotpOfflineConfirm"/>
+   <operation name="openotpTouchConfirm">
+      <soap:operation soapAction="openotpTouchConfirm"/>
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>
-   <operation name="openotpOfflineQRCode">
-      <soap:operation soapAction="openotpOfflineQRCode"/>
+   <operation name="openotpListConfirm">
+      <soap:operation soapAction="openotpListConfirm"/>
       <input><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
       <output><soap:body use="literal" namespace="urn:openotp" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
    </operation>
@@ -204,7 +305,7 @@
 
 <service name="openotpService">
    <port name="openotpPort" binding="tns:openotpBinding">
-      <soap:address location="%ADDRESS%"/>
+	   <soap:address location="%ADDRESS%"/>
    </port>
 </service>
 

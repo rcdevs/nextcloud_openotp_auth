@@ -74,13 +74,18 @@ html #body-login .warning{ margin:0; }
 				<?php } ?>		
 				</div>	
 			<?php } ?>			
-			
-			<?php if( $rcdevsopenotp_otpChallenge || ( !$rcdevsopenotp_otpChallenge && !$rcdevsopenotp_u2fChallenge ) ){ ?>
+			<?php if ($rcdevsopenotp_voiceLogin) { ?>
+				<strong><?php p($l->t('Voice Biometrics: ')); ?></strong>
+				<img style="width:100px;" src="<?php p($rcdevsopenotp_appWebPath) ?>/img/voice.gif"><br>
+				<input type="button" id="voice_button" value="<?php p($l->t('Click to Speak')); ?>" class="login primary icon-confirm-white">
+				<input type="hidden" name="rcdevsopenotp_sample" value="">
+				<input type="hidden" name="challenge" value="">
+			<?php } elseif( $rcdevsopenotp_otpChallenge || ( !$rcdevsopenotp_otpChallenge && !$rcdevsopenotp_u2fChallenge ) ){ ?>
 			<div id="actions" class="display">
 				<input type="password" id="openotp_password" name="challenge" placeholder="One Time Password" autocomplete="off" autocorrect="off" required autofocus/>
 				<input type="submit" id="openotp_submit" class="login primary icon-confirm-white" title="" value="<?php p($l->t('Login')); ?>" />
 			</div>
-			<?php } ?>		
+			<?php } ?>
 			<div id="retry"></div>
 		<?php }else{ ?>
 				<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="<?php p($l->t('Retry')); ?>" />		
@@ -193,7 +198,59 @@ document.addEventListener('DOMContentLoaded', function() {
 				$('#u2f_activate').css('color','darkorange'); 
             }
             <?php
-        } ?>	
+        }
+
+	    if ($rcdevsopenotp_voiceLogin) { ?>
+			var audio_stream;
+			var audio_context;
+			var audio_recorder;
+			var voice_start_callback = function() {
+				var counter = 5;
+				setInterval(() => {
+					if (counter == 0) {
+						audio_recorder.stop();
+						audio_context.close();
+						audio_recorder.exportWAV(voice_stop_callback);
+						audio_stream.getTracks().forEach((track) => { track.stop(); });
+					} else if (counter > 0) {
+						$('#voice_button').attr('value', '<?php p($l->t('Speak Now')); ?>' + '('+counter+')');
+			$('#voice_button').addClass('ui_button_red');
+						$('#login_button').prop('disabled', true);
+					} else {
+			$('#voice_button').attr('value', '<?php p($l->t('Processing...')); ?>');
+		}
+		counter--;
+				}, 1000);
+			};
+			var voice_stop_callback = function(data) {
+				var reader = new FileReader;
+				reader.onload = function(e) {
+					$('#OpenOTPLoginForm input[name=rcdevsopenotp_sample]').val(e.target.result.slice(e.target.result.indexOf(',') + 1));
+					$('#OpenOTPLoginForm').submit();
+				};
+				reader.readAsDataURL(data);
+			};
+			function voice_record () {
+				AudioContext = window.AudioContext || window.webkitAudioContext;
+				navigator.mediaDevices.getUserMedia({audio:true,video:false}).then(function (stream) {
+					audio_context = new AudioContext();
+					audio_stream = stream;
+					audio_input = audio_context.createMediaStreamSource(stream);
+					audio_recorder = new Recorder(audio_input, {numChannels:1});
+					audio_recorder.record();
+					voice_start_callback();
+				}).catch(function (error) {
+					alert(error);
+					$('#voice_button').attr('value', '<?php p($l->t('Browser Error')); ?>');
+					$('#voice_button').prop('disabled', true);
+				});
+			}
+
+			$('#voice_button').click(function() {
+				voice_record();
+			});
+			<?php
+		} ?>
 	
 
 	<?php if(!$_['error_msg'] && ($_['status'] && $_['status'] !== "pushSuccess")):?>

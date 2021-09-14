@@ -357,10 +357,10 @@ EOT;
 		return isset($resp) ? $resp : false;
 	}
 	
-	public function openOTPChallenge($username, $domain, $state, $password, $u2f){
+	public function openOTPChallenge($username, $domain, $state, $password, $u2f, $sample){
 		try{
 			$this->soapRequest();
-			$resp = $this->soap_client->openotpChallenge($username, $domain, $state, $password, $u2f);
+			$resp = $this->soap_client->openotpChallenge($username, $domain, $state, $password, $u2f, base64_decode($sample));
 		}catch(exception $e){
 			$message = __METHOD__.', exception: '.$e->getMessage();
 			$this->logger->error($message, array('app' => 'rcdevsopenotp'));
