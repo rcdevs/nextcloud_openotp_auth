@@ -52,8 +52,8 @@ or download our appliances:
 https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
-Compatible Nextcloud 14.x/15.X (Tested on 14.0/15.0.0alpha)
-Version 1.0.4
+Compatible Nextcloud 14.x to 22.X (Tested on 22.1.1)
+Version 1.1.0
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -91,6 +91,9 @@ Version 1.0.4
 
 
 ### **********   CHANGELOG  **********
+1.1.0
+	- Add compatibility from NextCloud v16 to NextCloud v22
+	- Add support for Voice Biometrics authentication
 1.0.5
 1.0.4-1
 	- Fixed Add all users to IRegistry when saving plugin configuration
