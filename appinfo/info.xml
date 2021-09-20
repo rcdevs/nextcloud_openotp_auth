@@ -25,7 +25,7 @@ It is enterprise-ready with strong support for:
 	</description>
     <summary>RCDevs OpenOTP Application enables Multi-Factor authentication for your users.</summary>
 	<licence>AGPL</licence>
-    <author>RCDevs (Charly ROHART)</author>
+    <author>RCDevs</author>
 	<version>1.1.0</version>
 	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
 	<category>security</category>

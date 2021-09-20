@@ -4,7 +4,7 @@
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
  * @package twofactor_rcdevsopenotp
- * @author Charly ROHART
+ * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
  * This program is free software: you can redistribute it and/or modify
