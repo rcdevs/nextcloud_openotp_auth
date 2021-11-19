@@ -79,9 +79,10 @@
 function check_server_url() {
 	var url = OC.generateUrl('/apps/twofactor_rcdevsopenotp/check_server_url');
 	var server_url_val = $( "#openotp_settings #rcdevsopenotp_server_url" ).val();
+	var ignore_ssl_errors = $( "#openotp_settings #rcdevsopenotp_ignore_ssl_errors" ).is(":checked");
 	
 	$("#check_server_loading").fadeIn();
-    $.post( url, { server_url: server_url_val }, function(response){
+    $.post( url, { server_url: server_url_val, ignore_ssl_errors: ignore_ssl_errors }, function(response){
 		/*if($('#message_check_server_url').is(":visible")){
 			$('#message_check_server_url').fadeOut("fast"); 
 		}*/

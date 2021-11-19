@@ -194,6 +194,8 @@ class SettingsController extends Controller {
 		$this->logger->info("********* New OpenOTP Authentication Status *********", array('app' => 'twofactor_rcdevsopenotp'));
 
 		$server_url = $_POST['server_url'];
+		$ignore_ssl_errors = filter_var($_POST['ignore_ssl_errors'], FILTER_VALIDATE_BOOLEAN);
+
 		if( $server_url === "" ) return false;
 
 		// get App Configs
@@ -206,6 +208,8 @@ class SettingsController extends Controller {
 		}
 		$params['rcdevsopenotp_remote_addr'] = $this->request->getRemoteAddress();
 		$params['rcdevsopenotp_server_url'] = stripslashes($server_url);
+		$params['rcdevsopenotp_ignore_ssl_errors'] = $ignore_ssl_errors;
+
 		try {
 			$appPath = $this->appManager->getAppPath('twofactor_rcdevsopenotp');
 		} catch (AppPathNotFoundException $e) {}		

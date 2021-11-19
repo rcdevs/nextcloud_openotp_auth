@@ -39,6 +39,8 @@ class OpenotpAuth{
 	private $home;
 	/** @var server_url */
 	private $server_url;
+	/** @var ignore_ssl_errors */
+	private $ignore_ssl_errors;
 	/** @var client_id */
 	private $client_id;
 	/** @var default_domain */
@@ -75,6 +77,7 @@ class OpenotpAuth{
 		$this->logger = $logger;
 		// load config		
 		$this->server_url = $params['rcdevsopenotp_server_url'];
+		$this->ignore_ssl_errors = $params['rcdevsopenotp_ignore_ssl_errors'];
 		$this->client_id = $params['rcdevsopenotp_client_id'];
 		$this->remote_addr = $params['rcdevsopenotp_remote_addr'];
 		$this->default_domain = $params['rcdevsopenotp_default_domain'];
@@ -325,12 +328,7 @@ EOT;
 				$options['proxy_password'] = $this->proxy_password;
 			}
 		}
-		
-		$stream_context = stream_context_create(array('ssl' => array('verify_peer' => false)));
-		if ($stream_context){
-			$options['stream_context'] = $stream_context;
-		}		
-		
+
 		try{	
 			$soap_client = new SoapClientTimeout(dirname(__FILE__).'/openotp.wsdl', $options);
 		}catch(exception $e){
@@ -341,6 +339,7 @@ EOT;
 		$soap_client->setTimeout(30);	
 		$soap_client->setVersion(2);
 		$soap_client->setLogger($this->logger);
+		$soap_client->setIgnoreSslErrors($this->ignore_ssl_errors);
 		
 		$this->soap_client = $soap_client;	
 		return true;
@@ -388,6 +387,7 @@ class SoapClientTimeout extends \SoapClient {
     private $timeout;
     private $version;
     private $logger;
+    private $ignore_ssl_errors;
 
     public function setTimeout ($timeout) {
         $this->timeout = $timeout;
@@ -398,6 +398,10 @@ class SoapClientTimeout extends \SoapClient {
     public function setLogger ($logger) {
         $this->logger = $logger;
     }
+
+	public function setIgnoreSslErrors($ignore_ssl_errors) {
+		$this->ignore_ssl_errors = $ignore_ssl_errors;
+	}
 
     public function __doRequest($request, $location, $action, $version, $one_way=false) {
         if (!$this->timeout) {
@@ -418,6 +422,10 @@ class SoapClientTimeout extends \SoapClient {
             curl_setopt($curl, CURLOPT_HEADER, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: text/xml", "API-Version: ".strval($this->version)));
             curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+
+			if ($this->ignore_ssl_errors) {
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+			}
 
             $response = curl_exec($curl);
             if (curl_errno($curl)) throw new Exception(curl_error($curl));
