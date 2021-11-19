@@ -42,7 +42,8 @@ $urlGenerator = \OC::$server->getURLGenerator();
 			<input type="text" id="<?php p($openotp_config['name']); ?>" name="<?php p($openotp_config['name']); ?>" value="<?php p($_[$openotp_config['name']]); ?>"
 			       title="<?php p($l->t($openotp_config['title']));?>">
 			<?php if( $openotp_config['name'] === "rcdevsopenotp_server_url" ){ ?>
-			<input type="button" id="check_server_url" name="check_server_url" value="Test"/><img id="check_server_loading" src="<?php p($urlGenerator->imagePath('twofactor_rcdevsopenotp', 'ajax-loader.gif'));?>"/><span style="display:none; padding:6px 15px;" id="message_status"></span><span style="float:right; padding:5px; display:none;" id="message_check_server_url"></span>
+			<input type="button" id="check_server_url" name="check_server_url" value="Test"/><img id="check_server_loading" src="<?php p($urlGenerator->imagePath('twofactor_rcdevsopenotp', 'ajax-loader.gif'));?>"/><span style="display:none; padding:6px 15px;" id="message_status"></span>
+			<div style="padding:5px; display:none;" id="message_check_server_url"></div>
 			<?php } ?>
 			<?php 	break;
 					case "checkbox": 
