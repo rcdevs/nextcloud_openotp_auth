@@ -34,12 +34,12 @@ It is enterprise-ready with strong support for:
 		<authentication/>
 	</types>
     <documentation>
-          <user>https://github.com/rcdevs/openotp_authentication_nextcloud/blob/nextcloud-v13/README.md</user>
+          <user>https://github.com/rcdevs/nextcloud_openotp_auth/blob/nextcloud-v13/README.md</user>
           <admin>https://www.rcdevs.com/docs/howtos/openotp_quick_start/openotp_quick_start/</admin>
     </documentation>
     <website>https://rcdevs.com</website>
-    <bugs>https://github.com/rcdevs/openotp_authentication_nextcloud/issues</bugs>	
-    <repository type="git">https://github.com/rcdevs/openotp_authentication_nextcloud/tree/nextcloud-v13</repository>	
+    <bugs>https://github.com/rcdevs/nextcloud_openotp_auth/issues</bugs>
+    <repository type="git">https://github.com/rcdevs/nextcloud_openotp_auth/tree/nextcloud-v13</repository>
 	<two-factor-providers>
 		<provider>OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
 	</two-factor-providers>
@@ -58,10 +58,10 @@ It is enterprise-ready with strong support for:
              <type>link</type>
          </navigation>
      </navigations>	
-    <screenshot>https://raw.githubusercontent.com/rcdevs/openotp_authentication_nextcloud/nextcloud-v13/screenshots/loginscreen-by-otp-u2f.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/rcdevs/openotp_authentication_nextcloud/nextcloud-v13/screenshots/loginscreen-by-otp.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/rcdevs/openotp_authentication_nextcloud/nextcloud-v13/screenshots/loginscreen-by-u2f.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/rcdevs/openotp_authentication_nextcloud/nextcloud-v13/screenshots/administration-settings.png</screenshot>	
+    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/nextcloud-v13/screenshots/loginscreen-by-otp-u2f.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/nextcloud-v13/screenshots/loginscreen-by-otp.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/nextcloud-v13/screenshots/loginscreen-by-u2f.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/nextcloud-v13/screenshots/administration-settings.png</screenshot>
     <dependencies>
 		<php min-version="5.5"/>
         <lib>soap</lib>
