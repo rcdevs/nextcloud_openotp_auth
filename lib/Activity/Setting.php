@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -46,7 +46,7 @@ class Setting implements ISetting {
 	}
 
 	public function getIdentifier() {
-		return 'twofactor_rcdevsopenotp';
+		return 'openotp_auth';
 	}
 
 	public function getName() {

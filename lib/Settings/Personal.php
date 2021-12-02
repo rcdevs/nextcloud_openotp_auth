@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -69,10 +69,10 @@ class Personal implements ISettings {
 	 */
 	public function getForm() {	
 
-		$enable_openotp = $this->config->getUserValue( $this->userSession->getUser()->getUID(), 'twofactor_rcdevsopenotp', 'enable_openotp');
+		$enable_openotp = $this->config->getUserValue( $this->userSession->getUser()->getUID(), 'openotp_auth', 'enable_openotp');
 		$parameters['enable_openotp'] = $enable_openotp;
 
-		return new TemplateResponse('twofactor_rcdevsopenotp', 'settings-personal', $parameters);
+		return new TemplateResponse('openotp_auth', 'settings-personal', $parameters);
 	}
 
 	/**

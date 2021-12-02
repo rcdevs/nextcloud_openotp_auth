@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -23,13 +23,13 @@
  *
  */
 // Keep compatibility with onwcloud 12 personal settings 
-$_openotp_persotmpl = new OCP\Template('twofactor_rcdevsopenotp', 'settings-personal');
+$_openotp_persotmpl = new OCP\Template('openotp_auth', 'settings-personal');
 $ocConfig = \OC::$server->getConfig();
 $user = \OC::$server->getUserSession()->getUser();
 
 $_openotp_persotmpl->assign(
     "enable_openotp",
-    $ocConfig->getUserValue( $user->getUID(), 'twofactor_rcdevsopenotp', 'enable_openotp')
+    $ocConfig->getUserValue( $user->getUID(), 'openotp_auth', 'enable_openotp')
 );	
 
 return $_openotp_persotmpl->fetchPage();

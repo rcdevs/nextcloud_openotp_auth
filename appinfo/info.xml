@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
-	<id>twofactor_rcdevsopenotp</id>
+	<id>openotp_auth</id>
 	<name>OpenOTP Two Factor Authentication</name>
     <description>
 **RCDevs OpenOTP Application enables two-factor authentication for your users using your personal Cloud.**
@@ -50,9 +50,9 @@ It is enterprise-ready with strong support for:
     </settings>	
     <navigations>
          <navigation role="admin">			 
-             <id>twofactor_rcdevsopenotp</id>
+             <id>openotp_auth</id>
              <name>OpenOTP Authentication</name>
-             <route>twofactor_rcdevsopenotp.settings.index</route>
+             <route>openotp_auth.settings.index</route>
              <order>100</order>
              <icon>app.svg</icon>
              <type>link</type>

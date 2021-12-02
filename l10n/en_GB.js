@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "twofactor_rcdevsopenotp",
+    "openotp_auth",
     {
 	"OpenOTP Two-Factor Authentication" : "OpenOTP Two-Factor Authentication",
 	"OpenOTP Authentication" : "OpenOTP Authentication",

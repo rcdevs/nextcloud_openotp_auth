@@ -3,7 +3,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *

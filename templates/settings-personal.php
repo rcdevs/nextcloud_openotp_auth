@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -23,9 +23,9 @@
  *
  */
 
-script('twofactor_rcdevsopenotp', 'script');
+script('openotp_auth', 'script');
 $ocConfig = \OC::$server->getConfig();
-$allow_user_administer_openotp = $ocConfig->getAppValue('twofactor_rcdevsopenotp','rcdevsopenotp_allow_user_administer_openotp');
+$allow_user_administer_openotp = $ocConfig->getAppValue('openotp_auth','rcdevsopenotp_allow_user_administer_openotp');
 ?>
 
 <div id="openotp_personnal_settings" class="section">

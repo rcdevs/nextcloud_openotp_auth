@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -47,7 +47,7 @@ class AdminSection implements IIconSection {
 	 * @returns string
 	 */
 	public function getID() {
-		return 'twofactor_rcdevsopenotp';
+		return 'openotp_auth';
 	}
 
 	/**
@@ -73,6 +73,6 @@ class AdminSection implements IIconSection {
 	 * {@inheritdoc}
 	 */
 	public function getIcon() {
-		return $this->url->imagePath('twofactor_rcdevsopenotp', 'app-dark.svg');
+		return $this->url->imagePath('openotp_auth', 'app-dark.svg');
 	}
 }

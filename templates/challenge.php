@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
     function login_u2f (request) {
     	var u2f_handles = [];
-		var u2fProblemMsg = "<b style=\"color:darkorange;\">" + t('twofactor_rcdevsopenotp', 'A problem occurs, please verify your configuration:') + "</b><br/><ul><li>- " + t('twofactor_rcdevsopenotp', 'FIDO client communication with the public AppID URL requires SSL. Verify your AppID and communication in between.') + " </li><li>- " + t('twofactor_rcdevsopenotp', 'Onwcloud App URL (U2F facets) MUST be under the same DNS domain suffix as the AppID URL (configured in RCDevs MFA Server - WebADM WebPortal)') + "</li><li>- " + t('twofactor_rcdevsopenotp', 'Fido U2F login Method is only available for Chrome, Firefox and Opera. Internet Explorer and other Web browser are coming soon.') + "</li></ul><br/><a style=\"text-decoration:underline;\" target=\"_blank\" href=\"https://www.rcdevs.com/docs/howtos/openotp_u2f/openotp_u2f/\">" + t('twofactor_rcdevsopenotp', 'Read more on RCDevs Docs site') + "</a><br/><br/>";
+		var u2fProblemMsg = "<b style=\"color:darkorange;\">" + t('openotp_auth', 'A problem occurs, please verify your configuration:') + "</b><br/><ul><li>- " + t('openotp_auth', 'FIDO client communication with the public AppID URL requires SSL. Verify your AppID and communication in between.') + " </li><li>- " + t('openotp_auth', 'Onwcloud App URL (U2F facets) MUST be under the same DNS domain suffix as the AppID URL (configured in RCDevs MFA Server - WebADM WebPortal)') + "</li><li>- " + t('openotp_auth', 'Fido U2F login Method is only available for Chrome, Firefox and Opera. Internet Explorer and other Web browser are coming soon.') + "</li></ul><br/><a style=\"text-decoration:underline;\" target=\"_blank\" href=\"https://www.rcdevs.com/docs/howtos/openotp_u2f/openotp_u2f/\">" + t('openotp_auth', 'Read more on RCDevs Docs site') + "</a><br/><br/>";
 		var u2fErrorCodes = {
 			2: 'Invalid U2F request',
 			3: 'Unsupported U2F client',
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.errorCode) {
 				$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="Retry" />');
 				if (response.errorMessage) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + response.errorMessage.ucwords() + "</p><br/>" + u2fErrorCodes[10]);
-				else if (response.errorCode != 5) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + t('twofactor_rcdevsopenotp', u2fErrorCodes[response.errorCode]) + "</p>" + t('twofactor_rcdevsopenotp', u2fErrorCodes[10]));
+				else if (response.errorCode != 5) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + t('openotp_auth', u2fErrorCodes[response.errorCode]) + "</p>" + t('openotp_auth', u2fErrorCodes[10]));
 				else if (response.errorCode == 5) $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + u2fErrorCodes[response.errorCode] + "</p>");
 				else $('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + u2fErrorCodes[6] + "</p>");
 				console.log("OpenOTP Fido U2F signature Log #Code:" + response.errorCode);								
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (request.credentialIds) login_fido2(request);
                 if (request.keyHandles) login_u2f(request);
             } else {
-				$('#u2f_activate').html('<h2>[' + t('twofactor_rcdevsopenotp', 'Browser Not Supported') + ']</h2>'); 
+				$('#u2f_activate').html('<h2>[' + t('openotp_auth', 'Browser Not Supported') + ']</h2>'); 
 				$('#u2f_activate').css('color','darkorange'); 
             }
             <?php
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function count()
 	{
 		plural = c <= 1 ? "" : "s";
-		$("#timeout").html(c + " " + t('twofactor_rcdevsopenotp', 'second'+ plural) );
+		$("#timeout").html(c + " " + t('openotp_auth', 'second'+ plural) );
 		var div_width = $('#div_orange').width();
 		if(!static_width) static_width = div_width;
 		var new_width =  Math.round(c*static_width/base);
@@ -273,9 +273,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		if(c == 0 || c < 0) {
 			c = 0;
 			clearInterval(timer);
-			$("#timout_cell").html("<b style='color:darkorange;'>" + t('twofactor_rcdevsopenotp', 'Login timedout!') + "</b>");
+			$("#timout_cell").html("<b style='color:darkorange;'>" + t('openotp_auth', 'Login timedout!') + "</b>");
 			$(".display").html("");
-			$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="' + t('twofactor_rcdevsopenotp', 'Retry') + '" />');
+			$('#retry').html('<input type="button" id="openotp_retry" class="login primary icon-confirm-white" title="" value="' + t('openotp_auth', 'Retry') + '" />');
 		}
 		c--;
 	}

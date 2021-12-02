@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -35,11 +35,11 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager->addDefaultPolicy($policy);
 }
 
-\OCP\Util::addStyle('twofactor_rcdevsopenotp', 'settings');
-\OCP\Util::addScript('twofactor_rcdevsopenotp', 'script');
-\OCP\Util::addScript('twofactor_rcdevsopenotp', 'fidou2f');
-\OCP\Util::addScript('twofactor_rcdevsopenotp', 'base64');
-\OCP\Util::addScript('twofactor_rcdevsopenotp', 'voice');
+\OCP\Util::addStyle('openotp_auth', 'settings');
+\OCP\Util::addScript('openotp_auth', 'script');
+\OCP\Util::addScript('openotp_auth', 'fidou2f');
+\OCP\Util::addScript('openotp_auth', 'base64');
+\OCP\Util::addScript('openotp_auth', 'voice');
 
 //TODO: OC_User - Static method of private class must not be called
 

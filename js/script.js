@@ -1,12 +1,12 @@
 /**
- * Nextcloud - twofactor_rcdevsopenotp
+ * Nextcloud - openotp_auth
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  */
@@ -21,7 +21,7 @@
 		});
 		
 		$('#openotp_settings #saveconfig').click(function () {
-			var url = OC.generateUrl('/apps/twofactor_rcdevsopenotp/saveconfig');
+			var url = OC.generateUrl('/apps/openotp_auth/saveconfig');
 			var post = {
 				post: $( "#openotp_settings" ).serialize()
 			};
@@ -41,7 +41,7 @@
 		
 		
 		$('#openotp_psettings input[name="enable_openotp"]:radio').change(function() {
-				var url = OC.generateUrl('/apps/twofactor_rcdevsopenotp/saveconfig');
+				var url = OC.generateUrl('/apps/openotp_auth/saveconfig');
 				var post = {
 					post: $( "#openotp_psettings" ).serialize()
 				};
@@ -77,7 +77,7 @@
 })(jQuery, OC);
 
 function check_server_url() {
-	var url = OC.generateUrl('/apps/twofactor_rcdevsopenotp/check_server_url');
+	var url = OC.generateUrl('/apps/openotp_auth/check_server_url');
 	var server_url_val = $( "#openotp_settings #rcdevsopenotp_server_url" ).val();
 	var ignore_ssl_errors = $( "#openotp_settings #rcdevsopenotp_ignore_ssl_errors" ).is(":checked");
 	

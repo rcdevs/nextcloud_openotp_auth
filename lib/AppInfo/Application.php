@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -39,13 +39,13 @@ class Application extends \OCP\AppFramework\App
      */
     public function __construct(array $urlParams = array())
     {
-        parent::__construct('twofactor_rcdevsopenotp', $urlParams);
+        parent::__construct('openotp_auth', $urlParams);
         $container = $this->getContainer();
 			
 
 		//Declaration openotp classes
-		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\Settings\\OpenotpConfig'] = 'twofactor_rcdevsopenotp/lib/Settings/openotp.config.php';
-		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\AuthService\\OpenotpAuth'] = 'twofactor_rcdevsopenotp/lib/Provider/openotp.class.php';
+		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\Settings\\OpenotpConfig'] = 'openotp_auth/lib/Settings/openotp.config.php';
+		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\AuthService\\OpenotpAuth'] = 'openotp_auth/lib/Provider/openotp.class.php';
 		
         /**
          * Controllers
@@ -95,7 +95,7 @@ class Application extends \OCP\AppFramework\App
     public function registerSettings()
     {
 		//TODO: line   94: OCP\App::registerPersonal - Method of deprecated class must not be called
-        \OCP\App::registerPersonal('twofactor_rcdevsopenotp',
+        \OCP\App::registerPersonal('openotp_auth',
             'lib/Settings/settings-personal');
     }	
 		

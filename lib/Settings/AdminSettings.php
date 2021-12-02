@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -67,17 +67,17 @@ class AdminSettings implements ISettings {
 				$parameters['openotp_allconfig'] = $this->openotpconfig;
 				
 				foreach( $this->openotpconfig as $_openotp_confname => $_openotp_config ){
-					$parameters[$_openotp_config['name']] = $this->config->getAppValue('twofactor_rcdevsopenotp', $_openotp_config['name'], $_openotp_config['default_value']);						
+					$parameters[$_openotp_config['name']] = $this->config->getAppValue('openotp_auth', $_openotp_config['name'], $_openotp_config['default_value']);						
 				}				
 
-                return new TemplateResponse('twofactor_rcdevsopenotp', 'settings-admin', $parameters);
+                return new TemplateResponse('openotp_auth', 'settings-admin', $parameters);
         }
 
         /**
          * @return string the section ID
          */
         public function getSection() {
-                return 'twofactor_rcdevsopenotp';
+                return 'openotp_auth';
         }
 
         /**

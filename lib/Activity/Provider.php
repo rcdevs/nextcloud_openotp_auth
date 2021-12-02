@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -50,11 +50,11 @@ class Provider implements IProvider {
 	}
 
 	public function parse($language, IEvent $event, IEvent $previousEvent = null) {
-		if ($event->getApp() !== 'twofactor_rcdevsopenotp') {
+		if ($event->getApp() !== 'openotp_auth') {
 			throw new InvalidArgumentException();
 		}
 
-		$l = $this->l10n->get('twofactor_rcdevsopenotp', $language);
+		$l = $this->l10n->get('openotp_auth', $language);
 
 		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('core', 'actions/password.svg')));
 		switch ($event->getSubject()) {

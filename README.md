@@ -57,9 +57,9 @@ Version 1.1.0
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
-2.  Upload twofactor_rcdevsopenotp directory under the 'apps' directory of your ownCloud.
+2.  Upload openotp_auth directory under the 'apps' directory of your ownCloud.
 3.	RCDevsOpenOTP Application folder should have read write permission for the web server 
-..	user (under debian/ubuntu : chown -R www-data:www-data twofactor_rcdevsopenotp)
+..	user (under debian/ubuntu : chown -R www-data:www-data openotp_auth)
 4.	Navigate to the 'Apps' page in Admin.
 ..	Click on 'OpenOTP Two Factor Authentication' in the application list. Then click the 'Enable' button.
 
@@ -70,7 +70,7 @@ Version 1.1.0
 -	Set at least the server url and the Client Id, Click 'Save'
 -	Allow users to administer Two-factor on their profile settings page or not. When activated, User goes to Personnal section
 	to enable or not Two-Factor on his account.
--	It's possible to use LDAP/AD Integration (user_ldap) application with RCDevs OpenOTP (twofactor_rcdevsopenotp) application. Be sure to configure
+-	It's possible to use LDAP/AD Integration (user_ldap) application with RCDevs OpenOTP (openotp_auth) application. Be sure to configure
 	LDAP plugin to create your local user with the uid/samaccountname, otherwise a random generated string is used for username when accounts 
 	are auto-created during import process. To do this, click on Expert tab, and fill in "Override UUID detection" with the correct login name
 	based on your LDAP directory (uid/samaccountname...)
@@ -83,9 +83,9 @@ Version 1.1.0
 -	!! IMPORTANT !! keep an admin user working without otp in case of a problem. If not you can:
 		->  Use occ command line to disable/enable two-factor authentication for a user: (sudo -u www-data) ./occ twofactorauth:enable username 
 		->  Switch authentication method to Standard (Owncloud password):
-			"UPDATE *PREFIX*appconfig SET configvalue = 0 WHERE appid = 'twofactor_rcdevsopenotp' AND configkey = 'rcdevsopenotp_authentication_method'
+			"UPDATE *PREFIX*appconfig SET configvalue = 0 WHERE appid = 'openotp_auth' AND configkey = 'rcdevsopenotp_authentication_method'
 		->  Disable openOTP authentication for one (admin?) user:
-			"DELETE FROM *PREFIX*appconfig WHERE userid = '%yourusername%' AND appid = 'twofactor_rcdevsopenotp' AND configkey = 'enable_openotp'
+			"DELETE FROM *PREFIX*appconfig WHERE userid = '%yourusername%' AND appid = 'openotp_auth' AND configkey = 'enable_openotp'
 			Replace *PREFIX* by owncloud table prefix 'oc_' by default
 
 

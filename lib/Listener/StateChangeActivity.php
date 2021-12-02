@@ -2,7 +2,7 @@
 /**
  * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package twofactor_rcdevsopenotp
+ * @package openotp_auth
  * @author RCDevs
  * @copyright 2018 RCDEVS info@rcdevs.com
  *
@@ -44,7 +44,7 @@ class StateChangeActivity implements IListener {
 			$subject = $event->isEnabled() ? 'openotp_enabled_subject' : 'openotp_disabled_subject';
 
 			$activity = $this->activityManager->generateEvent();
-			$activity->setApp('twofactor_rcdevsopenotp')
+			$activity->setApp('openotp_auth')
 				->setType('security')
 				->setAuthor($user->getUID())
 				->setAffectedUser($user->getUID());
