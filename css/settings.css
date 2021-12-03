@@ -46,3 +46,9 @@ span.error{ background: #ce3702; border-radius: 3px; }
 .openotp_ui_button_red.primary {
 	background-color: red;
 }
+
+#u2f_button {
+	display: none;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}

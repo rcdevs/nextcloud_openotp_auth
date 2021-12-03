@@ -195,7 +195,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		$domain = "";
 		$password = NULL;
 		/* Don't check LDAP password, validate localy OR via third party User integration (LDAP plugin, etc...) */
-		$option = "-LDAP";
+		$option = "-LDAP,WEBAUTH";
 		
 		$POST = array();
 		$POST[] = $this->request->getParam("password");		

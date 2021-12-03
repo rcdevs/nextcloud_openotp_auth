@@ -66,10 +66,12 @@ html #body-login .warning{ margin:0; }
 				<div id="u2f_display" class="display">
 				<?php if( $rcdevsopenotp_otpChallenge ){ ?>
 					<b><?php p($l->t('U2F response')); ?></b> &nbsp; <span class="blink" id="u2f_activate">[<?php p($l->t('Activate Device')); ?>]</span>
+					<input type="button" class="primary" hidden id="u2f_button" value="Click to Start FIDO Login">
 				<?php }else{ ?>
 					<p style="text-align:center;padding-top:10px;">
 						<img src="<?php p($rcdevsopenotp_appWebPath) ?>/img/u2f.png"><br/>
 						<span class="blink" id="u2f_activate">[<?php p($l->t('Activate Device')); ?>]</span>
+						<input type="button" class="primary" hidden id="u2f_button" value="Click to Start FIDO Login">
 					</p>
 				<?php } ?>		
 				</div>	
@@ -130,6 +132,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		    window.location = "";    
 		});
 	});
+
+	$('#u2f_button').click(function() {
+		login_fido2(request);
+	});
 	
     function login_u2f (request) {
     	var u2f_handles = [];
@@ -169,6 +175,9 @@ document.addEventListener('DOMContentLoaded', function() {
             timeout: <?php echo $rcdevsopenotp_timeout*1000; ?>,
             allowCredentials: []
     	};
+		if ('appId' in request) {
+			fido2_request.extensions = { appid: request.appId };
+		}
     	for (i=0, len=request.credentialIds.length; i<len; i++) {
             var allowCredential = {
             	id: Base64Binary.decodeArrayBuffer(request.credentialIds[i]),
@@ -184,9 +193,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 			document.getElementsByName('openotp_u2f')[0].value = JSON.stringify(response); 
 			document.getElementsByName('challenge')[0].value = "dummy"; 
-			$('#OpenOTPLoginForm').submit();	
+			$('#OpenOTPLoginForm').submit();
     	}).catch (function (error) {
-			$('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + error.message + "</p>");
+			if (error.code) {
+				$('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + error.message + "</p>");
+			} else {
+				$('#u2f_activate').css('display', 'none');
+				$('#u2f_button').css('display', 'block');
+			}
         });
     }
 
