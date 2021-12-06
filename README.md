@@ -94,6 +94,8 @@ Version 1.1.0
 1.1.0
 	- Add compatibility from NextCloud v16 to NextCloud v22
 	- Add support for Voice Biometrics authentication
+	- Add a setting to ignore SSL/TLS certificate errors
+	- Fix FIDO / FIDO2 for Safari
 1.0.5
 1.0.4-1
 	- Fixed Add all users to IRegistry when saving plugin configuration
