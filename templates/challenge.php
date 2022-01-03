@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementsByName('challenge')[0].value = "dummy"; 
 			$('#OpenOTPLoginForm').submit();
     	}).catch (function (error) {
-			if (error.code) {
+			if (error.message.indexOf('cancelled') == -1) {
 				$('#u2f_display').html("<p style='font-style: italic; font-weight:bold;'>" + error.message + "</p>");
 			} else {
 				$('#u2f_activate').css('display', 'none');
