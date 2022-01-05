@@ -1,7 +1,7 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.1.0
-Copyright (c) 2010-2021 RCDevs SA, All rights reserved.
+RCDevs OpenOTP Plugin for Nextcloud version 1.2.0
+Copyright (c) 2010-2022 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -52,8 +52,8 @@ or download our appliances:
 https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
-Compatible Nextcloud 14.x to 22.X (Tested on 22.1.1)
-Version 1.1.0
+Compatible Nextcloud 14.x to 23.X (Tested on 23.0.0)
+Version 1.2.0
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -91,6 +91,8 @@ Version 1.1.0
 
 
 ### **********   CHANGELOG  **********
+1.2.0
+	- Add compatibility for NextCloud v23
 1.1.0
 	- Add compatibility from NextCloud v16 to NextCloud v22
 	- Add support for Voice Biometrics authentication

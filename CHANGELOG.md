@@ -1,3 +1,5 @@
+1.2.0
+	- Add compatibility for NextCloud v23
 1.1.0
 	- Add compatibility from NextCloud v16 to NextCloud v22
 	- Add support for Voice Biometrics authentication
