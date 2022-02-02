@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.2.0
+RCDevs OpenOTP Plugin for Nextcloud version 1.3.0
 Copyright (c) 2010-2022 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ https://www.rcdevs.com/downloads/index.php?id=VMWare+Appliances
 
 ### **********   INSTALLATION   **********
 Compatible Nextcloud 14.x to 23.X (Tested on 23.0.0)
-Version 1.2.0
+Version 1.3.0
 
 1.	If your PHP installation does not have the soap extension, install the php-soap 
 ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -91,6 +91,9 @@ Version 1.2.0
 
 
 ### **********   CHANGELOG  **********
+1.3.0
+	- Add a 2nd OpenOTP server URL in settings to be used as a failover if the first one is not responding
+	- Ignoring SSL/TLS certificate errors now allows to use an IP address instead of a domain name
 1.2.0
 	- Add compatibility for NextCloud v23
 1.1.0

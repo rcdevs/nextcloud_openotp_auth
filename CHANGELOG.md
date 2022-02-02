@@ -1,3 +1,6 @@
+1.3.0
+	- Add a 2nd OpenOTP server URL in settings to be used as a failover if the first one is not responding
+	- Ignoring SSL/TLS certificate errors now allows to use an IP address instead of a domain name
 1.2.0
 	- Add compatibility for NextCloud v23
 1.1.0
