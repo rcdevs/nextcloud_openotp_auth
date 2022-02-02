@@ -207,7 +207,8 @@ class SettingsController extends Controller {
 	        );
 		}
 		$params['rcdevsopenotp_remote_addr'] = $this->request->getRemoteAddress();
-		$params['rcdevsopenotp_server_url'] = stripslashes($server_url);
+		$params['rcdevsopenotp_server_url1'] = stripslashes($server_url);
+		$params['rcdevsopenotp_server_url2'] = '';
 		$params['rcdevsopenotp_ignore_ssl_errors'] = $ignore_ssl_errors;
 
 		try {

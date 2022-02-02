@@ -37,8 +37,8 @@ class OpenotpAuth{
 
 	/** @var home */
 	private $home;
-	/** @var server_url */
-	private $server_url;
+	/** @var server_urls */
+	private $server_urls;
 	/** @var ignore_ssl_errors */
 	private $ignore_ssl_errors;
 	/** @var client_id */
@@ -76,7 +76,7 @@ class OpenotpAuth{
 	    $this->home = $home;
 		$this->logger = $logger;
 		// load config		
-		$this->server_url = $params['rcdevsopenotp_server_url'];
+		$this->server_urls = array($params['rcdevsopenotp_server_url1'], $params['rcdevsopenotp_server_url2']);
 		$this->ignore_ssl_errors = $params['rcdevsopenotp_ignore_ssl_errors'];
 		$this->client_id = $params['rcdevsopenotp_client_id'];
 		$this->remote_addr = $params['rcdevsopenotp_remote_addr'];
@@ -105,9 +105,9 @@ class OpenotpAuth{
 		return true;
 	}
 			
-	public function getServer_url()
+	public function getServer_urls()
 	{
-		return $this->server_url;
+		return $this->server_urls;
 	}
 	
 	public function getScope()
@@ -319,7 +319,7 @@ EOT;
 	
 	private function soapRequest(){
 	
-		$options = array('location' => $this->server_url);
+		$options = array('location' => $this->server_urls[0]);
 		if ($this->proxy_host !== NULL && $this->proxy_port !== NULL) {
 			$options['proxy_host'] = $this->proxy_host;
 			$options['proxy_port'] = $this->proxy_port;
