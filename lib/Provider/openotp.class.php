@@ -425,6 +425,7 @@ class SoapClientTimeout extends \SoapClient {
 
 			if ($this->ignore_ssl_errors) {
 				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 			}
 
             $response = curl_exec($curl);
