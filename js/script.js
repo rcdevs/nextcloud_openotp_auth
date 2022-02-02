@@ -60,12 +60,17 @@
 		    });
 			
 			
-		$('#check_server_url').click(function () {
-			check_server_url();
-		});					
+		$('#check_server_url1').click(function () {
+			check_server_url(1);
+		});
+
+		$('#check_server_url2').click(function () {
+			check_server_url(2);
+		});
 		
 		if ( $("#openotp_settings").length ) {
-			check_server_url();			
+			check_server_url(1);
+			check_server_url(2);
 		}
 		
 		if ( $("#body-login div.warning #OpenOTPLoginForm").length ) {
@@ -76,30 +81,33 @@
 
 })(jQuery, OC);
 
-function check_server_url() {
+function check_server_url(id) {
 	var url = OC.generateUrl('/apps/openotp_auth/check_server_url');
-	var server_url_val = $( "#openotp_settings #rcdevsopenotp_server_url" ).val();
+	var server_url_val = $( "#openotp_settings #rcdevsopenotp_server_url" + id ).val();
 	var ignore_ssl_errors = $( "#openotp_settings #rcdevsopenotp_ignore_ssl_errors" ).is(":checked");
 	
-	$("#check_server_loading").fadeIn();
+	$('#message_check_server_url' + id).hide();
+	$('#message_status' + id).hide();
+	$("#check_server_loading" + id).fadeIn();
     $.post( url, { server_url: server_url_val, ignore_ssl_errors: ignore_ssl_errors }, function(response){
 		/*if($('#message_check_server_url').is(":visible")){
 			$('#message_check_server_url').fadeOut("fast"); 
 		}*/
         if( response.status == "success" ){
-			$("#check_server_loading").fadeOut();
+			$("#check_server_loading" + id).hide();
+
 			console.log(response.openotpStatus);
 			if( response.openotpStatus === false){ 
-				$('#message_status').removeClass('success').addClass('error').fadeIn('fast');
-				$('#message_check_server_url').fadeOut('fast');
+				$('#message_status' + id).removeClass('success').addClass('error').fadeIn('fast');
+				$('#message_check_server_url' + id).fadeOut('fast');
 			}else{
-        		$('#message_status').removeClass('error').addClass('success').fadeIn('fast');
-        		$('#message_check_server_url').removeClass('error').html(response.message).fadeIn('fast');
+				$('#message_status' + id).removeClass('error').addClass('success').fadeIn('fast');
+				$('#message_check_server_url' + id).removeClass('error').html(response.message).fadeIn('fast');
 			}
         }else{
-			$("#check_server_loading").fadeOut();
-        	$('#message_status').removeClass('success').addClass('error').fadeIn('fast');
-        	$('#message_check_server_url').fadeOut('fast');
+			$("#check_server_loading" + id).hide();
+			$('#message_status' + id).removeClass('success').addClass('error').fadeIn('fast');
+			$('#message_check_server_url' + id).fadeOut('fast');
         }
     });			
 }

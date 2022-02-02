@@ -41,10 +41,16 @@ $urlGenerator = \OC::$server->getURLGenerator();
 			<label class="for_text" for="<?php p($openotp_config['name']); ?>"><?php p($l->t($openotp_config['label']));?></label>
 			<input type="text" id="<?php p($openotp_config['name']); ?>" name="<?php p($openotp_config['name']); ?>" value="<?php p($_[$openotp_config['name']]); ?>"
 			       title="<?php p($l->t($openotp_config['title']));?>">
-			<?php if( $openotp_config['name'] === "rcdevsopenotp_server_url" ){ ?>
-			<input type="button" id="check_server_url" name="check_server_url" value="Test"/><img id="check_server_loading" src="<?php p($urlGenerator->imagePath('openotp_auth', 'ajax-loader.gif'));?>"/><span style="display:none; padding:6px 15px;" id="message_status"></span>
-			<div style="padding:5px; display:none;" id="message_check_server_url"></div>
-			<?php } ?>
+			<?php
+				for ($i = 1; $i <= 2; $i++) {
+					if( $openotp_config['name'] === "rcdevsopenotp_server_url".$i ) {
+			?>
+						<input type="button" id="check_server_url<?=$i?>" name="check_server_url<?=$i?>" value="Test"/><img id="check_server_loading<?=$i?>" src="<?php p($urlGenerator->imagePath('core', 'loading.gif'));?>" style="margin-bottom: -10px;" /><span style="display:none; padding:6px 15px;" id="message_status<?=$i?>"></span>
+						<div style="padding:5px; display:none;" id="message_check_server_url<?=$i?>" class="message_check_server_url"></div>
+			<?php
+					}
+				}
+			?>
 			<?php 	break;
 					case "checkbox": 
 					?>

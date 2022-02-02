@@ -31,12 +31,19 @@ namespace OCA\TwoFactor_RCDevsOpenOTP\Settings;
 
 class OpenotpConfig
 {	
-	static public $_openotp_configs = array( "server_url" => 
-				array(	'name'	=>	'rcdevsopenotp_server_url',
-						'label'	=>  'OpenOTP server URL',
+	static public $_openotp_configs = array( "server_url1" =>
+				array(	'name'	=>	'rcdevsopenotp_server_url1',
+						'label'	=>  'OpenOTP server URL #1',
 						'type'	=> 'text',
-						'default_value'	=> 'http://myserver:8080/openotp/',
-						'title'	=>	'URL of the openOTP webservice - Should be like http://myserver:8080/openotp/'
+						'default_value'	=> 'http://myserver1:8080/openotp/',
+						'title'	=>	'URL of the openOTP webservice - Should be like http://myserver1:8080/openotp/'
+					),
+				"server_url2" =>
+				array(	'name'	=>	'rcdevsopenotp_server_url2',
+						'label'	=>  'OpenOTP server URL #2',
+						'type'	=> 'text',
+						'default_value'	=> 'http://myserver2:8080/openotp/',
+						'title'	=>	'URL of the openOTP webservice - Should be like http://myserver2:8080/openotp/'
 					),
 				"ignore_ssl_errors" =>
 				array(	'name'	=>	'rcdevsopenotp_ignore_ssl_errors',

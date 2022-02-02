@@ -117,7 +117,7 @@ class SettingsController extends Controller {
 		
 	    // Admin Settings && Application Settings page
 		if( $POST && isset($POST["openotp_settings_sent"]) ){
-			if( $POST['rcdevsopenotp_server_url'] === "" &&  $POST['rcdevsopenotp_client_id'] === ""
+			if( $POST['rcdevsopenotp_server_url1'] === "" && $POST['rcdevsopenotp_server_url2'] === "" && $POST['rcdevsopenotp_client_id'] === ""
 			&&	$POST['rcdevsopenotp_default_domain']  === "" && $POST['rcdevsopenotp_proxy_host']  === "" 
 			&&	$POST['rcdevsopenotp_proxy_port']  === "" && $POST['rcdevsopenotp_proxy_login']  === ""
 			&&	$POST['rcdevsopenotp_proxy_password']  === "" )
