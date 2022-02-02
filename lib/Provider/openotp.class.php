@@ -33,7 +33,9 @@ class OpenotpAuthException extends Exception
 {
 }
 
-class OpenotpAuth{ 
+class OpenotpAuth{
+
+	const NB_SERVERS = 2;
 
 	/** @var home */
 	private $home;
@@ -317,9 +319,9 @@ EOT;
 		return $overlay;
 	}
 	
-	private function soapRequest(){
+	private function soapRequest($serverId){
 	
-		$options = array('location' => $this->server_urls[0]);
+		$options = array('location' => $this->server_urls[$serverId]);
 		if ($this->proxy_host !== NULL && $this->proxy_port !== NULL) {
 			$options['proxy_host'] = $this->proxy_host;
 			$options['proxy_port'] = $this->proxy_port;
@@ -346,30 +348,42 @@ EOT;
 	}
 		
 	public function openOTPSimpleLogin($username, $domain, $password, $option, $context){
-		try{
-			$this->soapRequest();
-			$resp = $this->soap_client->openotpSimpleLogin($username, $domain, $password, $this->client_id, $this->remote_addr, $this->user_settings, $option, $context, null);
-		}catch(exception $e){
-			$message = __METHOD__.', exception: '.$e->getMessage();
-			$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+		for ($i = 0; $i < self::NB_SERVERS; $i++) {
+			try{
+				$this->soapRequest($i);
+				$resp = $this->soap_client->openotpSimpleLogin($username, $domain, $password, $this->client_id, $this->remote_addr, $this->user_settings, $option, $context, null);
+			}catch(exception $e){
+				if ($i < self::NB_SERVERS - 1) {
+					continue;
+				}
+
+				$message = __METHOD__.', exception: '.$e->getMessage();
+				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+			}
+			return isset($resp) ? $resp : false;
 		}
-		return isset($resp) ? $resp : false;
 	}
 	
 	public function openOTPChallenge($username, $domain, $state, $password, $u2f, $sample){
-		try{
-			$this->soapRequest();
-			$resp = $this->soap_client->openotpChallenge($username, $domain, $state, $password, $u2f, base64_decode($sample));
-		}catch(exception $e){
-			$message = __METHOD__.', exception: '.$e->getMessage();
-			$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+		for ($i = 0; $i < self::NB_SERVERS; $i++) {
+			try{
+				$this->soapRequest();
+				$resp = $this->soap_client->openotpChallenge($username, $domain, $state, $password, $u2f, base64_decode($sample));
+			}catch(exception $e){
+				if ($i < self::NB_SERVERS - 1) {
+					continue;
+				}
+
+				$message = __METHOD__.', exception: '.$e->getMessage();
+				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+			}
+			return isset($resp) ? $resp : false;
 		}
-		return isset($resp) ? $resp : false;
 	}
 	
 	public function openOTPStatus(){
 		try{
-			$this->soapRequest();
+			$this->soapRequest(0);
 			$resp = $this->soap_client->openotpStatus();
 		}catch(exception $e){
 			$message = __METHOD__.', exception: '.$e->getMessage();
