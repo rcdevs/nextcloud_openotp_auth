@@ -107,7 +107,14 @@ class OpenotpConfig
 						'type'	=> 'checkbox',
 						'default_value'	=> 'on',
 						'title'	=>	'Disable OTP on remote (webdav/Mobile Apps and sync)'
-					),											
+					),
+				"disable_otp_local_users" =>
+				array(	'name'	=>	'rcdevsopenotp_disable_otp_local_users',
+						'label'	=> 'Disable OpenOTP for local users (use standard authentication)',
+						'type'	=> 'checkbox',
+						'default_value'	=> 'off',
+						'title'	=>	'Disable OpenOTP for local users (use standard authentication)'
+					),
 				"authentication_method" => 															
 				array(	'name'	=>	'rcdevsopenotp_authentication_method',
 						'label' => 'Authentication method',

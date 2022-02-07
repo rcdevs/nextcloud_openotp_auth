@@ -152,6 +152,20 @@ class SettingsController extends Controller {
 			// Admins can enable or disable 2FA for all users, this change give the possibility to be "statefull" in other word
 			// we have to register enable/disable state for all users in IRegistry during plugin configuration (all user IRegistry will be populated at first config)						
 			foreach($this->userManager->getBackends() as $backend) {
+				if ($backend->getBackendName() === "Database" && isset($POST["rcdevsopenotp_disable_otp_local_users"])) {
+					$limit = 500;
+					$offset = 0;
+					do {
+						$users = $backend->getUsers('', $limit, $offset);
+						foreach ($users as $user) {
+							$this->eventDispatcher->dispatch(StateChanged::class, new StateChanged($this->userManager->get($user), false));
+						}
+						$offset += $limit;
+					} while(count($users) >= $limit);
+
+					continue;
+				}
+
 				$limit = 500;
 				$offset = 0;
 				do {
@@ -170,7 +184,7 @@ class SettingsController extends Controller {
 		// Personal Settings
 	    if( !$POST ) return new DataResponse(['status' => "error", 'message' => $this->l10n->t("An error occured, please contact administrator") ]);
 		
-		if( $POST && isset($POST["openotp_psettings_sent"]) ){	
+		if( $POST && isset($POST["openotp_psettings_sent"]) ){
 			if( isset($POST["enable_openotp"]) ){
 				$this->config->setUserValue( $this->User->getUID(), 'openotp_auth', 'enable_openotp', $POST["enable_openotp"] );
 				

@@ -363,9 +363,15 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		// Get User Config
 		$user_enable_openotp = $this->config->getUserValue( $user->getUID(), 'openotp_auth', 'enable_openotp');
 		$allow_user_administer_openotp = $this->getAppValue('rcdevsopenotp_allow_user_administer_openotp');
+		$disable_otp_local_users = $this->getAppValue('rcdevsopenotp_disable_otp_local_users');
 		$authentication_method = $this->getAppValue('rcdevsopenotp_authentication_method'); 
 		// 0 => AUTHENTICATION_METHOD_STD (Standard)
 		// 1 => AUTHENTICATION_METHOD_OTP (OTP)
+
+		if ($disable_otp_local_users === "on" && $user->getBackend()->getBackendName() === "Database") {
+			$this->logger->info("2FA NOT ACTIVED", array('app' => 'openotp_auth'));
+			return false;
+		}
 
 		if (( $allow_user_administer_openotp === "off" && $authentication_method === "1") ||
 		    ( $allow_user_administer_openotp === "on" && $user_enable_openotp === "yes") ){
@@ -373,7 +379,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 			  return true;
 		  }
 		  
-		  $this->logger->info("2FA NOT ACTIVED", array('app' => 'openotp_auth'));		
+		  $this->logger->info("2FA NOT ACTIVED", array('app' => 'openotp_auth'));
 		  return false;
     }
 
