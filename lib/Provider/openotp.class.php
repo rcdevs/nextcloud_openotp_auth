@@ -367,7 +367,7 @@ EOT;
 	public function openOTPChallenge($username, $domain, $state, $password, $u2f, $sample){
 		for ($i = 0; $i < self::NB_SERVERS; $i++) {
 			try{
-				$this->soapRequest();
+				$this->soapRequest($i);
 				$resp = $this->soap_client->openotpChallenge($username, $domain, $state, $password, $u2f, base64_decode($sample));
 			}catch(exception $e){
 				if ($i < self::NB_SERVERS - 1) {
