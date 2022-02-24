@@ -1,0 +1,14 @@
+{
+    "name": "rcdevs/openotp_auth",
+    "description": "Nextcloud app to enable OpenOTP two-factor authentication for your users",
+    "type": "project",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "RCDevs"
+        }
+    ],
+    "require": {
+        "econea/nusoap": "^0.9.11"
+    }
+}

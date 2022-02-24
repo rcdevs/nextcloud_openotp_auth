@@ -64,7 +64,6 @@ It is enterprise-ready with strong support for:
     <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/nextcloud-v13/screenshots/administration-settings.png</screenshot>
     <dependencies>
 		<php min-version="5.5"/>
-        <lib>soap</lib>
         <lib>ldap</lib>
 		<nextcloud min-version="14" max-version="23" />
     </dependencies>	

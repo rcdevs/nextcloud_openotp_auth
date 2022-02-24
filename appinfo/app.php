@@ -23,6 +23,8 @@
  *
  */
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 use OCA\TwoFactor_RCDevsOpenOTP\AppInfo\Application;
 $app = new Application();
 // Register the personal configuration settings 

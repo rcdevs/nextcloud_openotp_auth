@@ -230,11 +230,9 @@ class SettingsController extends Controller {
 		} catch (AppPathNotFoundException $e) {}		
 		
 		$openotpAuth = new openotpAuth($this->logger, $params, $appPath);
-		try{
-			$resp = $openotpAuth->openOTPStatus();
-		}catch(exception $e){}
+		$resp = $openotpAuth->openOTPStatus();
 		
-		if( isset($resp) )
+		if(isset($resp['status']) && $resp['status'] === 'true')
 			return new DataResponse(['status' => "success", 'openotpStatus' => $resp['status'], 'message' => nl2br($resp['message']) ]);
 		else{
 			$this->logger->error("Could not connect to host", array('app' => 'openotp_auth'));

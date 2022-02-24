@@ -28,6 +28,7 @@ namespace OCA\TwoFactor_RCDevsOpenOTP\AuthService;
 use OCP\AppFramework\App;
 use OCP\ILogger;
 use Exception;
+use nusoap_client;
 
 class OpenotpAuthException extends Exception
 {
@@ -57,7 +58,7 @@ class OpenotpAuth{
 	private $proxy_username;
 	/** @var proxy_password */
 	private $proxy_password;
-	/** SoapClientTimeout object */
+	/** NuSOAP object */
 	private $soap_client;
 	/** Logger object */
     private $logger;
@@ -321,27 +322,25 @@ EOT;
 	
 	private function soapRequest($serverId){
 	
-		$options = array('location' => $this->server_urls[$serverId]);
 		if ($this->proxy_host !== NULL && $this->proxy_port !== NULL) {
-			$options['proxy_host'] = $this->proxy_host;
-			$options['proxy_port'] = $this->proxy_port;
+			$proxyHost = $this->proxy_host;
+			$proxyPort = $this->proxy_port;
+
 			if ($this->proxy_username !== NULL && $this->proxy_password !== NULL) {
-				$options['proxy_login'] = $this->proxy_username;
-				$options['proxy_password'] = $this->proxy_password;
+				$proxyUsername = $this->proxy_username;
+				$proxyPassword = $this->proxy_password;
 			}
+		} else {
+			$proxyHost = false;
+			$proxyPort = false;
+			$proxyUsername = false;
+			$proxyPassword = false;
 		}
 
-		try{	
-			$soap_client = new SoapClientTimeout(dirname(__FILE__).'/openotp.wsdl', $options);
-		}catch(exception $e){
-			$message = __METHOD__.', exception: '.$e->getMessage();
-			throw new OpenotpAuthException($message);
-		}
-
-		$soap_client->setTimeout(30);	
-		$soap_client->setVersion(2);
-		$soap_client->setLogger($this->logger);
-		$soap_client->setIgnoreSslErrors($this->ignore_ssl_errors);
+		$soap_client = new nusoap_client($this->server_urls[$serverId], false, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, 30);
+		$soap_client->setDebugLevel(0);
+		$soap_client->soap_defencoding = 'UTF-8';
+		$soap_client->decode_utf8 = FALSE;
 		
 		$this->soap_client = $soap_client;	
 		return true;
@@ -349,105 +348,72 @@ EOT;
 		
 	public function openOTPSimpleLogin($username, $domain, $password, $option, $context){
 		for ($i = 0; $i < self::NB_SERVERS; $i++) {
-			try{
-				$this->soapRequest($i);
-				$resp = $this->soap_client->openotpSimpleLogin($username, $domain, $password, $this->client_id, $this->remote_addr, $this->user_settings, $option, $context, null);
-			}catch(exception $e){
-				if ($i < self::NB_SERVERS - 1) {
-					continue;
-				}
+			$this->soapRequest($i);
+			$resp = $this->soap_client->call('openotpSimpleLogin', array(
+				'username' => $username,
+				'domain' => $domain,
+				'anyPassword' => $password,
+				'client' => $this->client_id,
+				'source' => $this->remote_addr,
+				'settings' => $this->user_settings,
+				'options' => $option,
+				'context' => $context,
+				'retryId' => '',
+				'virtual' => ''
+			), 'urn:openotp', '', false, null, 'rpc', 'literal');
 
-				$message = __METHOD__.', exception: '.$e->getMessage();
+			if ($this->soap_client->fault) {
+				$message = __METHOD__.', error: '.$resp['faultcode'].' / '.$resp['faultstring'];
 				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+				return false;
 			}
-			return isset($resp) ? $resp : false;
+
+			$err = $this->soap_client->getError();
+			if ($err) {
+				$message = __METHOD__.', error: '.$err;
+				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+				continue;
+			}
+
+			return $resp;
 		}
+
+		return false;
 	}
-	
-	public function openOTPChallenge($username, $domain, $state, $password, $u2f, $sample){
+
+	public function openOTPChallenge($username, $domain, $state, $password, $u2f, $sample) {
 		for ($i = 0; $i < self::NB_SERVERS; $i++) {
-			try{
-				$this->soapRequest($i);
-				$resp = $this->soap_client->openotpChallenge($username, $domain, $state, $password, $u2f, base64_decode($sample));
-			}catch(exception $e){
-				if ($i < self::NB_SERVERS - 1) {
-					continue;
-				}
+			$this->soapRequest($i);
+			$resp = $this->soap_client->call('openotpChallenge', array(
+				'username' => $username,
+				'domain' => $domain,
+				'session' => $state,
+				'otpPassword' => $password,
+				'u2fResponse' => $u2f,
+				'voiceSample' => $sample
+			), 'urn:openotp', '', false, null, 'rpc', 'literal');
 
-				$message = __METHOD__.', exception: '.$e->getMessage();
+			if ($this->soap_client->fault) {
+				$message = __METHOD__.', error: '.$resp['faultcode'].' / '.$resp['faultstring'];
 				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
-			}
-			return isset($resp) ? $resp : false;
-		}
-	}
-	
-	public function openOTPStatus(){
-		try{
-			$this->soapRequest(0);
-			$resp = $this->soap_client->openotpStatus();
-		}catch(exception $e){
-			$message = __METHOD__.', exception: '.$e->getMessage();
-			$this->logger->error($message, array('app' => 'rcdevsopenotp'));
-			throw new OpenotpAuthException($message);
-		}
-
-		return $resp;
-	}
-}
-
-
-
-class SoapClientTimeout extends \SoapClient {
-    private $timeout;
-    private $version;
-    private $logger;
-    private $ignore_ssl_errors;
-
-    public function setTimeout ($timeout) {
-        $this->timeout = $timeout;
-    }
-    public function setVersion ($version) {
-        $this->version = $version;
-    }
-    public function setLogger ($logger) {
-        $this->logger = $logger;
-    }
-
-	public function setIgnoreSslErrors($ignore_ssl_errors) {
-		$this->ignore_ssl_errors = $ignore_ssl_errors;
-	}
-
-    public function __doRequest($request, $location, $action, $version, $one_way=false) {
-        if (!$this->timeout) {
-            // Call via parent because we require no timeout
-            $response = parent::__doRequest($request, $location, $action, $version, $one_way);
-        } else {
-            // Call via Curl and use the timeout
-            $curl = curl_init(trim($location));
-			
-			
-			//$this->logger->error("*************  Location  **********" . trim($location), array('app' => 'rcdevsopenotp'));
-			//$this->logger->error("*************  Request  **********" . $request, array('app' => 'rcdevsopenotp'));
-			
-            curl_setopt($curl, CURLOPT_VERBOSE, false);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: text/xml", "API-Version: ".strval($this->version)));
-            curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
-
-			if ($this->ignore_ssl_errors) {
-				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+				return false;
 			}
 
-            $response = curl_exec($curl);
-            if (curl_errno($curl)) throw new Exception(curl_error($curl));
-            curl_close($curl);
-        }
+			$err = $this->soap_client->getError();
+			if ($err) {
+				$message = __METHOD__.', error: '.$err;
+				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+				continue;
+			}
 
-        if (!$one_way) return ($response);
-    }
+			return $resp;
+		}
+
+		return false;
+	}
+
+	public function openOTPStatus() {
+		$this->soapRequest(0);
+		return $this->soap_client->call('openotpStatus', array());
+	}
 }
-
