@@ -1,3 +1,6 @@
+1.4.1
+	- Switch from SoapClient to NuSOAP
+	- Fix broken challenge authentication
 1.4.0
 	- Add a setting to allow disabling OpenOTP authentication for local users
 1.3.0
