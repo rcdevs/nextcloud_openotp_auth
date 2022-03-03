@@ -42,8 +42,6 @@ class OpenotpAuth{
 	private $home;
 	/** @var server_urls */
 	private $server_urls;
-	/** @var ignore_ssl_errors */
-	private $ignore_ssl_errors;
 	/** @var client_id */
 	private $client_id;
 	/** @var default_domain */
@@ -80,7 +78,6 @@ class OpenotpAuth{
 		$this->logger = $logger;
 		// load config		
 		$this->server_urls = array($params['rcdevsopenotp_server_url1'], $params['rcdevsopenotp_server_url2']);
-		$this->ignore_ssl_errors = $params['rcdevsopenotp_ignore_ssl_errors'];
 		$this->client_id = $params['rcdevsopenotp_client_id'];
 		$this->remote_addr = $params['rcdevsopenotp_remote_addr'];
 		$this->default_domain = $params['rcdevsopenotp_default_domain'];

@@ -45,13 +45,6 @@ class OpenotpConfig
 						'default_value'	=> 'http://myserver2:8080/openotp/',
 						'title'	=>	'URL of the openOTP webservice - Should be like http://myserver2:8080/openotp/'
 					),
-				"ignore_ssl_errors" =>
-				array(	'name'	=>	'rcdevsopenotp_ignore_ssl_errors',
-						'label'	=> 'Ignore SSL/TLS certificate errors',
-						'type'	=> 'checkbox',
-						'default_value'	=> 'off',
-						'title'	=>	'Useful to accept a self-signed certificate'
-					),
 				"client_id" => 
 				array(	'name'	=>	'rcdevsopenotp_client_id',
 						'label'	=> 'OpenOTP client id',

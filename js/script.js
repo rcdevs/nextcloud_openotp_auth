@@ -84,12 +84,11 @@
 function check_server_url(id) {
 	var url = OC.generateUrl('/apps/openotp_auth/check_server_url');
 	var server_url_val = $( "#openotp_settings #rcdevsopenotp_server_url" + id ).val();
-	var ignore_ssl_errors = $( "#openotp_settings #rcdevsopenotp_ignore_ssl_errors" ).is(":checked");
 	
 	$('#message_check_server_url' + id).hide();
 	$('#message_status' + id).hide();
 	$("#check_server_loading" + id).fadeIn();
-    $.post( url, { server_url: server_url_val, ignore_ssl_errors: ignore_ssl_errors }, function(response){
+    $.post( url, { server_url: server_url_val }, function(response){
 		/*if($('#message_check_server_url').is(":visible")){
 			$('#message_check_server_url').fadeOut("fast"); 
 		}*/
