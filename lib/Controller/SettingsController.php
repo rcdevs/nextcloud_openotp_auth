@@ -233,7 +233,7 @@ class SettingsController extends Controller {
 		if(isset($resp['status']) && $resp['status'] === 'true')
 			return new DataResponse(['status' => "success", 'openotpStatus' => $resp['status'], 'message' => nl2br($resp['message']) ]);
 		else{
-			$this->logger->error("Could not connect to host", array('app' => 'openotp_auth'));
+			$this->logger->error("Could not connect to host $server_url", array('app' => 'openotp_auth'));
 			return new DataResponse(['status' => "error", 'message' => $this->l10n->t('Could not connect to host') ]);
 		}		
 	}
