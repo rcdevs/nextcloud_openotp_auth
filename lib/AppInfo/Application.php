@@ -43,9 +43,6 @@ class Application extends \OCP\AppFramework\App
         $container = $this->getContainer();
 			
 
-		//Declaration openotp classes
-		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\Settings\\OpenotpConfig'] = 'openotp_auth/lib/Settings/openotp.config.php';
-		\OC::$CLASSPATH['OCA\\TwoFactor_RCDevsOpenOTP\\AuthService\\OpenotpAuth'] = 'openotp_auth/lib/Provider/openotp.class.php';
 		
         /**
          * Controllers
