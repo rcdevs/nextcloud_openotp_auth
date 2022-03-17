@@ -30,19 +30,54 @@ use OCA\TwoFactor_RCDevsOpenOTP\Listener\IListener;
 use OCA\TwoFactor_RCDevsOpenOTP\Listener\StateChangeActivity;
 use OCA\TwoFactor_RCDevsOpenOTP\Listener\StateChangeRegistryUpdater;
 use OCA\TwoFactor_RCDevsOpenOTP\Controller\SettingsController;
+use OCP\AppFramework\App;
+use OCP\EventDispatcher\IEventDispatcher;
+use \OCP\AppFramework\Http\TemplateResponse;
+use OCP\Util;
+
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
 
-class Application extends \OCP\AppFramework\App
+
+class Application extends App
 {
+    public const APP_ID = 'openotp_auth';
+
     /**
      * @param array $urlParams
      */
     public function __construct(array $urlParams = array())
     {
-        parent::__construct('openotp_auth', $urlParams);
-        $container = $this->getContainer();
-			
+        parent::__construct(self::APP_ID, $urlParams);
 
+        if (class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
+            $manager = \OC::$server->getContentSecurityPolicyManager();
+            $policy = new \OCP\AppFramework\Http\EmptyContentSecurityPolicy();
+            $policy->addAllowedScriptDomain('\'unsafe-inline\'');
+            $manager->addDefaultPolicy($policy);
+        }
+
+        $container = $this->getContainer();
+        $eventDispatcher = $container->get(IEventDispatcher::class);
+        $eventDispatcher->addListener(TemplateResponse::EVENT_LOAD_ADDITIONAL_SCRIPTS, function() {
+            Util::addStyle(self::APP_ID, 'settings');
+            Util::addScript(self::APP_ID, 'script');
+            Util::addScript(self::APP_ID, 'fidou2f');
+            Util::addScript(self::APP_ID, 'base64');
+            Util::addScript(self::APP_ID, 'voice');
+        });
+
+        $eventDispatcher->addListener(StateChanged::class, function (StateChanged $event) use ($container) {
+            /** @var IListener[] $listeners */
+            $listeners = [
+                $container->query(StateChangeActivity::class),
+                $container->query(StateChangeRegistryUpdater::class),
+            ];
+
+            foreach ($listeners as $listener) {
+                $listener->handle($event);
+            }
+        });
 		
         /**
          * Controllers
@@ -69,31 +104,5 @@ class Application extends \OCP\AppFramework\App
         $container->registerService('L10N', function($c) {
             return $c->query('ServerContainer')->getL10N($c->query('AppName'));
         });
-		
-		$dispatcher = $container->getServer()->getEventDispatcher();
-		$dispatcher->addListener(StateChanged::class, function (StateChanged $event) use ($container) {
-			/** @var IListener[] $listeners */
-			$listeners = [
-				$container->query(StateChangeActivity::class),
-				$container->query(StateChangeRegistryUpdater::class),
-			];
-
-			foreach ($listeners as $listener) {
-				$listener->handle($event);
-			}
-		});		
-		
 	}
-	
-    /**
-     * register setting scripts
-     */
-	
-    public function registerSettings()
-    {
-		//TODO: line   94: OCP\App::registerPersonal - Method of deprecated class must not be called
-        \OCP\App::registerPersonal('openotp_auth',
-            'lib/Settings/settings-personal');
-    }	
-		
 }
