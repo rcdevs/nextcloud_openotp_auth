@@ -34,10 +34,10 @@ $disable_otp_local_users = $ocConfig->getAppValue('openotp_auth','rcdevsopenotp_
 		<h2><?php p($l->t('OpenOTP Two-Factor Authentication'));?></h2>
 		<p>
 			<label style="padding-right:10px;" for="enable_openotp"><?php p($l->t("Enable OpenOTP Two-Factor Authentication."));?></label>	
-			<input id="enable_openotp_yes" name="enable_openotp" type="radio" value="yes" <?php if ( $_['enable_openotp'] === "yes"  ): ?> checked="checked"<?php endif; ?> <?php if ( $allow_user_administer_openotp !== "on" || $disable_otp_local_users === "on" ): ?> disabled="disabled"<?php endif; ?> /> <label for="enable_openotp_yes"> <?php p($l->t("Yes"));?></label>
-			<input id="enable_openotp_no" name="enable_openotp" type="radio" value="no" <?php if ($_['enable_openotp'] === "no" || !isset($_['enable_openotp'])): ?> checked="checked"<?php endif; ?>  <?php if ( $allow_user_administer_openotp !== "on" || $disable_otp_local_users === "on"  ): ?> disabled="disabled"<?php endif; ?>/> <label for="enable_openotp_no"> <?php p($l->t("No"));?></label>
+			<input id="enable_openotp_yes" name="enable_openotp" type="radio" value="yes" <?php if ( $_['enable_openotp'] === "yes"  ): ?> checked="checked"<?php endif; ?> <?php if ( $allow_user_administer_openotp !== "on" || ($disable_otp_local_users === "on" && $_['is_local_user'])): ?> disabled="disabled"<?php endif; ?> /> <label for="enable_openotp_yes"> <?php p($l->t("Yes"));?></label>
+			<input id="enable_openotp_no" name="enable_openotp" type="radio" value="no" <?php if ($_['enable_openotp'] === "no" || !isset($_['enable_openotp'])): ?> checked="checked"<?php endif; ?>  <?php if ( $allow_user_administer_openotp !== "on" || ($disable_otp_local_users === "on" && $_['is_local_user'])): ?> disabled="disabled"<?php endif; ?>/> <label for="enable_openotp_no"> <?php p($l->t("No"));?></label>
 		</p>		
-		<?php if ( $allow_user_administer_openotp !== "off" && $disable_otp_local_users === "off" ): ?> <input type="hidden" name="openotp_psettings_sent" value="1" /><?php endif; ?>
+		<?php if ( $allow_user_administer_openotp !== "off" && ($disable_otp_local_users === "off" || !$_['is_local_user'])): ?> <input type="hidden" name="openotp_psettings_sent" value="1" /><?php endif; ?>
 	</form>
 	<div id="message"></div>
 </div>

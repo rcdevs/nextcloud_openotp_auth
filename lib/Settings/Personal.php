@@ -71,6 +71,7 @@ class Personal implements ISettings {
 
 		$enable_openotp = $this->config->getUserValue( $this->userSession->getUser()->getUID(), 'openotp_auth', 'enable_openotp');
 		$parameters['enable_openotp'] = $enable_openotp;
+		$parameters['is_local_user'] = $this->userSession->getUser()->getBackendClassName() === 'Database';
 
 		return new TemplateResponse('openotp_auth', 'settings-personal', $parameters);
 	}
