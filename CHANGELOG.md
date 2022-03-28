@@ -1,3 +1,8 @@
+1.4.2
+	- Fix some users not being able to administer their Two-factor
+	- Remove now useless setting to ignore SSL/TLS certificate errors
+	- Drop support for Nextcloud versions lower than 21
+	- Remove depreciation and improve performance
 1.4.1
 	- Switch from SoapClient to NuSOAP
 	- Fix broken challenge authentication
