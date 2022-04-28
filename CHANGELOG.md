@@ -1,3 +1,7 @@
+1.4.3
+	- Remove checks of SOAP extension and WSDL file
+	- Reintroduce the code to deal with CSP to avoid occasionnal
+	  issues
 1.4.2
 	- Fix some users not being able to administer their Two-factor
 	- Remove now useless setting to ignore SSL/TLS certificate errors
