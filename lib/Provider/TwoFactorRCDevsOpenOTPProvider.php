@@ -170,20 +170,6 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		
 		$openotpAuth = new OpenotpAuth($this->logger, $params, $appPath);
 		
-		// check OpenOTP WSDL file
-		if (!$openotpAuth->checkFile('lib/Provider/openotp.wsdl')){
-			$this->logger->error("Could not load OpenOTP WSDL file.", array('app' => 'openotp_auth'));
-			$message = $this->trans->t("Could not load OpenOTP WSDL file.");
-			throw new OpenOTPsendRequestException($message);
-		}
-			
-		// Check SOAP extension is loaded
-		if (!$openotpAuth->checkSOAPext()){
-			$this->logger->error("Your PHP installation is missing the SOAP extension.", array('app' => 'openotp_auth'));
-			$message = $this->trans->t("Your PHP installation is missing the SOAP extension.");
-			throw new OpenOTPsendRequestException($message);
-		}		
-		
 		// Get context cookie
 		$context_name = $openotpAuth->getContext_name();
 		$context_size = $openotpAuth->getContext_size();

@@ -96,14 +96,6 @@ class OpenotpAuth{
 		}
 		return true;
 	}
-	
-	public function checkSOAPext()
-	{
-		if (!extension_loaded('soap')) {
-			return false;
-		}
-		return true;
-	}
 			
 	public function getServer_urls()
 	{

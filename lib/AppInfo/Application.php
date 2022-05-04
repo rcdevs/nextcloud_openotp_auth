@@ -50,6 +50,13 @@ class Application extends App
     {
         parent::__construct(self::APP_ID, $urlParams);
 
+        if (class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
+            $manager = \OC::$server->getContentSecurityPolicyManager();
+            $policy = new \OCP\AppFramework\Http\EmptyContentSecurityPolicy();
+            $policy->addAllowedScriptDomain('\'unsafe-inline\'');
+            $manager->addDefaultPolicy($policy);
+        }
+
         $container = $this->getContainer();
         $eventDispatcher = $container->get(IEventDispatcher::class);
         $eventDispatcher->addListener(TemplateResponse::EVENT_LOAD_ADDITIONAL_SCRIPTS, function() {

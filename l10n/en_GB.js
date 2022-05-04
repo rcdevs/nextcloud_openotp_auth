@@ -13,7 +13,6 @@ OC.L10N.register(
 	"An error occured, please contact administrator" : "An error occured, please contact administrator",
 	"Could not connect to host" : "Could not connect to host",
 	"Could not load OpenOTP WSDL file." : "Could not load OpenOTP WSDL file.",
-	"Your PHP installation is missing the SOAP extension." : "Your PHP installation is missing the SOAP extension.",
 	"Invalid OpenOTP response for user" : "Invalid OpenOTP response for user",
 	"OpenOTP Authentication failed for user" : "OpenOTP Authentication failed for user",
 	"OpenOTP server URL" : "OpenOTP server URL",
