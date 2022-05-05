@@ -1,3 +1,5 @@
+1.4.4
+	- Add compatibility for NextCloud v24
 1.4.3
 	- Remove checks of SOAP extension and WSDL file
 	- Reintroduce the code to deal with CSP to avoid occasionnal
