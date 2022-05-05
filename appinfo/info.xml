@@ -65,7 +65,7 @@ It is enterprise-ready with strong support for:
     <dependencies>
 		<php min-version="5.5"/>
         <lib>ldap</lib>
-		<nextcloud min-version="21" max-version="23" />
+		<nextcloud min-version="21" max-version="24" />
     </dependencies>	
 	<activity>
 		<settings>
