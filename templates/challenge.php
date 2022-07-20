@@ -22,6 +22,7 @@
  * @license http://opensource.org/licenses/AGPL-3.0 GNU AFFERO GENERAL PUBLIC LICENSE
  *
  */
+if(!isset($rcdevsopenotp_timeout)) { $rcdevsopenotp_timeout = 0; }
 $rcdevsopenotp_message = "";
 if(is_array($_['challenge_params'])) extract($_['challenge_params']);
 ?>
@@ -204,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    <?php if ($rcdevsopenotp_u2fChallenge) { ?>
+    <?php if (isset($rcdevsopenotp_u2fChallenge) && $rcdevsopenotp_u2fChallenge) { ?>
             if (typeof navigator.credentials == 'object') {
                 var request = <?php echo $rcdevsopenotp_u2fChallenge; ?>;
                 if (request.credentialIds) login_fido2(request);
@@ -216,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <?php
         }
 
-	    if ($rcdevsopenotp_voiceLogin) { ?>
+	    if (isset($rcdevsopenotp_voiceLogin) && $rcdevsopenotp_voiceLogin) { ?>
 			var audio_stream;
 			var audio_context;
 			var audio_recorder;

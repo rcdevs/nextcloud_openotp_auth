@@ -1,3 +1,5 @@
+1.4.5
+	- Add dependencies
 1.4.4
 	- Add compatibility for NextCloud v24
 1.4.3

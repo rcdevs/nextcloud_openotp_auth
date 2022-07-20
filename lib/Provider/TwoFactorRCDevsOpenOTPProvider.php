@@ -243,13 +243,13 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 				$this->logger->info("OpenOTP Response require Challenge", array('app' => 'openotp_auth'));
 
 				$this->challenge_params = array( 'rcdevsopenotp_otpChallenge' => $resp['otpChallenge'],
-										  'rcdevsopenotp_u2fChallenge' => $resp['u2fChallenge'],
+										  'rcdevsopenotp_u2fChallenge' => (array_key_exists('u2fChallenge', $resp) ? $resp['u2fChallenge'] : null), // $resp['u2fChallenge'],
 										  'rcdevsopenotp_voiceLogin' => (strstr($resp['otpChallenge'], "VOICE")),
 										  'rcdevsopenotp_voiceOnly' => (strcmp($resp['otpChallenge'], "VOICE") == 0),
 										  'rcdevsopenotp_message' => $resp['message'],
 										  'rcdevsopenotp_username' => $username,
 										  'rcdevsopenotp_session' => $resp['session'],
-										  'rcdevsopenotp_timeout' => $resp['timeout'],
+										  'rcdevsopenotp_timeout' => (array_key_exists('timeout', $resp) ? $resp['timeout'] : 0), // $resp['timeout'],
 										  'rcdevsopenotp_password' => $password,
 										  'rcdevsopenotp_appPath' => $appPath,
 										  'rcdevsopenotp_appWebPath' => $appWebPath,
