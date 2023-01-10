@@ -1,3 +1,6 @@
+1.4.6
+	- Add compatibility for NextCloud v25
+	- Documentation URL updated
 1.4.5
 	- Add dependencies
 1.4.4

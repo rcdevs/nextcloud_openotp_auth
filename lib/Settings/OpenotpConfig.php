@@ -49,8 +49,8 @@ class OpenotpConfig
 				array(	'name'	=>	'rcdevsopenotp_client_id',
 						'label'	=> 'OpenOTP client id',
 						'type'	=> 'text',
-						'default_value'	=> 'Owncloud',
-						'title'	=>	'Give an Identifiant to the owncloud Application (Default Owncloud) - Allows OpenOTP server to apply specifics policies for requests from owncloud app / Displays when receiving OTP via email / Displays in OpenOTP Logs'
+						'default_value'	=> 'Nextcloud',
+						'title'	=>	'Give an Identifiant to the Nextcloud Application (Default Nextcloud) - Allows OpenOTP server to apply specifics policies for requests from Nextcloud app / Displays when receiving OTP via email / Displays in OpenOTP Logs'
 					),	
 				"default_domain" => 	
 				array(	'name'	=>	'rcdevsopenotp_default_domain',
@@ -116,7 +116,7 @@ class OpenotpConfig
 						'radios' => array( 'authentication_method_std' => array('label' => 'Standard authentication (Disable OpenOTP)',
 						 														'value' => '0',		
 						 														'checked' => '1',	
-																				'title'	=>	'User login with Owncloud password - OpenOTP'	
+																				'title'	=>	'User login with Nextcloud password - OpenOTP'	
 																				),
  										   'authentication_method_otp' => array('label' => 'Two-Factor authentication (Enable OpenOTP for all user)',
  						 														'value' => '1',		
