@@ -2229,6 +2229,8 @@ class soapval extends nusoap_base
 class soap_transport_http extends nusoap_base
 {
 
+    var $query = '';
+    var $tryagain = false;
     var $url = '';
     var $uri = '';
     var $digest_uri = '';
@@ -3626,6 +3628,13 @@ class nusoap_server extends nusoap_base
      */
     var $methodname = '';
     /**
+     * name of the response tag name
+     *
+     * @var string
+     * @access private
+     */
+    var $responseTagName = '';
+    /**
      * method parameters from request
      *
      * @var array
@@ -3682,6 +3691,13 @@ class nusoap_server extends nusoap_base
      * @access private
      */
     var $responseSOAP = '';
+    /**
+     * SOAP attachments in response
+     *
+     * @var string
+     * @access private
+     */
+    var $attachments= '';
     /**
      * method return value to place in response
      *
@@ -4297,15 +4313,15 @@ class nusoap_server extends nusoap_base
                 if ($this->opData['output']['use'] == 'literal') {
                     // http://www.ws-i.org/Profiles/BasicProfile-1.1-2004-08-24.html R2735 says rpc/literal accessor elements should not be in a namespace
                     if ($this->methodURI) {
-                        $payload = '<ns1:' . $this->methodname . 'Response xmlns:ns1="' . $this->methodURI . '">' . $return_val . '</ns1:' . $this->methodname . "Response>";
+                        $payload = '<ns1:' . $this->responseTagName . ' xmlns:ns1="' . $this->methodURI . '">' . $return_val . '</ns1:' . $this->responseTagName . ">";
                     } else {
-                        $payload = '<' . $this->methodname . 'Response>' . $return_val . '</' . $this->methodname . 'Response>';
+                        $payload = '<' . $this->responseTagName . '>' . $return_val . '</' . $this->responseTagName . 'Response>';
                     }
                 } else {
                     if ($this->methodURI) {
-                        $payload = '<ns1:' . $this->methodname . 'Response xmlns:ns1="' . $this->methodURI . '">' . $return_val . '</ns1:' . $this->methodname . "Response>";
+                        $payload = '<ns1:' . $this->responseTagName . ' xmlns:ns1="' . $this->methodURI . '">' . $return_val . '</ns1:' . $this->responseTagName . ">";
                     } else {
-                        $payload = '<' . $this->methodname . 'Response>' . $return_val . '</' . $this->methodname . 'Response>';
+                        $payload = '<' . $this->responseTagName . '>' . $return_val . '</' . $this->responseTagName . '>';
                     }
                 }
             } else {
@@ -4314,7 +4330,7 @@ class nusoap_server extends nusoap_base
             }
         } else {
             $this->debug('do not have WSDL for serialization: assume rpc/encoded');
-            $payload = '<ns1:' . $this->methodname . 'Response xmlns:ns1="' . $this->methodURI . '">' . $return_val . '</ns1:' . $this->methodname . "Response>";
+            $payload = '<ns1:' . $this->responseTagName . ' xmlns:ns1="' . $this->methodURI . '">' . $return_val . '</ns1:' . $this->responseTagName . ">";
         }
         $this->result = 'successful';
         if ($this->wsdl) {
@@ -4483,6 +4499,12 @@ class nusoap_server extends nusoap_base
             $this->methodURI = $parser->root_struct_namespace;
             $this->methodname = $parser->root_struct_name;
             $this->debug('methodname: ' . $this->methodname . ' methodURI: ' . $this->methodURI);
+            
+            // get/set custom response tag name
+            $outputMessage = $this->wsdl->getOperationData($this->methodname)['output']['message'];
+            $this->responseTagName = $outputMessage;
+            $this->debug('responseTagName: ' . $this->responseTagName . ' methodURI: ' . $this->methodURI);
+
             $this->debug('calling parser->get_soapbody()');
             $this->methodparams = $parser->get_soapbody();
             // get SOAP headers
@@ -4559,9 +4581,10 @@ class nusoap_server extends nusoap_base
      * @param    mixed $use optional (encoded|literal) or false
      * @param    string $documentation optional Description to include in WSDL
      * @param    string $encodingStyle optional (usually 'http://schemas.xmlsoap.org/soap/encoding/' for encoded)
+     * @param    string $customResponseTagName optional Name of the outgoing response, default $name . 'Response'
      * @access   public
      */
-    function register($name, $in = array(), $out = array(), $namespace = false, $soapaction = false, $style = false, $use = false, $documentation = '', $encodingStyle = '')
+    function register($name, $in = array(), $out = array(), $namespace = false, $soapaction = false, $style = false, $use = false, $documentation = '', $encodingStyle = '', $customResponseTagName = '')
     {
         global $HTTP_SERVER_VARS;
 
@@ -4607,6 +4630,9 @@ class nusoap_server extends nusoap_base
         if ($use == 'encoded' && $encodingStyle == '') {
             $encodingStyle = 'http://schemas.xmlsoap.org/soap/encoding/';
         }
+        if (!$customResponseTagName) {
+            $customResponseTagName = $name . 'Response';
+        }
 
         $this->operations[$name] = array(
             'name' => $name,
@@ -4614,9 +4640,11 @@ class nusoap_server extends nusoap_base
             'out' => $out,
             'namespace' => $namespace,
             'soapaction' => $soapaction,
-            'style' => $style);
+            'style' => $style,
+            'outputMessage' => $customResponseTagName,
+        );
         if ($this->wsdl) {
-            $this->wsdl->addOperation($name, $in, $out, $namespace, $soapaction, $style, $use, $documentation, $encodingStyle);
+            $this->wsdl->addOperation($name, $in, $out, $namespace, $soapaction, $style, $use, $documentation, $encodingStyle, $customResponseTagName);
         }
         return true;
     }
@@ -4836,12 +4864,12 @@ class wsdl extends nusoap_base
             $imported = 0;
             // Schema imports
             foreach ($this->schemas as $ns => $list) {
-                foreach ($list as $xs) {
+                foreach ($list as $xsKey => $xs) {
                     $wsdlparts = parse_url($this->wsdl);    // this is bogusly simple!
                     foreach ($xs->imports as $ns2 => $list2) {
                         for ($ii = 0; $ii < count($list2); $ii++) {
                             if (array_key_exists($ii, $list2) && (!isset($list2[$ii]['loaded']) || !$list2[$ii]['loaded'])) {
-                                $this->schemas[$ns][$ns2]->imports[$ns2][$ii]['loaded'] = true;
+                                @$this->schemas[$ns][$xsKey]->imports[$ns2][$ii]['loaded'] = true;
                                 $url = $list2[$ii]['location'];
                                 if ($url != '') {
                                     $urlparts = parse_url($url);
@@ -6614,9 +6642,10 @@ class wsdl extends nusoap_base
      * @param string $use (encoded|literal) optional The use for the parameters (cannot mix right now)
      * @param string $documentation optional The description to include in the WSDL
      * @param string $encodingStyle optional (usually 'http://schemas.xmlsoap.org/soap/encoding/' for encoded)
+     * @param string $customResponseTagName optional Name of the outgoing response
      * @access public
      */
-    function addOperation($name, $in = false, $out = false, $namespace = false, $soapaction = false, $style = 'rpc', $use = 'encoded', $documentation = '', $encodingStyle = '')
+    function addOperation($name, $in = false, $out = false, $namespace = false, $soapaction = false, $style = 'rpc', $use = 'encoded', $documentation = '', $encodingStyle = '', $customResponseTagName = '')
     {
         if ($use == 'encoded' && $encodingStyle == '') {
             $encodingStyle = 'http://schemas.xmlsoap.org/soap/encoding/';
@@ -6636,8 +6665,8 @@ class wsdl extends nusoap_base
                 $elements[$n] = array('name' => $n, 'type' => $t, 'form' => 'unqualified');
             }
             $this->addComplexType($name . 'ResponseType', 'complexType', 'struct', 'all', '', $elements);
-            $this->addElement(array('name' => $name . 'Response', 'type' => $name . 'ResponseType', 'form' => 'qualified'));
-            $out = array('parameters' => 'tns:' . $name . 'Response' . '^');
+            $this->addElement(array('name' => $customResponseTagName, 'type' => $name . 'ResponseType', 'form' => 'qualified'));
+            $out = array('parameters' => 'tns:' . $customResponseTagName . '^');
         }
 
         // get binding
@@ -6652,13 +6681,13 @@ class wsdl extends nusoap_base
                     'use' => $use,
                     'namespace' => $namespace,
                     'encodingStyle' => $encodingStyle,
-                    'message' => $name . 'Request',
+                    'message' => $name,
                     'parts' => $in),
                 'output' => array(
                     'use' => $use,
                     'namespace' => $namespace,
                     'encodingStyle' => $encodingStyle,
-                    'message' => $name . 'Response',
+                    'message' => $customResponseTagName,
                     'parts' => $out),
                 'namespace' => $namespace,
                 'transport' => 'http://schemas.xmlsoap.org/soap/http',
@@ -6670,20 +6699,20 @@ class wsdl extends nusoap_base
                 if (strpos($pType, ':')) {
                     $pType = $this->getNamespaceFromPrefix($this->getPrefix($pType)) . ":" . $this->getLocalPart($pType);
                 }
-                $this->messages[$name . 'Request'][$pName] = $pType;
+                $this->messages[$name][$pName] = $pType;
             }
         } else {
-            $this->messages[$name . 'Request'] = '0';
+            $this->messages[$name] = '0';
         }
         if ($out) {
             foreach ($out as $pName => $pType) {
                 if (strpos($pType, ':')) {
                     $pType = $this->getNamespaceFromPrefix($this->getPrefix($pType)) . ":" . $this->getLocalPart($pType);
                 }
-                $this->messages[$name . 'Response'][$pName] = $pType;
+                $this->messages[$customResponseTagName][$pName] = $pType;
             }
         } else {
-            $this->messages[$name . 'Response'] = '0';
+            $this->messages[$customResponseTagName] = '0';
         }
         return true;
     }
@@ -6702,6 +6731,8 @@ class wsdl extends nusoap_base
 class nusoap_parser extends nusoap_base
 {
 
+    var $parser = null;
+    var $methodNamespace = '';
     var $xml = '';
     var $xml_encoding = '';
     var $method = '';
@@ -6736,6 +6767,8 @@ class nusoap_parser extends nusoap_base
     // toggle for auto-decoding element content
     var $decode_utf8 = true;
 
+    var $attachments = array();
+
     /**
      * constructor that actually does the parsing
      *
@@ -6752,6 +6785,7 @@ class nusoap_parser extends nusoap_base
         $this->xml_encoding = $encoding;
         $this->method = $method;
         $this->decode_utf8 = $decode_utf8;
+        $this->attachments = array();
 
         // Check whether content has been read.
         if (!empty($xml)) {
@@ -6801,6 +6835,75 @@ class nusoap_parser extends nusoap_base
             }
             //Tell the script that is the end of the parsing (by setting is_final to TRUE)
             xml_parse($this->parser, '', true);
+
+            // Check if there is any attachment
+            $this->attachments = array();
+            foreach(preg_split("/((\r?\n)|(\r\n?))/", $xml) as $line){
+                if(preg_match(("/^--(.*)/"), $line, $matches)) {
+                    array_push($this->attachments, array());
+                    $this->attachments[count($this->attachments)-1]['boundaryStr'] = $matches[1];
+                } elseif(preg_match(("/Content-Type:(.*)/"), $line, $matches)) {
+                    $this->attachments[count($this->attachments)-1]['Content-Type'] = $matches[1];
+                } elseif(preg_match(("/Content-Id:(.*)/"), $line, $matches)) {
+                    $this->attachments[count($this->attachments)-1]['Content-Id'] = $matches[1];
+                } elseif(preg_match(("/Content-Transfer-Encoding:(.*)/"), $line, $matches)) {
+                    $this->attachments[count($this->attachments)-1]['Content-Transfer-Encoding'] = $matches[1];
+                }
+            }
+
+            if(!empty($this->attachments)) {
+                // Extract the content of each attachments
+                $substrXml = $xml;
+                foreach($this->attachments as $key => $attachment) {
+                    $startPos = max(
+                        stripos($substrXml, $attachment['boundaryStr']), 
+                        (array_key_exists('Content-Type', $attachment) ? stripos($substrXml, $attachment['Content-Type']) : 0), 
+                        (array_key_exists('Content-Id', $attachment) ? stripos($substrXml, $attachment['Content-Id']) : 0), 
+                        (array_key_exists('Content-Transfer-Encoding', $attachment) ? stripos($substrXml, $attachment['Content-Transfer-Encoding']) : 0)
+                    );
+                    $substrXml = substr($substrXml, $startPos);
+                    $startPos = stripos($substrXml, PHP_EOL);
+                    $substrXml = substr($substrXml, $startPos);
+                    $substrXml = trim($substrXml);
+                    $length = null;
+                    if(array_key_exists($key+1, $this->attachments) && $this->attachments[$key+1] && !empty($this->attachments[$key+1]['boundaryStr'])) {
+                        $length = stripos($substrXml, ('--' . $this->attachments[$key+1]['boundaryStr']))-1;
+                    }
+                    $content = substr($substrXml, 0, $length);
+                    $this->attachments[$key]['content'] = $content;
+
+                    $substrXml = substr($substrXml, $length);
+                }
+            }
+
+            if(!empty($parseErrors) && !empty($this->attachments)){
+                // Search the SOAP response message
+                foreach($this->attachments as $key => $attachment) {
+                    // Settings for xml_parse
+                    $this->parser = xml_parser_create($this->xml_encoding);
+                    xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
+                    xml_parser_set_option($this->parser, XML_OPTION_TARGET_ENCODING, $this->xml_encoding);
+                    xml_set_object($this->parser, $this);
+                    xml_set_element_handler($this->parser, 'start_element', 'end_element');
+                    xml_set_character_data_handler($this->parser, 'character_data');
+                    
+                    if(!empty($attachment['content'])) {
+                        $content = $attachment['content'];
+                        foreach(preg_split("/((\r?\n)|(\r\n?))/", $content) as $line){
+                            if(preg_match(("/:Envelope/"), $line, $matches)) {
+                                if(!xml_parse($this->parser, $content, true)) {
+                                    $parseErrors['lineNumber'] = xml_get_current_line_number($this->parser);
+                                    $parseErrors['errorString'] = xml_error_string(xml_get_error_code($this->parser));
+                                } else {
+                                    $parseErrors = array();
+                                    unset($this->attachments[$key]);
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             if(!empty($parseErrors)){
             	// Display an error message.
@@ -7121,7 +7224,7 @@ class nusoap_parser extends nusoap_base
             // raw UTF-8 that, e.g., might not map to iso-8859-1
             // TODO: this can also be handled with xml_parser_set_option($this->parser, XML_OPTION_TARGET_ENCODING, "ISO-8859-1");
             if ($this->decode_utf8) {
-                $data = utf8_decode($data);
+                $data = function_exists('mb_convert_encoding') ? mb_convert_encoding($data, 'ISO-8859-1', 'UTF-8') : utf8_decode($data);
             }
         }
         $this->message[$pos]['cdata'] .= $data;
@@ -7375,6 +7478,10 @@ class soap_parser extends nusoap_parser
 class nusoap_client extends nusoap_base
 {
 
+    var $attachments = '';
+    var $return = null;
+    var $operation = '';
+    var $opData = array();
     var $username = '';                // Username for HTTP authentication
     var $password = '';                // Password for HTTP authentication
     var $authtype = '';                // Type of HTTP authentication
@@ -7895,6 +8002,8 @@ class nusoap_client extends nusoap_base
             $return = $parser->get_soapbody();
             // add document for doclit support
             $this->document = $parser->document;
+            // Add attachments
+            $this->attachments = $parser->attachments;
             // destroy the parser object
             unset($parser);
             // return decode message

@@ -1,3 +1,6 @@
+1.4.7
+	- Issue with signature
+	- Compatibility with v24 and v25 only
 1.4.6
 	- Add compatibility for NextCloud v25
 	- Documentation URL updated

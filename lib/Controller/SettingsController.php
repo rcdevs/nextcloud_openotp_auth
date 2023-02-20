@@ -94,8 +94,6 @@ class SettingsController extends Controller {
 	 *          basically the only required method to add this exemption, don't
 	 *          add it to any other method if you don't exactly know what it does
 	 *
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 */	
 	public function index() {
 		
@@ -109,9 +107,6 @@ class SettingsController extends Controller {
 		return new TemplateResponse('openotp_auth', 'settings-admin', $params);
 	}
 	
-	/**
-	 * @NoAdminRequired
-	 */
 	public function saveconfig( $post ){
 		parse_str($post, $POST);		
 		
@@ -201,9 +196,6 @@ class SettingsController extends Controller {
 			return new DataResponse(['status' => "error", 'message' => $this->l10n->t("An error occured, please contact administrator") ]);
 	}
 	
-	/**
-	 * @NoAdminRequired
-	 */	
 	public function checkServerUrl(){
 		$this->logger->info("********* New OpenOTP Authentication Status *********", array('app' => 'openotp_auth'));
 

@@ -8,10 +8,10 @@
 
 It is versatile, device-independent and based on opened security standards.
 
-OpenOTP provides fine-grained user identity and access management (IAM), one-time passwords authentication technologies (OTP) and Universal Second Factor Authentification (U2F) including among others extensive authentication policies for your AD / LDAP users. 
+OpenOTP provides fine-grained user identity and access management (IAM), one-time passwords authentication technologies (OTP) and Universal Second Factor Authentification (U2F) including among others extensive authentication policies for your AD / LDAP users.
 
 It is enterprise-ready with strong support for:
-		
+
 * high-availability
 * load-balancing
 * multi-tenancy
@@ -26,7 +26,7 @@ It is enterprise-ready with strong support for:
     <summary>RCDevs OpenOTP Application enables Multi-Factor authentication for your users.</summary>
 	<licence>AGPL</licence>
     <author>RCDevs</author>
-	<version>1.4.6</version>
+	<version>1.4.7</version>
 	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
 	<category>security</category>
 	<types>
@@ -44,29 +44,17 @@ It is enterprise-ready with strong support for:
 		<provider>OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
 	</two-factor-providers>
     <settings>
-		<personal>OCA\TwoFactor_RCDevsOpenOTP\Settings\Personal</personal>
 		<admin>OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSettings</admin>
 		<admin-section>\OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSection</admin-section>
-    </settings>	
-    <navigations>
-         <navigation role="admin">			 
-             <id>openotp_auth</id>
-             <name>OpenOTP Authentication</name>
-             <route>openotp_auth.settings.index</route>
-             <order>100</order>
-             <icon>app.svg</icon>
-             <type>link</type>
-         </navigation>
-     </navigations>	
-    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/loginscreen-by-otp-u2f.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/loginscreen-by-otp.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/loginscreen-by-u2f.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/administration-settings.png</screenshot>
+		<personal>OCA\TwoFactor_RCDevsOpenOTP\Settings\Personal</personal>
+    </settings>
+	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/administration-settings.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/loginscreen-by-otp.png</screenshot>
     <dependencies>
 		<php min-version="5.5"/>
         <lib>ldap</lib>
-		<nextcloud min-version="21" max-version="25" />
-    </dependencies>	
+		<nextcloud min-version="24" max-version="25" />
+    </dependencies>
 	<activity>
 		<settings>
 			<setting>OCA\TwoFactor_RCDevsOpenOTP\Activity\Setting</setting>
@@ -74,5 +62,5 @@ It is enterprise-ready with strong support for:
 		<providers>
 			<provider>OCA\TwoFactor_RCDevsOpenOTP\Activity\Provider</provider>
 		</providers>
-	</activity>	
+	</activity>
 </info>
