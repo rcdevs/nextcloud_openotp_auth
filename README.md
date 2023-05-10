@@ -1,6 +1,6 @@
 # Rcdevs Openotp
 
-RCDevs OpenOTP Plugin for Nextcloud version 1.4.7
+RCDevs OpenOTP Plugin for Nextcloud version 1.5.0
 Copyright (c) 2010-2022 RCDevs SA, All rights reserved.
 
 This program is free software; you can redistribute it and/or
@@ -51,8 +51,8 @@ Authenticator - Mobile-OTP (mOTP) Software Tokens - SMS One-Time Passwords
 
 ### **********   INSTALLATION   **********
 
-Compatible Nextcloud 24.x to 25.X (Tested on 25.0.3)
-Version 1.4.7
+Compatible Nextcloud 24.x to 26.X (Tested on 26.0.0)
+Version 1.5.0
 
 1. If your PHP installation does not have the soap extension, install the php-soap
    ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -88,6 +88,8 @@ Version 1.4.7
 
 ### **********   CHANGELOG  **********
 
+1.5.0
+	- Add API Key
 1.4.7
 	- Issue with signature
 	- Compatibility with v24 and v25 only

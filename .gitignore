@@ -1,1 +1,4 @@
 Ω nextcloud_openotp_auth.code-workspace
+/.gitignore
+/*.url
+Ω*.*

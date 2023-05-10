@@ -161,7 +161,7 @@ class TwoFactorRCDevsOpenOTPProvider implements IProvider
 		
 		$params = $this->getAllAppValue();
 		
-		$params['rcdevsopenotp_remote_addr'] = $this->request->getRemoteAddress();
+		// $params['rcdevsopenotp_remote_addr'] = $this->request->getRemoteAddress();
 		try {
 			$appPath = $this->appManager->getAppPath('openotp_auth');
 		} catch (AppPathNotFoundException $e) {}		

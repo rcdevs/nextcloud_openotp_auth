@@ -44,10 +44,8 @@ class OpenotpAuth{
 	private $server_urls;
 	/** @var client_id */
 	private $client_id;
-	/** @var default_domain */
-	private $default_domain;
-	/** @var user_settings */
-	private $user_settings;                                                                           
+	/** @var api_key */
+	private $api_key;
 	/** @var proxy_host */
 	private $proxy_host;                                                                              
 	/** @var proxy_port */
@@ -79,9 +77,7 @@ class OpenotpAuth{
 		// load config		
 		$this->server_urls = array($params['rcdevsopenotp_server_url1'], $params['rcdevsopenotp_server_url2']);
 		$this->client_id = $params['rcdevsopenotp_client_id'];
-		$this->remote_addr = $params['rcdevsopenotp_remote_addr'];
-		$this->default_domain = $params['rcdevsopenotp_default_domain'];
-		$this->user_settings = $params['rcdevsopenotp_user_settings'];                                                                                   
+		$this->api_key = $params['rcdevsopenotp_api_key'];
 		$this->proxy_host = $params['rcdevsopenotp_proxy_host'];                                                                               
 		$this->proxy_port = $params['rcdevsopenotp_proxy_port'];                                                                               
 		$this->proxy_username = $params['rcdevsopenotp_proxy_username'];
@@ -104,7 +100,7 @@ class OpenotpAuth{
 	
 	public function getScope()
 	{
-		return $this->openotp_scope;
+		// return $this->openotp_scope;
 	}
 		
 	public function getDomain($username)
@@ -331,6 +327,12 @@ EOT;
 		$soap_client->soap_defencoding = 'UTF-8';
 		$soap_client->decode_utf8 = FALSE;
 		
+		$soap_client->setUseCurl(true);
+		$soap_client->setCurlOption(CURLOPT_HTTPHEADER, [
+			"Content-type: text/xml;charset=\"utf-8\"",
+			"WA-API-Key: {$this->api_key}",
+		]);
+
 		$this->soap_client = $soap_client;	
 		return true;
 	}
@@ -343,7 +345,8 @@ EOT;
 				'domain' => $domain,
 				'anyPassword' => $password,
 				'client' => $this->client_id,
-				'source' => $this->remote_addr,
+				'apiKey' => $this->api_key,
+				// 'source' => $this->remote_addr,
 				'settings' => $this->user_settings,
 				'options' => $option,
 				'context' => $context,

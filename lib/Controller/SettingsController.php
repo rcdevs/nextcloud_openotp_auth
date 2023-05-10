@@ -37,6 +37,7 @@ use Exception;
 use OCA\TwoFactor_RCDevsOpenOTP\AuthService\OpenotpAuth;
 use OCA\TwoFactor_RCDevsOpenOTP\Settings\OpenotpConfig;
 use OCA\TwoFactor_RCDevsOpenOTP\Event\StateChanged;
+use OCP\App\AppPathNotFoundException;
 use OCP\App\IAppManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -112,8 +113,8 @@ class SettingsController extends Controller {
 		
 	    // Admin Settings && Application Settings page
 		if( $POST && isset($POST["openotp_settings_sent"]) ){
-			if( $POST['rcdevsopenotp_server_url1'] === "" && $POST['rcdevsopenotp_server_url2'] === "" && $POST['rcdevsopenotp_client_id'] === ""
-			&&	$POST['rcdevsopenotp_default_domain']  === "" && $POST['rcdevsopenotp_proxy_host']  === "" 
+			if( $POST['rcdevsopenotp_server_url1'] === "" && $POST['rcdevsopenotp_server_url2'] === "" && $POST['rcdevsopenotp_client_id'] === "" && $POST['rcdevsopenotp_api_key'] === ""
+			&& $POST['rcdevsopenotp_proxy_host']  === "" 
 			&&	$POST['rcdevsopenotp_proxy_port']  === "" && $POST['rcdevsopenotp_proxy_login']  === ""
 			&&	$POST['rcdevsopenotp_proxy_password']  === "" )
 				return new DataResponse(['status' => "error", 'message' => $this->l10n->t("You must fill openotp settings before saving") ]);

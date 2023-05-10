@@ -35,14 +35,14 @@ class OpenotpConfig
 				array(	'name'	=>	'rcdevsopenotp_server_url1',
 						'label'	=>  'OpenOTP server URL #1',
 						'type'	=> 'text',
-						'default_value'	=> 'http://myserver1:8080/openotp/',
+						'default_value'	=> '',
 						'title'	=>	'URL of the openOTP webservice - Should be like http://myserver1:8080/openotp/'
 					),
 				"server_url2" =>
 				array(	'name'	=>	'rcdevsopenotp_server_url2',
 						'label'	=>  'OpenOTP server URL #2',
 						'type'	=> 'text',
-						'default_value'	=> 'http://myserver2:8080/openotp/',
+						'default_value'	=> '',
 						'title'	=>	'URL of the openOTP webservice - Should be like http://myserver2:8080/openotp/'
 					),
 				"client_id" => 
@@ -52,20 +52,13 @@ class OpenotpConfig
 						'default_value'	=> 'Nextcloud',
 						'title'	=>	'Give an Identifiant to the Nextcloud Application (Default Nextcloud) - Allows OpenOTP server to apply specifics policies for requests from Nextcloud app / Displays when receiving OTP via email / Displays in OpenOTP Logs'
 					),	
-				"default_domain" => 	
-				array(	'name'	=>	'rcdevsopenotp_default_domain',
-						'label'	=> 'OpenOTP Default Domain',
+				"api_key" => 
+				array(	'name'	=>	'rcdevsopenotp_api_key',
+						'label'	=> 'OpenOTP API key',
 						'type'	=> 'text',
 						'default_value'	=> '',
-						'title'	=>	'Put the same name than the Domain you specify in WebADM (where your user are stored)'
+						'title'	=>	'API key defined in WebADM ; mandatory for WebADM Cloud'
 					),	
-				"user_settings" => 	
-				array(	'name'	=>	'rcdevsopenotp_user_settings',
-						'label'	=> 'OpenOTP User settings',
-						'type'	=> 'text',
-						'default_value'	=> '',
-						'title'	=>	'Enforce ie: OpenOTP.LoginMode=LDAPOTP or OpenOTP.OTPType=SMS (OpenOTP Application Settings, find it in WebADM) '
-					),						
 				"proxy_host" => 	
 				array(	'name'	=>	'rcdevsopenotp_proxy_host',
 						'label'	=> 'Proxy Host',

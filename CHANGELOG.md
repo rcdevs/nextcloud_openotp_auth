@@ -1,3 +1,5 @@
+1.5.0
+	- Add API Key
 1.4.7
 	- Issue with signature
 	- Compatibility with v24 and v25 only
