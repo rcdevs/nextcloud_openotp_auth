@@ -55,8 +55,6 @@ Version 1.5.0
 
 ### **********   CHANGELOG  **********
 
-### **********   CHANGELOG  **********
-
 1.5.0
 	- Add API Key
 
