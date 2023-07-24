@@ -26,7 +26,7 @@ Users' credentials can be validated:
 - Through an LDAP service (LDAP accounts)
 
 Once the first step of the authentication is successfully validated, the authentication workflow continues through the OpenOTP Plugin for Nextcloud and OpenOTP server(s). 
-The plugin will submit an authentication request to OpenOTP server(s) with the provided credentials during the step (username).
+The plugin will submit an authentication request to OpenOTP server(s) with the provided credentials during the first step (username).
 In both scenarios (local and LDAP accounts), for the authentication to work with OpenOTP, the provided username must match a valid WebADM licensed account.
 
 In order to use that plugin, you MUST HAVE OpenOTP Security Suite running in your infrastructure (on-premise or in the cloud).
