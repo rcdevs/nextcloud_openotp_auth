@@ -26,7 +26,7 @@ It is enterprise-ready with strong support for:
     <summary>RCDevs OpenOTP Application enables Multi-Factor authentication for your users.</summary>
 	<licence>AGPL</licence>
     <author>RCDevs</author>
-	<version>1.5.0</version>
+	<version>1.5.1</version>
 	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
 	<category>security</category>
 	<types>
@@ -51,9 +51,9 @@ It is enterprise-ready with strong support for:
 	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/administration-settings.png</screenshot>
 	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/loginscreen-by-otp.png</screenshot>
     <dependencies>
-		<php min-version="5.5"/>
+		<php min-version="8.1"/>
         <lib>ldap</lib>
-		<nextcloud min-version="24" max-version="26" />
+		<nextcloud min-version="26" max-version="27" />
     </dependencies>
 	<activity>
 		<settings>

@@ -41,8 +41,9 @@ OpenOTP is provided as an Enterprise product and a Cloud service, depending on y
 
 ### **********   INSTALLATION   **********
 
-Compatible Nextcloud 24.x to 26.X (Tested on 26.0.0)
-Version 1.5.0
+Compatible with versions supported by Nextcloud (cf. https://github.com/nextcloud/server/wiki/Maintenance-and-Release-Schedule)
+Nextcloud 26.x to 27.X
+Version 1.5.1
 
 1. If your PHP installation does not have the soap extension, install the php-soap
    ..	package for your Linux distribution. With RedHat, do it with 'yum install php-soap'.
@@ -55,6 +56,8 @@ Version 1.5.0
 
 ### **********   CHANGELOG  **********
 
+1.5.1
+- Compatibility with versions supported by Nextcloud (cf. https://github.com/nextcloud/server/wiki/Maintenance-and-Release-Schedule)
 1.5.0
 - Add API Key
 

@@ -1,3 +1,5 @@
+1.5.1
+	- Compatibility with versions supported by Nextcloud (cf. https://github.com/nextcloud/server/wiki/Maintenance-and-Release-Schedule)
 1.5.0
 	- Add API Key
 1.4.7
