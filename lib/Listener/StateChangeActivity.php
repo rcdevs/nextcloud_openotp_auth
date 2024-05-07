@@ -1,54 +1,63 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package openotp_auth
- * @author RCDevs
- * @copyright 2018 RCDEVS info@rcdevs.com
+ * @copyright Copyright (c) 2024, RCDevs (info@rcdevs.com)
+ *
+ * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * Displays <a href="http://opensource.org/licenses/AGPL-3.0">GNU AFFERO GENERAL PUBLIC LICENSE</a>
- * @license http://opensource.org/licenses/AGPL-3.0 GNU AFFERO GENERAL PUBLIC LICENSE
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 
-namespace OCA\TwoFactor_RCDevsOpenOTP\Listener;
+namespace OCA\OpenOTPAuth\Listener;
 
-use OCA\TwoFactor_RCDevsOpenOTP\Event\StateChanged;
-use OCP\Activity\IManager as ActivityManager;
-use Symfony\Component\EventDispatcher\Event;
+use OCA\OpenOTPAuth\AppInfo\Application as OpenOTPAuthApp;
+use OCA\OpenOTPAuth\Event\DisabledByAdmin;
+use OCA\OpenOTPAuth\Event\StateChanged;
+use OCP\Activity\IManager;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
 
-class StateChangeActivity implements IListener {
+/**
+ * @template-implements IEventListener<StateChanged>
+ */
+class StateChangeActivity implements IEventListener {
 
-	/** @var ActivityManager */
+	/** @var IManager */
 	private $activityManager;
 
-	public function __construct(ActivityManager $activityManager) {
+	public function __construct(IManager $activityManager) {
 		$this->activityManager = $activityManager;
 	}
 
-	public function handle(Event $event) {
+	public function handle(Event $event): void {
 		if ($event instanceof StateChanged) {
-			$user = $event->getUser();
-			$subject = $event->isEnabled() ? 'openotp_enabled_subject' : 'openotp_disabled_subject';
+			if ($event instanceof DisabledByAdmin) {
+				$subject = 'openotp_disabled_by_admin';
+			} else {
+				$subject = $event->isEnabled() ? 'openotp_device_added' : 'openotp_device_removed';
+			}
 
 			$activity = $this->activityManager->generateEvent();
-			$activity->setApp('openotp_auth')
+			$activity->setApp(OpenOTPAuthApp::APP_ID)
 				->setType('security')
-				->setAuthor($user->getUID())
-				->setAffectedUser($user->getUID());
-			$activity->setSubject($subject);
+				->setAuthor($event->getUser()->getUID())
+				->setAffectedUser($event->getUser()->getUID())
+				->setSubject($subject);
 			$this->activityManager->publish($activity);
 		}
 	}
