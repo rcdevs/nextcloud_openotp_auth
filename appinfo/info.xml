@@ -2,7 +2,8 @@
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>openotp_auth</id>
-	<name>OpenOTP Two Factor Authentication</name>
+	<name>OpenOTP Auth</name>
+	<summary>OpenOTP two-factor provider</summary>
     <description>
 **RCDevs OpenOTP Application enables two-factor authentication for your users using your personal Cloud.**
 
@@ -23,44 +24,39 @@ It is enterprise-ready with strong support for:
 * easy installation, update and configuration in RCDevs WebADM
 * ... and much more.
 	</description>
-    <summary>RCDevs OpenOTP Application enables Multi-Factor authentication for your users.</summary>
-	<licence>AGPL</licence>
-    <author>RCDevs</author>
-	<version>1.5.1</version>
-	<namespace>TwoFactor_RCDevsOpenOTP</namespace>
+			<version>1.28.0</version>
+	<licence>agpl</licence>
+	<author></author>
+	<namespace>OpenOTPAuth</namespace>
 	<category>security</category>
-	<types>
-		<prelogin/>
-		<authentication/>
-	</types>
-    <documentation>
-          <user>https://github.com/rcdevs/nextcloud_openotp_auth/blob/master/README.md</user>
-          <admin>https://docs.rcdevs.com/howtos/webadm_install/webadm_install/</admin>
-    </documentation>
-    <website>https://rcdevs.com</website>
-    <bugs>https://github.com/rcdevs/nextcloud_openotp_auth/issues</bugs>
-    <repository type="git">https://github.com/rcdevs/nextcloud_openotp_auth/tree/master</repository>
+
+	<website>https://github.com/rcdevs/nextcloud_openotp_auth</website>
+	<bugs>https://github.com/rcdevs/nextcloud_openotp_auth/issues</bugs>
+	<repository type="git">https://github.com/rcdevs/nextcloud_openotp_auth.git</repository>
+
+	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/N28/screenshots/openotp_auth_admin.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/N28/screenshots/openotp_auth_fido2.png</screenshot>
+
+	<dependencies>
+		<php min-version="8.0" max-version="8.3"/>
+		<nextcloud min-version="28" max-version="28" />
+	</dependencies>
+
 	<two-factor-providers>
-		<provider>OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
+		<provider>OCA\OpenOTPAuth\Provider\TwoFactorRCDevsOpenOTPProvider</provider>
 	</two-factor-providers>
-    <settings>
-		<admin>OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSettings</admin>
-		<admin-section>\OCA\TwoFactor_RCDevsOpenOTP\Settings\AdminSection</admin-section>
-		<personal>OCA\TwoFactor_RCDevsOpenOTP\Settings\Personal</personal>
-    </settings>
-	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/administration-settings.png</screenshot>
-	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/master/screenshots/loginscreen-by-otp.png</screenshot>
-    <dependencies>
-		<php min-version="8.1"/>
-        <lib>ldap</lib>
-		<nextcloud min-version="26" max-version="27" />
-    </dependencies>
+
 	<activity>
 		<settings>
-			<setting>OCA\TwoFactor_RCDevsOpenOTP\Activity\Setting</setting>
+			<setting>OCA\OpenOTPAuth\Activity\Setting</setting>
 		</settings>
 		<providers>
-			<provider>OCA\TwoFactor_RCDevsOpenOTP\Activity\Provider</provider>
+			<provider>OCA\OpenOTPAuth\Activity\Provider</provider>
 		</providers>
 	</activity>
+
+	<settings>
+		<admin>OCA\OpenOTPAuth\Settings\Admin\AdminSettings</admin>
+		<admin-section>OCA\OpenOTPAuth\Settings\Admin\AdminSection</admin-section>
+	</settings>
 </info>

@@ -1,40 +1,39 @@
 <?php
+
 /**
- * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package openotp_auth
- * @author RCDevs
- * @copyright 2018 RCDEVS info@rcdevs.com
+ * @copyright Copyright (c) 2024, RCDevs (info@rcdevs.com)
+ *
+ * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * Displays <a href="http://opensource.org/licenses/AGPL-3.0">GNU AFFERO GENERAL PUBLIC LICENSE</a>
- * @license http://opensource.org/licenses/AGPL-3.0 GNU AFFERO GENERAL PUBLIC LICENSE
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+ 
+namespace OCA\OpenOTPAuth\AuthService;
 
-namespace OCA\TwoFactor_RCDevsOpenOTP\AuthService;
-
-use OCP\AppFramework\App;
-use OCP\ILogger;
 use Exception;
 use nusoap_client;
+use OCA\OpenOTPAuth\AppInfo\Application as OpenOTPAuthApp;
+use Psr\Log\LoggerInterface;
 
 class OpenotpAuthException extends Exception
 {
 }
 
-class OpenotpAuth{
+class OpenotpAuth
+{
 
 	const NB_SERVERS = 2;
 
@@ -47,9 +46,9 @@ class OpenotpAuth{
 	/** @var api_key */
 	private $api_key;
 	/** @var proxy_host */
-	private $proxy_host;                                                                              
+	private $proxy_host;
 	/** @var proxy_port */
-	private $proxy_port;                                                                              
+	private $proxy_port;
 	/** @var proxy_username */
 	private $proxy_username;
 	/** @var proxy_password */
@@ -57,60 +56,61 @@ class OpenotpAuth{
 	/** NuSOAP object */
 	private $soap_client;
 	/** Logger object */
-    private $logger;
-	/** @var context_name */
-	private $context_name = '__Host-OpenOTPContext';
-	/** @var context_size */
-	private $context_size = 32;
-	/** @var context_time */
-	private $context_time = 2500000;	
+	private $logger;
+	private string $context_name = '__Host-OpenOTPContext';
+	private int $context_size = 32;
+	private int $context_time = 2500000;
 
-    /**
+	/**
 	 * @param ILogger $logger
 	 * @param Array $params
 	 * @param String $home
 	 */
-	public function __construct(ILogger $logger, $params, $home='' ){
+	public function __construct(LoggerInterface $logger, $params, $home = '')
+	{
 
-	    $this->home = $home;
+		$this->home = $home;
 		$this->logger = $logger;
 		// load config		
-		$this->server_urls = array($params['rcdevsopenotp_server_url1'], $params['rcdevsopenotp_server_url2']);
-		$this->client_id = $params['rcdevsopenotp_client_id'];
-		$this->api_key = $params['rcdevsopenotp_api_key'];
-		$this->proxy_host = $params['rcdevsopenotp_proxy_host'];                                                                               
-		$this->proxy_port = $params['rcdevsopenotp_proxy_port'];                                                                               
-		$this->proxy_username = $params['rcdevsopenotp_proxy_username'];
-		$this->proxy_password = $params['rcdevsopenotp_proxy_password'];
-		
+		$this->server_urls 		= array(
+			"1" => $params['rcdevsopenotp_server_url1'],
+			"2" => $params['rcdevsopenotp_server_url2']
+		);
+		$this->client_id		= trim($params['rcdevsopenotp_client_id']);
+		$this->api_key			= trim($params['rcdevsopenotp_api_key']);
+		$this->proxy_host		= trim($params['rcdevsopenotp_proxy_host']);
+		$this->proxy_port		= trim($params['rcdevsopenotp_proxy_port']);
+		$this->proxy_username	= trim($params['rcdevsopenotp_proxy_username']);
+		$this->proxy_password	= trim($params['rcdevsopenotp_proxy_password']);
 	}
-	
+
 	public function checkFile($file)
 	{
-		if (!file_exists($this->home."/".$file)) {
+		if (!file_exists($this->home . "/" . $file)) {
 			return false;
 		}
 		return true;
 	}
-			
+
 	public function getServer_urls()
 	{
 		return $this->server_urls;
 	}
-	
+
 	public function getScope()
 	{
 		// return $this->openotp_scope;
 	}
-		
+
 	public function getDomain($username)
 	{
 		$pos = strpos($username, "\\");
 		if ($pos) {
 			$ret['domain'] = substr($username, 0, $pos);
-			$ret['username'] = substr($username, $pos+1);
-		} else {                                                                                                                      
-			$ret = $this->default_domain;
+			$ret['username'] = substr($username, $pos + 1);
+		} else {
+			// $ret = $this->default_domain;
+			$ret = 'Default';
 		}
 		return $ret;
 	}
@@ -121,15 +121,16 @@ class OpenotpAuth{
 	public function getContext_size()
 	{
 		return $this->context_size;
-	}	
+	}
 	public function getContext_time()
 	{
 		return $this->context_time;
-	}	
-	
-	public static function getOverlay($otpChallenge, $u2fChallenge, $message, $username, $session, $timeout, $ldappw, $path, $appWebPath, $domain=NULL){
+	}
+
+	public static function getOverlay($otpChallenge, $u2fChallenge, $message, $username, $session, $timeout, $ldappw, $path, $appWebPath, $domain = NULL)
+	{
 		$appWebPath .= "/images";
-		
+
 		$overlay = <<<EOT
 
 		$(document).ready(function(){
@@ -195,24 +196,24 @@ class OpenotpAuth{
 			+ '<tr style="border:none;"><td style="text-align:center; font-weight:bold; font-size:14px; border:none;">$message</td></tr>'
 			+ '<tr style="border:none;"><td id="timout_cell" style="text-align:center; padding-top:4px; font-weight:bold; font-style:italic; font-size:11px; border:none;">Timeout: <span id="timeout">$timeout seconds</span></td></tr>'
 EOT;
-			
-			if( $otpChallenge || ( !$otpChallenge && !$u2fChallenge ) ){		
+
+		if ($otpChallenge || (!$otpChallenge && !$u2fChallenge)) {
 			$overlay .= <<<EOT
 			+ '<tr style="border:none;"><td id="inputs_cell" style="text-align:center; padding-top:25px; border:none;"><input style="width:165px; border:1px solid grey; background-color:white; margin-bottom:0; padding:3px; vertical-align:middle;" type="password" size=15 name="openotp_password" id="openotp_password">&nbsp;'
 			+ '<input style="vertical-align:middle; padding:5px 10px; margin:5px 5px 0 0;" type="submit" value="Ok" class="button btn btn-primary"></td></tr>'
 EOT;
-			}
-			
-			if( $u2fChallenge ){		
-			$overlay .= "+ '<tr style=\"border:none;\"><td id=\"inputs_cell\" style=\"text-align:center; padding-top:5px; border:none;\"><input type=\"hidden\" name=\"openotp_u2f\" value=\"\">'";
-				if( $otpChallenge ){		
-					$overlay .= "+ '<b>U2F response</b> &nbsp; <blink id=\"u2f_activate\">[Activate Device]</blink></td></tr>'";
-				} else { 
-					$overlay .= "+ '<img src=\"" . $appWebPath . "/u2f.png\"><br><br><blink id=\"u2f_activate\">[Activate Device]</blink></td></tr>'";
-				}			
-			}			
+		}
 
-			$overlay .= <<<EOT
+		if ($u2fChallenge) {
+			$overlay .= "+ '<tr style=\"border:none;\"><td id=\"inputs_cell\" style=\"text-align:center; padding-top:5px; border:none;\"><input type=\"hidden\" name=\"openotp_u2f\" value=\"\">'";
+			if ($otpChallenge) {
+				$overlay .= "+ '<b>U2F response</b> &nbsp; <blink id=\"u2f_activate\">[Activate Device]</blink></td></tr>'";
+			} else {
+				$overlay .= "+ '<img src=\"" . $appWebPath . "/u2f.svg\"><br><br><blink id=\"u2f_activate\">[Activate Device]</blink></td></tr>'";
+			}
+		}
+
+		$overlay .= <<<EOT
 			+ '</table></form>';
 			
 			document.body.appendChild(overlay_bg);    
@@ -280,12 +281,12 @@ EOT;
 		});
 		
 EOT;
-		
-		if( $u2fChallenge ){ 
-			
+
+		if ($u2fChallenge) {
+
 			$overlay .= " $(document).ready(function(){ " . "\r\n";
 			$overlay .= "if (/chrome|chromium|firefox|opera/.test(navigator.userAgent.toLowerCase())) {
-			    var u2f_request = ".$u2fChallenge.";
+			    var u2f_request = " . $u2fChallenge . ";
 			    var u2f_regkeys = [];
 			    for (var i=0, len=u2f_request.keyHandles.length; i<len; i++) {
 			        u2f_regkeys.push({version:u2f_request.version,keyHandle:u2f_request.keyHandles[i]});
@@ -299,15 +300,18 @@ EOT;
 				u2f_activate.innerHTML = '[Not Supported]'; 
 				u2f_activate.style.color='red'; 
 				}" . "\r\n";
-			$overlay .= " }); " . "\r\n";			
+			$overlay .= " }); " . "\r\n";
 		}
-		
+
 		return $overlay;
 	}
-	
-	private function soapRequest($serverId){
-	
-		if ($this->proxy_host !== NULL && $this->proxy_port !== NULL) {
+
+	private function soapRequest(string $serverId)
+	{
+
+		if (($this->proxy_host !== NULL && $this->proxy_host !== '')
+			&& ($this->proxy_port !== NULL && $this->proxy_port !== '')
+		) {
 			$proxyHost = $this->proxy_host;
 			$proxyPort = $this->proxy_port;
 
@@ -326,19 +330,20 @@ EOT;
 		$soap_client->setDebugLevel(0);
 		$soap_client->soap_defencoding = 'UTF-8';
 		$soap_client->decode_utf8 = FALSE;
-		
+
 		$soap_client->setUseCurl(true);
 		$soap_client->setCurlOption(CURLOPT_HTTPHEADER, [
 			"Content-type: text/xml;charset=\"utf-8\"",
 			"WA-API-Key: {$this->api_key}",
 		]);
 
-		$this->soap_client = $soap_client;	
+		$this->soap_client = $soap_client;
 		return true;
 	}
-		
-	public function openOTPSimpleLogin($username, $domain, $password, $option, $context){
-		for ($i = 0; $i < self::NB_SERVERS; $i++) {
+
+	public function openOTPSimpleLogin($username, $domain, $password, $option, $context)
+	{
+		for ($i = 1; $i <= self::NB_SERVERS; $i++) {
 			$this->soapRequest($i);
 			$resp = $this->soap_client->call('openotpSimpleLogin', array(
 				'username' => $username,
@@ -347,7 +352,7 @@ EOT;
 				'client' => $this->client_id,
 				'apiKey' => $this->api_key,
 				// 'source' => $this->remote_addr,
-				'settings' => $this->user_settings,
+				// 'settings' => $this->user_settings,
 				'options' => $option,
 				'context' => $context,
 				'retryId' => '',
@@ -355,15 +360,15 @@ EOT;
 			), 'urn:openotp', '', false, null, 'rpc', 'literal');
 
 			if ($this->soap_client->fault) {
-				$message = __METHOD__.', error: '.$resp['faultcode'].' / '.$resp['faultstring'];
-				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+				$message = __METHOD__ . ', error: ' . $resp['faultcode'] . ' / ' . $resp['faultstring'];
+				$this->logger->error($message, array('app' => OpenOTPAuthApp::APP_ID));
 				return false;
 			}
 
 			$err = $this->soap_client->getError();
 			if ($err) {
-				$message = __METHOD__.', error: '.$err;
-				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+				$message = __METHOD__ . ', error: ' . $err;
+				$this->logger->error($message, array('app' => OpenOTPAuthApp::APP_ID));
 				continue;
 			}
 
@@ -373,8 +378,9 @@ EOT;
 		return false;
 	}
 
-	public function openOTPChallenge($username, $domain, $state, $password, $u2f, $sample) {
-		for ($i = 0; $i < self::NB_SERVERS; $i++) {
+	public function openOTPChallenge($username, $domain, $state, $password, $u2f, $sample)
+	{
+		for ($i = 1; $i <= self::NB_SERVERS; $i++) {
 			$this->soapRequest($i);
 			$resp = $this->soap_client->call('openotpChallenge', array(
 				'username' => $username,
@@ -386,15 +392,15 @@ EOT;
 			), 'urn:openotp', '', false, null, 'rpc', 'literal');
 
 			if ($this->soap_client->fault) {
-				$message = __METHOD__.', error: '.$resp['faultcode'].' / '.$resp['faultstring'];
-				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+				$message = __METHOD__ . ', error: ' . $resp['faultcode'] . ' / ' . $resp['faultstring'];
+				$this->logger->error($message, array('app' => OpenOTPAuthApp::APP_ID));
 				return false;
 			}
 
 			$err = $this->soap_client->getError();
 			if ($err) {
-				$message = __METHOD__.', error: '.$err;
-				$this->logger->error($message, array('app' => 'rcdevsopenotp'));
+				$message = __METHOD__ . ', error: ' . $err;
+				$this->logger->error($message, array('app' => OpenOTPAuthApp::APP_ID));
 				continue;
 			}
 
@@ -404,8 +410,9 @@ EOT;
 		return false;
 	}
 
-	public function openOTPStatus() {
-		$this->soapRequest(0);
+	public function openOTPStatus(string $serverNumber)
+	{
+		$this->soapRequest($serverNumber);
 		return $this->soap_client->call('openotpStatus', array());
 	}
 }

@@ -1,55 +1,65 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package openotp_auth
- * @author RCDevs
- * @copyright 2018 RCDEVS info@rcdevs.com
+ * @copyright Copyright (c) 2024, RCDevs (info@rcdevs.com)
+ *
+ * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * Displays <a href="http://opensource.org/licenses/AGPL-3.0">GNU AFFERO GENERAL PUBLIC LICENSE</a>
- * @license http://opensource.org/licenses/AGPL-3.0 GNU AFFERO GENERAL PUBLIC LICENSE
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 
-namespace OCA\TwoFactor_RCDevsOpenOTP\Listener;
+namespace OCA\OpenOTPAuth\Listener;
 
-use OCA\TwoFactor_RCDevsOpenOTP\Event\StateChanged;
-use OCA\TwoFactor_RCDevsOpenOTP\Provider\TwoFactorRCDevsOpenOTPProvider;
+use OCA\OpenOTPAuth\Event\StateChanged;
+use OCA\OpenOTPAuth\Provider\WebAuthnProvider;
+use OCA\OpenOTPAuth\Service\WebAuthnManager;
 use OCP\Authentication\TwoFactorAuth\IRegistry;
-use Symfony\Component\EventDispatcher\Event;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
 
-class StateChangeRegistryUpdater implements IListener {
+/**
+ * @template-implements IEventListener<StateChanged>
+ */
+class StateChangeRegistryUpdater implements IEventListener {
 
 	/** @var IRegistry */
-	private $registry;
+	private $providerRegistry;
 
-	/** @var TotpProvider */
+	/** @var WebAuthnManager */
+	private $manager;
+
+	/** @var WebAuthnProvider */
 	private $provider;
 
-	public function __construct(IRegistry $registry, TwoFactorRCDevsOpenOTPProvider $provider) {
-		$this->registry = $registry;
+	public function __construct(IRegistry $providerRegistry, WebAuthnManager $manager, WebAuthnProvider $provider) {
+		$this->providerRegistry = $providerRegistry;
 		$this->provider = $provider;
+		$this->manager = $manager;
 	}
 
-	public function handle(Event $event) {
+	public function handle(Event $event): void {
 		if ($event instanceof StateChanged) {
 			if ($event->isEnabled()) {
-				$this->registry->enableProviderFor($this->provider, $event->getUser());
-			} else {
-				$this->registry->disableProviderFor($this->provider, $event->getUser());
+				// The first device was enabled -> enable provider for this user
+				$this->providerRegistry->enableProviderFor($this->provider, $event->getUser());
+			} elseif (!$event->isEnabled()) {
+				// The last device was removed -> disable provider for this user
+				$this->providerRegistry->disableProviderFor($this->provider, $event->getUser());
 			}
 		}
 	}

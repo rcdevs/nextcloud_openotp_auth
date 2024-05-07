@@ -1,94 +1,36 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * Nexcloud - RCDevs OpenOTP Two-factor Authentication
  *
- * @package openotp_auth
- * @author RCDevs
- * @copyright 2018 RCDEVS info@rcdevs.com
+ * @copyright Copyright (c) 2024, RCDevs (info@rcdevs.com)
+ *
+ * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * Displays <a href="http://opensource.org/licenses/AGPL-3.0">GNU AFFERO GENERAL PUBLIC LICENSE</a>
- * @license http://opensource.org/licenses/AGPL-3.0 GNU AFFERO GENERAL PUBLIC LICENSE
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 
-namespace OCA\TwoFactor_RCDevsOpenOTP\Settings;
+namespace OCA\OpenOTPAuth\Settings;
 
-use OCA\TwoFactor_RCDevsOpenOTP\Settings\OpenotpConfig;
-use OCA\TwoFactor_RCDevsOpenOTP\AppInfo\Application;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\IConfig;
-use OCP\IL10N;
-use OCP\Settings\ISettings;
-use OCP\IUserSession;
-use OCP\ILogger;
+use OCA\OpenOTPAuth\AppInfo\Application as OpenOTPAuthApp;
+use OCP\Authentication\TwoFactorAuth\IPersonalProviderSettings;
+use OCP\Template;
 
-class Personal implements ISettings {
-	
-	/** @var Application */
-	private $app;
-
-    /** @var IConfig */
-    private $config;
-
-    /** @var IL10N */
-    private $l;
-	
-	/** OpenOTP Config */
-    private $openotpconfig;		
-	
-	/** @var IUserSession */
-	private $userSession;	
-	
-	/** $obj ILogger $logger */	
-    private $logger;	
-		
-	public function __construct(Application $app, IConfig $config, IL10N $l, IUserSession $userSession, ILogger $logger) {
-		$this->app = $app;
-		$this->config = $config;
-		$this->l = $l;
-		$this->openotpconfig = OpenotpConfig::$_openotp_configs;
-		$this->userSession = $userSession;		
-		$this->logger = $logger;
-	}
-
-	/**
-	 * @return TemplateResponse returns the instance with all parameters set, ready to be rendered
-	 * @since 9.1
-	 */
-	public function getForm() {	
-
-		$enable_openotp = $this->config->getUserValue( $this->userSession->getUser()->getUID(), 'openotp_auth', 'enable_openotp');
-		$parameters['enable_openotp'] = $enable_openotp;
-		$parameters['is_local_user'] = $this->userSession->getUser()->getBackendClassName() === 'Database';
-
-		return new TemplateResponse('openotp_auth', 'settings-personal', $parameters);
-	}
-
-	/**
-	 * @return string the section ID, e.g. 'sharing'
-	 * @since 9.1
-	 */
-	public function getSection() {
-		return 'security';
-	}
-
-	/**
-	 * @return int (position)
-	 * @since 9.1
-	 */
-	public function getPriority() {
-		return 100;
+class Personal implements IPersonalProviderSettings {
+	public function getBody(): Template {
+		return new Template(OpenOTPAuthApp::APP_ID, 'personal');
 	}
 }
