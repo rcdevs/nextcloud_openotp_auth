@@ -26,7 +26,7 @@ It is enterprise-ready with strong support for:
 	</description>
 			<version>1.28.0</version>
 	<licence>agpl</licence>
-	<author></author>
+	<author>RCDevs</author>
 	<namespace>OpenOTPAuth</namespace>
 	<category>security</category>
 
