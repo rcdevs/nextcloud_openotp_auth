@@ -110,7 +110,7 @@ class OpenotpAuth
 			$ret['username'] = substr($username, $pos + 1);
 		} else {
 			// $ret = $this->default_domain;
-			$ret = 'Default';
+			$ret = '';
 		}
 		return $ret;
 	}

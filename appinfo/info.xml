@@ -24,7 +24,7 @@ It is enterprise-ready with strong support for:
 * easy installation, update and configuration in RCDevs WebADM
 * ... and much more.
 	</description>
-			<version>1.28.0</version>
+			<version>1.29.0</version>
 	<licence>agpl</licence>
 	<author>RCDevs</author>
 	<namespace>OpenOTPAuth</namespace>
@@ -39,7 +39,7 @@ It is enterprise-ready with strong support for:
 
 	<dependencies>
 		<php min-version="8.0" max-version="8.3"/>
-		<nextcloud min-version="28" max-version="28" />
+		<nextcloud min-version="29" max-version="29" />
 	</dependencies>
 
 	<two-factor-providers>
