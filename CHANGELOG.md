@@ -6,6 +6,12 @@ Y: Nextcloud version
 Z: minor or patch
 
 -----------------------------------------
+1.29.0
+	Domain setting and 'Default' domain value sent to OpenOTP has been removed. It must be now configured by WebADM Client Policy
+
+1.28.1
+	Domain setting and 'Default' domain value sent to OpenOTP has been removed. It must be now configured by WebADM Client Policy
+
 1.28.0
 	Change: Complete rebuild of the application and change of versioning
 	Change: Voice authentication via web browser removed
@@ -74,7 +80,7 @@ Z: minor or patch
 	FIDO2 now supported, All FIDO protocols fully supported:
 		 U2F: OpenOTP operated with CTAP1 only
 		 FIDO2: OpenOTP operates with CTAP2 only (WebAuthn)
-	Activate Multilingual 
+	Activate Multilingual
 	Add type to IProvider implemented classes
 
 1.0.3
@@ -82,17 +88,17 @@ Z: minor or patch
 	Update deprecated classes
 
 1.0.2
-	app:check-code integrity		 
-	Create new Administration menu entry in left side 
+	app:check-code integrity
+	Create new Administration menu entry in left side
 	Personal settings are now situated in Security Section
 
 1.0.1
-	Add compatibility to NextCloud v12/13 
+	Add compatibility to NextCloud v12/13
 	OC_User::getLogoutAttribute() is now deprecated
 	Fixed ajax-loader img not showing while pressing Test button
 	custom_csp in config deprecated - nonce used instead + addDefaultPolicy
 	add Annotation @UseSession to store session
-	add EventListener on DOMContentLoaded in template challenge	
+	add EventListener on DOMContentLoaded in template challenge
 	implement contextual authentication
 
 1.0.0
