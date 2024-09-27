@@ -1,14 +1,10 @@
 {
 	"name": "nextcloud/openotp_auth",
-	"description": "A two factor provider for WebAuthn devices for Nextcloud",
-	"type": "project",
+	"description": "A two factor provider for Nextcloud",
 	"license": "agplv3",
 	"authors": [
 		{
-			"name": "Christoph Wurst"
-		},
-		{
-			"name": "Michael Blumenstein"
+			"name": "RCDevs"
 		}
 	],
 	"require": {

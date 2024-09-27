@@ -6,6 +6,18 @@ Y: Nextcloud version
 Z: minor or patch
 
 -----------------------------------------
+1.30.0
+	Added End-User IP forwarding to OpenOTP for Per-Network policies
+	Update dependencies
+
+1.29.1
+	Added End-User IP forwarding to OpenOTP for Per-Network policies
+	Update dependencies
+
+1.28.2
+	Added End-User IP forwarding to OpenOTP for Per-Network policies
+	Update dependencies
+
 1.29.0
 	Domain setting and 'Default' domain value sent to OpenOTP has been removed. It must be now configured by WebADM Client Policy
 
