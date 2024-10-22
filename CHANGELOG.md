@@ -6,6 +6,15 @@ Y: Nextcloud version
 Z: minor or patch
 
 -----------------------------------------
+1.30.1
+	Update dependencies
+
+1.29.2
+	Update dependencies
+
+1.28.3
+	Update dependencies
+
 1.30.0
 	Added End-User IP forwarding to OpenOTP for Per-Network policies
 	Update dependencies
