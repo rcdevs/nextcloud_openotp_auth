@@ -24,7 +24,7 @@ It is enterprise-ready with strong support for:
 * easy installation, update and configuration in RCDevs WebADM
 * ... and much more.
 	</description>
-			<version>1.29.1</version>
+			<version>1.29.2</version>
 	<licence>agpl</licence>
 	<author>RCDevs</author>
 	<namespace>OpenOTPAuth</namespace>
@@ -34,8 +34,8 @@ It is enterprise-ready with strong support for:
 	<bugs>https://github.com/rcdevs/nextcloud_openotp_auth/issues</bugs>
 	<repository type="git">https://github.com/rcdevs/nextcloud_openotp_auth.git</repository>
 
-	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/N28/screenshots/openotp_auth_admin.png</screenshot>
-	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/N28/screenshots/openotp_auth_fido2.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/N29/screenshots/openotp_auth_admin.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/rcdevs/nextcloud_openotp_auth/N29/screenshots/openotp_auth_fido2.png</screenshot>
 
 	<dependencies>
 		<php min-version="8.0" max-version="8.3"/>
